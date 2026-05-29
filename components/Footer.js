@@ -24,15 +24,44 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
               {[
-                { name: 'Instagram', url: 'https://www.instagram.com/huma_beauty.saloon/', icon: '📷' },
-                { name: 'TikTok', url: 'https://www.tiktok.com/@humabeautysaloonjhe', icon: '🎵' },
-                { name: 'Website', url: 'https://humabeautysaloon.site/', icon: '🌐' }
+                {
+                  name: 'Instagram',
+                  url: 'https://www.instagram.com/huma_beauty.saloon/',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="white" strokeWidth="1.8" />
+                      <circle cx="12" cy="12" r="3.5" stroke="white" strokeWidth="1.8" />
+                      <circle cx="17.2" cy="6.8" r="1.1" fill="white" />
+                    </svg>
+                  ),
+                },
+                {
+                  name: 'TikTok',
+                  url: 'https://www.tiktok.com/@humabeautysaloonjhe',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 3v9.5c0 2.8 1.3 5 4.6 5 0.4 0 0.8 0 1.2-0.1V20c-0.5 0.1-1.1 0.2-1.7 0.2C10.8 20.1 7 16.4 7 11.9V7h3V3h2z" fill="white" />
+                      <path d="M15 4.5v3.2c-0.6 0-1.1-0.1-1.5-0.3-0.4-0.2-0.8-0.6-1-1.1V4.5h2.5z" fill="#25f4ee" />
+                      <path d="M15 14.5c-0.7 0-1.4-0.3-1.9-0.8-0.5-0.5-0.8-1.2-0.8-1.9V7h2.8c0.4 0.9 1.2 1.5 2.3 1.5V10c-0.6 0-1.2-0.2-1.7-0.5-0.5-0.3-0.8-0.8-1-1.3V14.5z" fill="#fe2c55" />
+                    </svg>
+                  ),
+                },
+                {
+                  name: 'Website',
+                  url: 'https://humabeautysaloon.site/',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="8.2" stroke="white" strokeWidth="1.8" />
+                      <path d="M4 12h16M12 4a16 16 0 010 16M7.5 6.5c2.3 3 2.3 7 0 10M16.5 6.5c-2.3 3-2.3 7 0 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+                    </svg>
+                  ),
+                },
               ].map(({ name, url, icon }) => (
                 <a key={name} href={url} target="_blank" rel="noreferrer" title={name} style={{
                   width: 36, height: 36, borderRadius: '50%',
                   border: '1px solid rgba(255,255,255,0.2)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '0.95rem', transition: 'all 0.3s', color: 'white',
+                  transition: 'all 0.3s', color: 'white',
                   background: 'transparent',
                 }}
                   onMouseOver={e => { e.currentTarget.style.background = 'var(--rose-gold)'; e.currentTarget.style.borderColor = 'var(--rose-gold)'; }}

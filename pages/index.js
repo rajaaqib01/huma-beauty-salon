@@ -139,10 +139,7 @@ export default function Home() {
         description="Jhelum's most luxurious beauty salon. Expert bridal makeup, hair styling, facials, nail art and more."
         canonical="https://humabeautysaloon.site/"
         ogImage="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80"
-      >
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
-      </SEO>
+      />
       <Navbar />
       <main className="page-main">
 

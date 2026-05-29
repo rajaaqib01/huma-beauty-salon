@@ -31,6 +31,7 @@ export default function Book() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [serviceFromUrl, setServiceFromUrl] = useState('');
   const [priceFromUrl, setPriceFromUrl] = useState('');
 
@@ -66,8 +67,27 @@ export default function Book() {
   const next = () => { if (validate()) setStep(s => s + 1); };
   const prev = () => { setStep(s => s - 1); setErrors({}); };
 
-  const submit = () => {
-    setSubmitted(true);
+  const submit = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/book-appointment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to submit booking request');
+      }
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Booking submission error:', error);
+      alert('Unable to submit your booking request right now. Please try again or contact us on WhatsApp.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const inputStyle = (field) => ({
@@ -91,9 +111,7 @@ export default function Book() {
         description="Book your beauty appointment at Huma Beauty Saloon, Jhelum's premier salon."
         canonical="https://humabeautysaloon.site/book"
         ogImage="https://images.unsplash.com/photo-1560066984-138daaa56d8c?w=1200&q=80"
-      >
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
-      </SEO>
+      />
       <Navbar />
 
       <main className="page-main">
@@ -178,22 +196,22 @@ export default function Book() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                           <div style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--rose-gold)' }}>📋 Your Information</div>
                           <div>
-                            <label style={labelStyle}>Full Name *</label>
-                            <input style={inputStyle('name')} value={form.name} onChange={e => update('name', e.target.value)} placeholder="e.g. Ayesha Malik"
+                            <label htmlFor="booking-name" style={labelStyle}>Full Name *</label>
+                            <input id="booking-name" style={inputStyle('name')} value={form.name} onChange={e => update('name', e.target.value)} placeholder="e.g. Ayesha Malik"
                               onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                               onBlur={e => e.target.style.borderColor = errors.name ? '#e57373' : 'var(--blush-mid)'} />
                             {errors.name && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.name}</p>}
                           </div>
                           <div>
-                            <label style={labelStyle}>WhatsApp / Phone *</label>
-                            <input style={inputStyle('phone')} value={form.phone} onChange={e => update('phone', e.target.value)} placeholder="e.g. 0300-1234567"
+                            <label htmlFor="booking-phone" style={labelStyle}>WhatsApp / Phone *</label>
+                            <input id="booking-phone" style={inputStyle('phone')} value={form.phone} onChange={e => update('phone', e.target.value)} placeholder="e.g. 0300-1234567"
                               onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                               onBlur={e => e.target.style.borderColor = errors.phone ? '#e57373' : 'var(--blush-mid)'} />
                             {errors.phone && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.phone}</p>}
                           </div>
                           <div>
-                            <label style={labelStyle}>Email Address *</label>
-                            <input style={inputStyle('email')} type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="e.g. ayesha@email.com"
+                            <label htmlFor="booking-email" style={labelStyle}>Email Address *</label>
+                            <input id="booking-email" style={inputStyle('email')} type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="e.g. ayesha@email.com"
                               onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                               onBlur={e => e.target.style.borderColor = errors.email ? '#e57373' : 'var(--blush-mid)'} />
                             {errors.email && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.email}</p>}
@@ -240,8 +258,8 @@ export default function Book() {
                       <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Choose your preferred appointment slot.</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                         <div>
-                          <label style={labelStyle}>Preferred Date *</label>
-                          <input type="date" min={minDate} style={inputStyle('date')} value={form.date} onChange={e => update('date', e.target.value)}
+                          <label htmlFor="booking-date" style={labelStyle}>Preferred Date *</label>
+                          <input id="booking-date" type="date" min={minDate} style={inputStyle('date')} value={form.date} onChange={e => update('date', e.target.value)}
                             onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                             onBlur={e => e.target.style.borderColor = errors.date ? '#e57373' : 'var(--blush-mid)'} />
                           {errors.date && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.date}</p>}

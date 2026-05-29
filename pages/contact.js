@@ -70,9 +70,7 @@ export default function Contact() {
         description="Get in touch with Huma Beauty Saloon in Jhelum. Call, WhatsApp or visit us."
         canonical="https://humabeautysaloon.site/contact"
         ogImage="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1200&q=80"
-      >
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
-      </SEO>
+      />
       <Navbar />
 
       <main className="page-main">
@@ -128,15 +126,46 @@ export default function Contact() {
                   <div style={{ fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-light)', marginBottom: 14 }}>Follow Us</div>
                   <div style={{ display: 'flex', gap: 10 }}>
                     {[
-                      { label: 'Facebook', color: '#1877f2', icon: 'f' },
-                      { label: 'Instagram', color: '#e1306c', icon: '✦' },
-                      { label: 'TikTok', color: '#010101', icon: '♬' },
-                    ].map(({ label, color, icon }) => (
-                      <a key={label} href="#" title={label} style={{
+                      {
+                        label: 'Instagram',
+                        href: 'https://www.instagram.com/huma_beauty.saloon/',
+                        color: '#e1306c',
+                        icon: (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="6" stroke="white" strokeWidth="1.8" />
+                            <circle cx="12" cy="12" r="4.5" stroke="white" strokeWidth="1.8" />
+                            <circle cx="17.5" cy="6.5" r="1.3" fill="white" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        label: 'TikTok',
+                        href: 'https://www.tiktok.com/@humabeautysaloonjhe/',
+                        color: '#010101',
+                        icon: (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3v9.5c0 2.8 1.3 5 4.6 5 0.4 0 0.8 0 1.2-0.1V20c-0.5 0.1-1.1 0.2-1.7 0.2C10.8 20.1 7 16.4 7 11.9V7h3V3h2z" fill="white" />
+                            <path d="M15 4.5v3.2c-0.6 0-1.1-0.1-1.5-0.3-0.4-0.2-0.8-0.6-1-1.1V4.5h2.5z" fill="#25f4ee" />
+                            <path d="M15 14.5c-0.7 0-1.4-0.3-1.9-0.8-0.5-0.5-0.8-1.2-0.8-1.9V7h2.8c0.4 0.9 1.2 1.5 2.3 1.5V10c-0.6 0-1.2-0.2-1.7-0.5-0.5-0.3-0.8-0.8-1-1.3V14.5z" fill="#fe2c55" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        label: 'Website',
+                        href: 'https://humabeautysaloon.site/',
+                        color: 'var(--blush-deep)',
+                        icon: (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="8.5" stroke="white" strokeWidth="1.8" />
+                            <path d="M4 12h16M12 4a16 16 0 010 16M7.5 6.5c2.3 3 2.3 7 0 10M16.5 6.5c-2.3 3-2.3 7 0 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+                          </svg>
+                        ),
+                      },
+                    ].map(({ label, href, color, icon }) => (
+                      <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label} title={label} style={{
                         width: 44, height: 44, borderRadius: 10,
                         background: color, color: 'white',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: label === 'Facebook' ? '0.9rem' : '0.8rem', fontWeight: 700,
                         transition: 'transform 0.25s, box-shadow 0.25s',
                         boxShadow: `0 4px 12px ${color}55`,
                       }}
@@ -176,8 +205,8 @@ export default function Contact() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                           <div>
-                            <label style={labelStyle}>Name *</label>
-                            <input style={inputStyle('name')} value={form.name} onChange={e => update('name', e.target.value)} placeholder="Your name"
+                            <label htmlFor="contact-name" style={labelStyle}>Name *</label>
+                            <input id="contact-name" style={inputStyle('name')} value={form.name} onChange={e => update('name', e.target.value)} placeholder="Your name"
                               onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                               onBlur={e => e.target.style.borderColor = errors.name ? '#e57373' : 'var(--blush-mid)'} />
                             {errors.name && <p style={{ color: '#c0392b', fontSize: '0.75rem', marginTop: 4 }}>{errors.name}</p>}
@@ -192,16 +221,16 @@ export default function Contact() {
                         </div>
 
                         <div>
-                          <label style={labelStyle}>Email (Optional)</label>
-                          <input style={inputStyle('email')} type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="your@email.com"
+                          <label htmlFor="contact-email" style={labelStyle}>Email (Optional)</label>
+                          <input id="contact-email" style={inputStyle('email')} type="email" value={form.email} onChange={e => update('email', e.target.value)} placeholder="your@email.com"
                             onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                             onBlur={e => e.target.style.borderColor = errors.email ? '#e57373' : 'var(--blush-mid)'} />
                           {errors.email && <p style={{ color: '#c0392b', fontSize: '0.75rem', marginTop: 4 }}>{errors.email}</p>}
                         </div>
 
                         <div>
-                          <label style={labelStyle}>Subject</label>
-                          <select style={{ ...inputStyle('subject'), cursor: 'pointer' }} value={form.subject} onChange={e => update('subject', e.target.value)}
+                          <label htmlFor="contact-subject" style={labelStyle}>Subject</label>
+                          <select id="contact-subject" style={{ ...inputStyle('subject'), cursor: 'pointer' }} value={form.subject} onChange={e => update('subject', e.target.value)}
                             onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                             onBlur={e => e.target.style.borderColor = 'var(--blush-mid)'}>
                             <option value="">Select a topic</option>
@@ -215,8 +244,8 @@ export default function Contact() {
                         </div>
 
                         <div>
-                          <label style={labelStyle}>Message *</label>
-                          <textarea rows={5} style={{ ...inputStyle('message'), resize: 'vertical' }} value={form.message} onChange={e => update('message', e.target.value)} placeholder="Tell us how we can help you..."
+                          <label htmlFor="contact-message" style={labelStyle}>Message *</label>
+                          <textarea id="contact-message" rows={5} style={{ ...inputStyle('message'), resize: 'vertical' }} value={form.message} onChange={e => update('message', e.target.value)} placeholder="Tell us how we can help you..."
                             onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                             onBlur={e => e.target.style.borderColor = errors.message ? '#e57373' : 'var(--blush-mid)'} />
                           {errors.message && <p style={{ color: '#c0392b', fontSize: '0.75rem', marginTop: 4 }}>{errors.message}</p>}
