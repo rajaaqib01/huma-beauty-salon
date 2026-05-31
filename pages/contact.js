@@ -8,6 +8,7 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', phone: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const update = (f, v) => setForm(p => ({ ...p, [f]: v }));
@@ -25,6 +26,7 @@ export default function Contact() {
   const submit = async () => {
     if (!validate()) return;
 
+    setServerError('');
     setIsLoading(true);
     try {
       const response = await fetch('/api/send-email', {
@@ -36,13 +38,15 @@ export default function Contact() {
       if (response.ok) {
         setSubmitted(true);
         setForm({ name: '', phone: '', email: '', subject: '', message: '' });
+        setServerError('');
       } else {
         const data = await response.json();
-        alert('Error sending message: ' + (data.error || 'Unknown error'));
+        const message = data.error || 'Unknown error';
+        setServerError('Error sending message: ' + message);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to send message. Please try again or contact us directly on WhatsApp.');
+      setServerError('Failed to send message. Please try again or contact us directly on WhatsApp.');
     } finally {
       setIsLoading(false);
     }
@@ -254,6 +258,11 @@ export default function Contact() {
                         <button onClick={submit} disabled={isLoading} className="btn-rose" style={{ padding: '15px 32px', fontSize: '0.88rem', width: '100%', justifyContent: 'center', opacity: isLoading ? 0.7 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}>
                           <span>{isLoading ? '⟳ Sending...' : '✦ Send Message'}</span>
                         </button>
+                        {serverError && (
+                          <p style={{ color: '#c0392b', fontSize: '0.9rem', lineHeight: 1.6, marginTop: 14 }}>
+                            {serverError}
+                          </p>
+                        )}
                       </div>
                     </>
                   )}

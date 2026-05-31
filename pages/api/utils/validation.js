@@ -105,7 +105,7 @@ export const validateBookingForm = (data) => {
  */
 export const validateEnv = () => {
   const required = ['EMAIL_USER', 'EMAIL_PASSWORD'];
-  const missing = required.filter(key => !process.env[key]);
+  const missing = required.filter(key => !process.env[key]?.trim());
 
   if (missing.length > 0) {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);

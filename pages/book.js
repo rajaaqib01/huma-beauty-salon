@@ -27,7 +27,7 @@ export default function Book() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
-    service: '', date: '', time: '', notes: '',
+    service: '', price: '', date: '', time: '', notes: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
@@ -40,7 +40,11 @@ export default function Book() {
       const service = decodeURIComponent(router.query.service);
       setForm(f => ({ ...f, service }));
       setServiceFromUrl(service);
-      if (router.query.price) setPriceFromUrl(decodeURIComponent(router.query.price));
+      if (router.query.price) {
+        const p = decodeURIComponent(router.query.price);
+        setPriceFromUrl(p);
+        setForm(f => ({ ...f, price: p }));
+      }
       setStep(0);
     }
   }, [router.isReady, router.query.service]);
@@ -174,7 +178,7 @@ export default function Book() {
                   <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: '2.5rem', color: 'var(--rose-gold)', marginBottom: 8 }}>Thank You!</div>
                   <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '2rem', fontWeight: 400, color: 'var(--text-dark)', marginBottom: 16 }}>Appointment Requested</h2>
                   <p style={{ color: 'var(--text-light)', lineHeight: 1.7, marginBottom: 12 }}>
-                    We have received your booking for <strong>{form.service}</strong> on <strong>{form.date}</strong> at <strong>{form.time}</strong>.
+                    We have received your booking for <strong>{form.service}</strong>{form.price ? <> (<strong>{form.price}</strong>)</> : ''} on <strong>{form.date}</strong> at <strong>{form.time}</strong>.
                   </p>
                   <p style={{ color: 'var(--text-light)', fontSize: '0.875rem', marginBottom: 32 }}>Our team will confirm via WhatsApp within 2 hours.</p>
                   <a href={`https://wa.me/923355462214?text=Hello! I just booked an appointment for ${encodeURIComponent(form.service)} on ${encodeURIComponent(form.date)} at ${encodeURIComponent(form.time)}. My name is ${encodeURIComponent(form.name)}.`} target="_blank" rel="noreferrer">
@@ -300,6 +304,7 @@ export default function Book() {
                           ['Phone', form.phone],
                           form.email ? ['Email', form.email] : null,
                           ['Service', form.service],
+                          form.price ? ['Price', form.price] : null,
                           ['Date', form.date],
                           ['Time', form.time],
                           form.notes ? ['Notes', form.notes] : null,

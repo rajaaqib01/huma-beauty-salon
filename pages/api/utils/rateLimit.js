@@ -23,8 +23,10 @@ export const rateLimit = (handler, limit = 5, windowMs = 60000) => {
 
     // Check if limit exceeded
     if (validTimestamps.length >= limit) {
+      const retryAfterSeconds = Math.ceil((windowMs - (now - validTimestamps[0])) / 1000);
+      res.setHeader('Retry-After', retryAfterSeconds);
       return res.status(429).json({
-        error: 'Too many requests. Please try again later.'
+        error: `Too many requests. Please wait ${retryAfterSeconds} second${retryAfterSeconds === 1 ? '' : 's'} and try again.`
       });
     }
 

@@ -144,38 +144,29 @@ export default function Home() {
       <main className="page-main">
 
         {/* HERO */}
-        <section className="hero" style={{ minHeight: '100vh', position: 'relative', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'url(https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1400&q=85) center/cover no-repeat', filter: 'brightness(0.65) contrast(1.05)' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(10,8,6,0.82) 0%, rgba(20,12,12,0.55) 60%, rgba(10,8,6,0.3) 100%)' }} />
-          <div style={{ position: 'absolute', top: '10%', right: '8%', width: 340, height: 340, borderRadius: '50%', border: '1px solid rgba(183,110,121,0.3)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: '14%', right: '11%', width: 260, height: 260, borderRadius: '50%', border: '1px solid rgba(183,110,121,0.15)', pointerEvents: 'none' }} />
-
-          <div className="hero-inner" style={{ position: 'relative', zIndex: 1, maxWidth: 1280, margin: '0 auto', padding: '0 5%', width: '100%' }}>
-            <div style={{ maxWidth: 680 }}>
-              <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', color: 'rgba(255,255,255,0.96)', marginBottom: 8, opacity: 1, textShadow: '0 2px 12px rgba(0,0,0,0.55)' }}>Welcome to</div>
-              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 400, color: 'white', lineHeight: 1.02, marginBottom: 16, textShadow: '0 4px 36px rgba(0,0,0,0.6)' }}>
-                Huma<br /><span style={{ fontStyle: 'italic', color: 'rgba(255,220,225,0.95)', textShadow: '0 4px 36px rgba(0,0,0,0.5)' }}>Beauty</span> Saloon
-              </h1>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', color: 'rgba(255,255,255,0.95)', marginBottom: 12, fontStyle: 'italic', fontWeight: 300, letterSpacing: '0.05em' }}>Where Beauty Meets Elegance</p>
-              <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.88)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 44 }}>Premium Beauty Services in Jhelum</p>
-              <div className="hero-ctas" style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 28 }}>
-                <Link href="/book"><button className="btn-rose" style={{ fontSize: '0.9rem', padding: '16px 36px' }}><span>✦ Book Appointment</span></button></Link>
-                <Link href="/#services"><button className="btn-outline" style={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white', padding: '16px 36px' }}>Our Services</button></Link>
+        <section className="hero" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1600&q=90')" }}>
+          <div className="hero-overlay" />
+          <div className="hero-inner">
+            <div className="hero-copy">
+              <div className="hero-label">Welcome to</div>
+              <h1>Huma <span>Beauty</span> Saloon</h1>
+              <p className="hero-subtitle">Where Beauty Meets Elegance</p>
+              <p className="hero-text">Experience premium bridal makeup, hair styling, facials, nails and waxing with expert care in the heart of Jhelum.</p>
+              <div className="hero-ctas">
+                <Link href="/book"><button className="btn-rose">✦ Book Appointment</button></Link>
+                <Link href="/#services"><button className="btn-outline">Our Services</button></Link>
               </div>
-              <div className="hero-stats" style={{ display: 'flex', flexWrap: 'wrap', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)', overflow: 'hidden', width: 'fit-content' }}>
-                {[['5+', 'Years Experience'], ['1000+', 'Happy Clients'], ['Expert', 'Certified Team']].map(([num, label], i) => (
-                  <div key={label} style={{ padding: '18px 28px', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.1)' : 'none', textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--blush-deep)', fontFamily: "'Cormorant Garamond', serif" }}>{num}</div>
-                    <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>{label}</div>
+              <div className="hero-stats">
+                {[['5+', 'Years Experience'], ['1000+', 'Happy Clients'], ['Expert', 'Certified Team']].map(([num, label]) => (
+                  <div key={label}>
+                    <div className="hero-stat-number">{num}</div>
+                    <div className="hero-stat-label">{label}</div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <div style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.45)', fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-            <span>Scroll</span>
-            <div style={{ width: 1, height: 48, background: 'linear-gradient(to bottom, rgba(255,255,255,0.45), transparent)' }} />
-          </div>
+          <div className="hero-scroll-tip">Scroll</div>
         </section>
 
         {/* SERVICES */}

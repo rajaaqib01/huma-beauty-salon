@@ -1,7 +1,12 @@
 import nodemailer from 'nodemailer';
 import { escapeHtml } from './utils/security';
-import { validateContactForm, validateEnv, validateRequestSize } from './utils/validation';
+import { validateContactForm, validateRequestSize } from './utils/validation';
 import { rateLimit } from './utils/rateLimit';
+import { supabaseServer } from '../../lib/supabaseServer'
+import { insert as localInsert } from '../../lib/localDb'
+
+const SEND_EMAIL_RATE_LIMIT = 12;
+const SEND_EMAIL_WINDOW_MS = 60 * 1000; // 1 minute
 
 async function sendEmailHandler(req, res) {
   if (req.method !== 'POST') {
@@ -21,81 +26,86 @@ async function sendEmailHandler(req, res) {
     return res.status(400).json({ error: 'Validation failed', errors });
   }
 
-  // Validate environment variables
-  try {
-    validateEnv();
-  } catch (error) {
-    console.error('Environment configuration error:', error);
-    return res.status(500).json({ error: 'Server configuration error' });
+  const emailUser = process.env.EMAIL_USER?.trim();
+  const emailPassword = process.env.EMAIL_PASSWORD?.trim();
+  const emailRecipient = process.env.EMAIL_RECIPIENT?.trim() || 'humaaqi96@gmail.com';
+
+  // Sanitize inputs
+  const safeName = escapeHtml(name);
+  const safePhone = escapeHtml(phone);
+  const safeEmail = email ? escapeHtml(email) : 'Not provided';
+  const safeSubject = escapeHtml(subject || 'Not specified');
+  const safeMessage = escapeHtml(message);
+
+  const msgObj = {
+    name: safeName,
+    phone: safePhone,
+    email: safeEmail === 'Not provided' ? null : safeEmail,
+    subject: safeSubject,
+    message: safeMessage,
+    created_at: new Date().toISOString(),
+    status: 'new'
+  }
+
+  // Persist message (Supabase if available, else local JSON)
+  let persisted = false
+  try{
+    if(supabaseServer){
+      await supabaseServer.from('messages').insert([{ ...msgObj }])
+      persisted = true
+    } else {
+      await localInsert('messages', msgObj)
+      persisted = true
+    }
+  } catch (e){
+    console.error('Message persistence error:', e)
+    persisted = false
   }
 
   try {
-    // Create a transporter using Gmail
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+    // Only attempt to send email if credentials are configured
+    const canSendEmail = Boolean(emailUser && emailPassword)
+    if (canSendEmail) {
+      try {
+        // Create a transporter using Gmail
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: emailUser,
+            pass: emailPassword,
+          },
+        });
 
-    // Sanitize inputs
-    const safeName = escapeHtml(name);
-    const safePhone = escapeHtml(phone);
-    const safeEmail = email ? escapeHtml(email) : 'Not provided';
-    const safeSubject = escapeHtml(subject || 'Not specified');
-    const safeMessage = escapeHtml(message);
+        // Verify the transporter before sending the message
+        await transporter.verify();
 
-    // Email to salon owner
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_RECIPIENT || 'humaaqi96@gmail.com',
-      subject: `New Contact Form Message: ${safeSubject}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
-          <h2 style="color: #6e3b52;">New Message from Contact Form</h2>
-          <hr style="border: 1px solid #ddd;">
-          <p><strong>Name:</strong> ${safeName}</p>
-          <p><strong>Phone:</strong> ${safePhone}</p>
-          <p><strong>Email:</strong> ${safeEmail}</p>
-          <p><strong>Subject:</strong> ${safeSubject}</p>
-          <hr style="border: 1px solid #ddd;">
-          <p><strong>Message:</strong></p>
-          <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #6e3b52;">
-            ${safeMessage}
-          </p>
-          <hr style="border: 1px solid #ddd;">
-          <p style="font-size: 12px; color: #999;">
-            This message was sent via Huma Beauty Saloon website contact form.
-          </p>
-        </div>
-      `,
-    });
+        // Email to salon owner
+        await transporter.sendMail({
+          from: emailUser,
+          to: emailRecipient,
+          subject: `New Contact Form Message: ${safeSubject}`,
+          html: `\n            <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">\n              <h2 style="color: #6e3b52;">New Message from Contact Form</h2>\n              <hr style="border: 1px solid #ddd;">\n              <p><strong>Name:</strong> ${safeName}</p>\n              <p><strong>Phone:</strong> ${safePhone}</p>\n              <p><strong>Email:</strong> ${safeEmail}</p>\n              <p><strong>Subject:</strong> ${safeSubject}</p>\n              <hr style="border: 1px solid #ddd;">\n              <p><strong>Message:</strong></p>\n              <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #6e3b52;">\n                ${safeMessage}\n              </p>\n              <hr style="border: 1px solid #ddd;">\n              <p style="font-size: 12px; color: #999;">\n                This message was sent via Huma Beauty Saloon website contact form.\n              </p>\n            </div>\n          `,
+        });
 
-    // Email to user (if email provided)
-    if (email) {
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'We Received Your Message - Huma Beauty Saloon',
-        html: `
-          <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
-            <h2 style="color: #6e3b52;">Thank You, ${safeName}! 💄</h2>
-            <p>We have received your message and will get back to you within 24 hours.</p>
-            <p>For urgent queries, please reach out to us on WhatsApp: <strong>+92 335 5462214</strong></p>
-            <hr style="border: 1px solid #ddd;">
-            <p><strong>Your Message:</strong></p>
-            <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #d4a5a5;">
-              ${safeMessage}
-            </p>
-            <hr style="border: 1px solid #ddd;">
-            <p>Best regards,<br><strong>Huma Beauty Saloon Team</strong></p>
-          </div>
-        `,
-      });
+        // Email to user (if email provided)
+        if (email) {
+          await transporter.sendMail({
+            from: emailUser,
+            to: email,
+            subject: 'We Received Your Message - Huma Beauty Saloon',
+            html: `\n              <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">\n                <h2 style="color: #6e3b52;">Thank You, ${safeName}! 💄</h2>\n                <p>We have received your message and will get back to you within 24 hours.</p>\n                <p>For urgent queries, please reach out to us on WhatsApp: <strong>+92 335 5462214</strong></p>\n                <hr style="border: 1px solid #ddd;">\n                <p><strong>Your Message:</strong></p>\n                <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #d4a5a5;">\n                  ${safeMessage}\n                </p>\n                <hr style="border: 1px solid #ddd;">\n                <p>Best regards,<br><strong>Huma Beauty Saloon Team</strong></p>\n              </div>\n            `,
+          });
+        }
+      } catch (e) {
+        console.error('Email send failed:', e)
+      }
     }
 
-    res.status(200).json({ success: true, message: 'Email sent successfully' });
+    if (persisted) {
+      return res.status(200).json({ success: true, message: canSendEmail ? 'Message saved and email sent (if configured)' : 'Message saved (email not configured)' })
+    }
+    // If persistence failed, return server error
+    return res.status(500).json({ error: 'Failed to persist message. Please try again later.' })
   } catch (error) {
     console.error('Email sending error:', error);
     // Don't expose error details to client
@@ -103,5 +113,5 @@ async function sendEmailHandler(req, res) {
   }
 }
 
-// Export with rate limiting (5 requests per minute)
-export default rateLimit(sendEmailHandler, 5, 60000);
+// Export with rate limiting (12 requests per minute)
+export default rateLimit(sendEmailHandler, SEND_EMAIL_RATE_LIMIT, SEND_EMAIL_WINDOW_MS);
