@@ -5,13 +5,37 @@ import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
 
-const services = [
-  'Everyday Makeup', 'Simple Party Makeup', 'Glam Party Makeup', 'Engagement Makeup', 'HD Makeup', 'Mehndi Makeup', 'Bridal Makeup', 'Luxury Bridal',
-  'Haircut & Styling', 'Hair Coloring', 'Keratin Treatment', 'Bridal Hairstyling',
-  'Cleanup Facial', 'Basic Facial', 'Whitening Facial', 'Gold Facial', 'Hydra Facial', 'Acne Facial', 'Anti-Aging Facial', 'Luxury Glow Facial',
-  'Gel Manicure', 'Nail Extensions', 'Nail Art', 'Lash Extensions',
-  'Full Body Waxing', 'Threading', 'Brazilian Wax', 'Eyebrow Lamination',
-];
+const servicePriceMap = {
+  'Everyday Makeup': 'Rs. 3,000',
+  'Simple Party Makeup': 'Rs. 6,000',
+  'Glam Party Makeup': 'Rs. 8,000',
+  'Engagement Makeup': 'Rs. 8,000',
+  'HD Makeup': 'Rs. 10,000',
+  'Mehndi Makeup': 'Rs. 10,000',
+  'Bridal Makeup': 'Rs. 18,000',
+  'Luxury Bridal': 'Rs. 25,000',
+  'Haircut & Styling': 'Rs. 1,000',
+  'Hair Coloring': 'Rs. 9,000',
+  'Keratin Treatment': 'Rs. 15,000',
+  'Bridal Hairstyling': 'Rs. 12,000',
+  'Cleanup Facial': 'Rs. 2,000',
+  'Basic Facial': 'Rs. 2,500',
+  'Whitening Facial': 'Rs. 4,500',
+  'Gold Facial': 'Rs. 5,500',
+  'Hydra Facial': 'Rs. 8,000',
+  'Acne Facial': 'Rs. 5,000',
+  'Anti-Aging Facial': 'Rs. 7,000',
+  'Luxury Glow Facial': 'Rs. 10,000',
+  'Gel Manicure': 'Rs. 1,500',
+  'Nail Extensions': 'Rs. 6,000',
+  'Nail Art': 'Rs. 2,000',
+  'Lash Extensions': 'Rs. 4,000',
+  'Full Body Waxing': 'Rs. 7,000',
+  'Threading': 'Rs. 300',
+  'Brazilian Wax': 'Rs. 9,000',
+  'Eyebrow Lamination': 'Rs. 2,500',
+};
+const services = Object.keys(servicePriceMap);
 
 const timeSlots = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -38,18 +62,20 @@ export default function Book() {
   useEffect(() => {
     if (router.isReady && router.query.service) {
       const service = decodeURIComponent(router.query.service);
-      setForm(f => ({ ...f, service }));
+      const price = router.query.price ? decodeURIComponent(router.query.price) : servicePriceMap[service] || '';
+      setForm(f => ({ ...f, service, price }));
       setServiceFromUrl(service);
-      if (router.query.price) {
-        const p = decodeURIComponent(router.query.price);
-        setPriceFromUrl(p);
-        setForm(f => ({ ...f, price: p }));
-      }
+      setPriceFromUrl(price);
       setStep(0);
     }
   }, [router.isReady, router.query.service]);
 
   const update = (field, val) => setForm(f => ({ ...f, [field]: val }));
+  const selectService = (serviceName) => {
+    setForm(f => ({ ...f, service: serviceName, price: servicePriceMap[serviceName] || '' }));
+    setServiceFromUrl('');
+    setPriceFromUrl('');
+  };
 
   const validate = () => {
     const e = {};
@@ -118,6 +144,7 @@ export default function Book() {
   });
 
   const labelStyle = { fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-mid)', marginBottom: 6, display: 'block' };
+  const stepCardStyle = { background: 'var(--champagne-pale)', borderRadius: 20, padding: 20, border: '1px solid rgba(15,76,69,0.08)', boxShadow: 'var(--shadow-soft)' };
 
   // Get tomorrow's date as min
   const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
@@ -136,14 +163,14 @@ export default function Book() {
       <main className="page-main">
         {/* Hero Banner */}
         <div style={{
-          background: 'linear-gradient(135deg, var(--text-dark) 0%, #5a2832 100%)',
+          background: 'linear-gradient(135deg, var(--rose-gold-dark) 0%, var(--rose-gold-light) 100%)',
           padding: '80px 5% 60px',
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden',
         }}>
-          <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', border: '1px solid rgba(183,110,121,0.2)', pointerEvents: 'none' }} />
-          <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: 'var(--blush-deep)', marginBottom: 8 }}>Reserve Your Spot</div>
+          <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', border: '1px solid rgba(15,76,69,0.2)', pointerEvents: 'none' }} />
+          <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: 'var(--champagne)', marginBottom: 8 }}>Reserve Your Spot</div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 300, color: 'white', marginBottom: 16 }}>
             Book an <em style={{ color: 'var(--blush-deep)', fontStyle: 'italic' }}>Appointment</em>
           </h1>
@@ -153,7 +180,7 @@ export default function Book() {
         </div>
 
         {/* Form Section */}
-        <section style={{ background: 'var(--champagne-pale)', padding: '80px 5%', minHeight: '70vh' }}>
+        <section style={{ background: 'var(--cream)', padding: '80px 5%', minHeight: '70vh' }}>
           <div style={{ maxWidth: 680, margin: '0 auto' }}>
 
             {/* Progress Steps */}
@@ -244,22 +271,25 @@ export default function Book() {
                             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                               <div style={{ flex: 1, background: form.service ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)', color: form.service ? 'white' : 'var(--text-mid)', padding: 16, borderRadius: 12 }}>
                                 <div style={{ fontSize: '1rem', fontWeight: 700 }}>{form.service}</div>
-                                <div style={{ fontSize: '0.9rem', color: form.service ? 'rgba(255,255,255,0.9)' : 'var(--text-light)', marginTop: 6 }}>{priceFromUrl}</div>
+                                <div style={{ fontSize: '0.9rem', color: form.service ? 'rgba(255,255,255,0.9)' : 'var(--text-light)', marginTop: 6 }}>{form.price || priceFromUrl}</div>
                               </div>
-                              <button onClick={() => { setServiceFromUrl(''); setPriceFromUrl(''); setForm(f => ({ ...f, service: '' })); }} className="btn-outline" style={{ padding: '10px 16px' }}>Change</button>
+                              <button onClick={() => { setServiceFromUrl(''); setPriceFromUrl(''); setForm(f => ({ ...f, service: '', price: '' })); }} className="btn-outline" style={{ padding: '10px 16px' }}>Change</button>
                             </div>
                           ) : (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
-                              {services.map(s => (
-                                <button key={s} onClick={() => update('service', s)} style={{
+                              {services.map(serviceName => (
+                                <button key={serviceName} onClick={() => selectService(serviceName)} style={{
                                   padding: '12px 14px', borderRadius: 10, fontSize: '0.85rem', fontFamily: "'Jost', sans-serif", textAlign: 'left', cursor: 'pointer', transition: 'all 0.25s',
-                                  background: form.service === s ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)',
-                                  color: form.service === s ? 'white' : 'var(--text-mid)',
-                                  border: form.service === s ? 'none' : '1.5px solid var(--blush-mid)',
-                                  fontWeight: form.service === s ? 600 : 400,
-                                  boxShadow: form.service === s ? '0 4px 12px rgba(110,59,82,0.3)' : 'none',
+                                  background: form.service === serviceName ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)',
+                                  color: 'white',
+                                  border: form.service === serviceName ? 'none' : '1.5px solid var(--blush-mid)',
+                                  fontWeight: form.service === serviceName ? 600 : 400,
+                                  boxShadow: form.service === serviceName ? '0 4px 12px rgba(110,59,82,0.3)' : 'none',
                                 }}>
-                                  {s}
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                                    <span>{serviceName}</span>
+                                    <span style={{ fontSize: '0.8rem', color: form.service === serviceName ? 'rgba(255,255,255,0.85)' : 'var(--text-light)', fontWeight: 500 }}>{servicePriceMap[serviceName]}</span>
+                                  </div>
                                 </button>
                               ))}
                             </div>
@@ -272,7 +302,7 @@ export default function Book() {
 
                   {/* Step 1: Date & Time */}
                   {step === 1 && (
-                    <div>
+                    <div style={stepCardStyle}>
                       <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: 'var(--text-dark)', marginBottom: 8 }}>Pick Date & Time</h2>
                       <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Choose your preferred appointment slot.</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -310,10 +340,10 @@ export default function Book() {
 
                   {/* Step 2: Confirm */}
                   {step === 2 && (
-                    <div>
+                    <div style={stepCardStyle}>
                       <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: 'var(--text-dark)', marginBottom: 8 }}>Confirm Booking</h2>
                       <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Please review your booking details before confirming.</p>
-                      <div style={{ background: 'var(--champagne-pale)', borderRadius: 14, padding: '24px', marginBottom: 24 }}>
+                      <div style={{ background: 'white', borderRadius: 14, padding: '24px', marginBottom: 24, border: '1px solid rgba(15,76,69,0.08)' }}>
                         {[
                           ['Name', form.name],
                           ['Phone', form.phone],

@@ -144,7 +144,7 @@ export default function Home() {
       <main className="page-main">
 
         {/* HERO */}
-        <section className="hero" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1600&q=90')" }}>
+        <section className="hero" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1600&q=90')" }} >
           <div className="hero-overlay" />
           <div className="hero-inner">
             <div className="hero-copy">
@@ -180,13 +180,13 @@ export default function Home() {
         </div>
 
         {/* WHY US */}
-        <section id="about" style={{ background: 'linear-gradient(135deg, var(--text-dark) 0%, #3d1e24 100%)', padding: '96px 5%', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 400, height: 400, borderRadius: '50%', background: 'rgba(183,110,121,0.06)', pointerEvents: 'none' }} />
-          <div style={{ maxWidth: 1280, margin: '0 auto', textAlign: 'center' }}>
-            <div className="section-label" style={{ color: 'var(--blush-deep)' }}>✦ Our Promise</div>
-            <h2 className="section-title" style={{ color: 'white' }}>Why Choose <em style={{ color: 'var(--blush-deep)' }}>Us</em></h2>
+        <section id="about" className="why-us-section">
+          <div className="why-us-background-circle" />
+          <div className="why-us-wrapper">
+            <div className="section-label">✦ Our Promise</div>
+            <h2 className="section-title" style={{ color: 'white' }}>Why Choose <em>Us</em></h2>
             <div className="section-divider" style={{ margin: '20px auto 52px' }} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 32 }}>
+            <div className="why-us-cards">
               {[
                 { icon: '✦', title: 'Expert Stylists', desc: 'Professionally trained artists with years of experience in bridal and beauty transformations.' },
                 { icon: '◈', title: 'Premium Products', desc: 'We use only international-grade, skin-safe products from trusted beauty brands worldwide.' },
@@ -194,12 +194,10 @@ export default function Home() {
                 { icon: '♡', title: 'Relaxing Atmosphere', desc: 'Escape into our serene, spa-like ambiance designed for total relaxation and comfort.' },
                 { icon: '✿', title: 'Affordable Luxury', desc: 'Premium quality services at prices that make luxury accessible to every woman in Jhelum.' },
               ].map(({ icon, title, desc }) => (
-                <div key={title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '36px 24px', transition: 'all 0.35s', cursor: 'default' }}
-                  onMouseOver={e => { e.currentTarget.style.background = 'rgba(183,110,121,0.12)'; e.currentTarget.style.borderColor = 'rgba(183,110,121,0.3)'; e.currentTarget.style.transform = 'translateY(-6px)'; }}
-                  onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none'; }}>
-                  <div style={{ fontSize: '2rem', color: 'var(--blush-deep)', marginBottom: 16 }}>{icon}</div>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.3rem', color: 'white', marginBottom: 12 }}>{title}</h3>
-                  <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{desc}</p>
+                <div key={title} className="why-us-card">
+                  <div className="why-us-card-icon">{icon}</div>
+                  <h3 className="why-us-card-title">{title}</h3>
+                  <p className="why-us-card-text">{desc}</p>
                 </div>
               ))}
             </div>
