@@ -1,6 +1,6 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import { sanitizeObject } from '../utils/security'
+import { sanitizeObject } from '../../../lib/apiUtils/security'
 
 async function handler(req, res) {
   if (!supabaseServer) {

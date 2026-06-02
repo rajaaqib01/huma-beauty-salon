@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
-import { escapeHtml, sanitizeObject } from './utils/security';
-import { validateBookingForm, validateEnv, validateRequestSize } from './utils/validation';
-import { rateLimit } from './utils/rateLimit';
+import { escapeHtml, sanitizeObject } from '../../lib/apiUtils/security';
+import { validateBookingForm, validateEnv, validateRequestSize } from '../../lib/apiUtils/validation';
+import { rateLimit } from '../../lib/apiUtils/rateLimit';
 import { supabaseServer } from '../../lib/supabaseServer';
 import { insert as localInsert } from '../../lib/localDb';
 

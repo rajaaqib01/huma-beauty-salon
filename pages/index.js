@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
-import { useState } from 'react';
 
 const makeupServices = [
   { name: 'Everyday Makeup', desc: 'Fresh, natural makeup perfect for daily wear and casual occasions.', price: 'Rs. 3,000', badge: '', img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80' },
@@ -91,14 +90,10 @@ const tiktokProfileLink = 'https://www.tiktok.com/@humabeautysaloonjhe';
 const tiktokVideoEmbedUrl = 'https://www.tiktok.com/embed/v2/7631137952298454292';
 
 function ServiceCard({ service }) {
-  const [hov, setHov] = useState(false);
   return (
-    <div className="service-card"
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ transform: hov ? 'translateY(-8px)' : 'none', boxShadow: hov ? 'var(--shadow-hover)' : 'var(--shadow-card)', transition: 'var(--transition)' }}>
+    <div className="service-card">
       <div className="service-card-img-wrap">
-        <img src={service.img} alt={service.name} className="service-card-img"
-          style={{ transform: hov ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.5s ease' }} />
+        <img src={service.img} alt={service.name} className="service-card-img" loading="lazy" />
         {service.badge && <span className="service-card-badge">{service.badge}</span>}
       </div>
       <div className="service-card-body">
@@ -107,9 +102,9 @@ function ServiceCard({ service }) {
         <div className="service-card-price">{service.price}</div>
         <div className="service-card-footer">
           <Link href={`/book?service=${encodeURIComponent(service.name)}&price=${encodeURIComponent(service.price)}`}>
-            <button className="btn-rose" style={{ padding: '10px 22px', fontSize: '0.78rem' }}><span>Book Now</span></button>
+            <button className="btn-rose btn-rose-small"><span>Book Now</span></button>
           </Link>
-          <Link href="/contact" style={{ fontSize: '0.78rem', color: 'var(--text-light)', letterSpacing: '0.05em' }}>Enquire →</Link>
+          <Link href="/contact" className="service-link">Enquire →</Link>
         </div>
       </div>
     </div>
@@ -150,23 +145,30 @@ export default function Home() {
             <div className="hero-copy">
               <div className="hero-label">Welcome to</div>
               <h1>Huma <span>Beauty</span> Saloon</h1>
-              <p className="hero-subtitle">Where Beauty Meets Elegance</p>
-              <p className="hero-text">Experience premium bridal makeup, hair styling, facials, nails and waxing with expert care in the heart of Jhelum.</p>
+              <p className="hero-subtitle">Luxury beauty services crafted for your perfect moment</p>
+              <p className="hero-text">We deliver bridal makeup, hair styling, facials, nails, and waxing with the same care, hygiene, and premium touch every time.</p>
               <div className="hero-ctas">
                 <Link href="/book"><button className="btn-rose">✦ Book Appointment</button></Link>
-                <Link href="/#services"><button className="btn-outline">Our Services</button></Link>
+                <Link href="/contact"><button className="btn-outline">Contact Us</button></Link>
               </div>
-              <div className="hero-stats">
-                {[['5+', 'Years Experience'], ['1000+', 'Happy Clients'], ['Expert', 'Certified Team']].map(([num, label]) => (
-                  <div key={label}>
-                    <div className="hero-stat-number">{num}</div>
-                    <div className="hero-stat-label">{label}</div>
-                  </div>
-                ))}
+              <div className="hero-badges">
+                <span>Bridal Specialist</span>
+                <span>Clean Salon</span>
+                <span>Fast WhatsApp Booking</span>
               </div>
             </div>
+            <div className="hero-card">
+              <div className="hero-card-tag">Quick Salon Guide</div>
+              <h2>Book in 3 easy steps</h2>
+              <ol className="hero-card-list">
+                <li>Select the service you love</li>
+                <li>Pick a convenient date & time</li>
+                <li>Confirm instantly on WhatsApp</li>
+              </ol>
+              <a className="btn-secondary hero-card-whatsapp" href="https://wa.me/923355462214" target="_blank" rel="noreferrer">Chat on WhatsApp</a>
+            </div>
           </div>
-          <div className="hero-scroll-tip">Scroll</div>
+          <div className="hero-scroll-tip">Scroll to explore</div>
         </section>
 
         {/* SERVICES */}
@@ -214,19 +216,17 @@ export default function Home() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24 }}>
               {testimonials.map((t, i) => (
-                <div key={i} style={{ background: 'var(--white)', borderRadius: 16, padding: '28px', boxShadow: 'var(--shadow-card)', transition: 'var(--transition)' }}
-                  onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-hover)'; }}
-                  onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--shadow-card)'; }}>
-                  <div style={{ fontSize: '2.5rem', color: 'var(--blush-mid)', fontFamily: 'Georgia, serif', lineHeight: 1, marginBottom: 8 }}>"</div>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-mid)', lineHeight: 1.75, marginBottom: 20 }}>{t.text}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <img src={t.img} alt={t.name} style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--blush-mid)' }} />
+                <div key={i} className="testimonial-card">
+                  <div className="testimonial-quote">"</div>
+                  <p className="testimonial-text">{t.text}</p>
+                  <div className="testimonial-meta">
+                    <img src={t.img} alt={t.name} className="testimonial-avatar" loading="lazy" />
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-dark)' }}>{t.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>{t.loc}</div>
+                      <div className="testimonial-name">{t.name}</div>
+                      <div className="testimonial-loc">{t.loc}</div>
                     </div>
-                    <div style={{ marginLeft: 'auto', display: 'flex', gap: 2 }}>
-                      {Array(t.stars).fill(0).map((_, j) => <span key={j} style={{ color: 'var(--champagne)', fontSize: '0.85rem' }}>★</span>)}
+                    <div className="testimonial-stars">
+                      {Array(t.stars).fill(0).map((_, j) => <span key={j}>★</span>)}
                     </div>
                   </div>
                 </div>
@@ -246,14 +246,12 @@ export default function Home() {
               </div>
               <a href="https://www.instagram.com/huma_beauty.saloon/" target="_blank" rel="noreferrer" style={{ fontSize: '0.85rem', color: 'var(--rose-gold)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}>Follow @HumaBeauty →</a>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+            <div className="gallery-grid">
               {galleryImgs.map((src, i) => (
-                <div key={i} style={{ borderRadius: 12, overflow: 'hidden', position: 'relative', width: '100%', paddingTop: '100%', cursor: 'pointer' }}
-                  onMouseOver={e => { e.currentTarget.querySelector('.gov').style.opacity = 1; e.currentTarget.querySelector('img').style.transform = 'scale(1.08)'; }}
-                  onMouseOut={e => { e.currentTarget.querySelector('.gov').style.opacity = 0; e.currentTarget.querySelector('img').style.transform = 'scale(1)'; }}>
-                  <img src={src} alt={`Gallery ${i + 1}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} />
-                  <div className="gov" style={{ position: 'absolute', inset: 0, background: 'rgba(143,79,89,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity 0.3s ease' }}>
-                    <span style={{ color: 'white', fontSize: '1.8rem' }}>♡</span>
+                <div key={i} className="gallery-item">
+                  <img src={src} alt={`Gallery ${i + 1}`} className="gallery-img" loading="lazy" />
+                  <div className="gallery-overlay">
+                    <span>♡</span>
                   </div>
                 </div>
               ))}
@@ -295,11 +293,7 @@ export default function Home() {
                   onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
                   onMouseOut={e => e.currentTarget.style.transform = 'none'}>✦ Book Appointment</button>
               </Link>
-              <a href="https://wa.me/923355462214" target="_blank" rel="noreferrer">
-                <button style={{ background: 'transparent', color: 'white', fontFamily: "'Jost', sans-serif", fontWeight: 500, fontSize: '0.85rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '15px 34px', border: '1.5px solid rgba(255,255,255,0.6)', borderRadius: '50px', cursor: 'pointer', transition: 'all 0.3s' }}
-                  onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                  onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'none'; }}>WhatsApp Us</button>
-              </a>
+              <a href="https://wa.me/923355462214" target="_blank" rel="noreferrer" className="btn-secondary">WhatsApp Us</a>
             </div>
           </div>
         </section>

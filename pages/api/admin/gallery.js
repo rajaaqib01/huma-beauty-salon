@@ -1,7 +1,7 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
-import { sanitizeObject } from '../utils/security'
+import { sanitizeObject } from '../../../lib/apiUtils/security'
 
 async function handler(req, res) {
   if (!supabaseServer) {
