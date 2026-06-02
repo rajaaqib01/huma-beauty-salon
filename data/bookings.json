@@ -1,18 +1,18 @@
 [
   {
-    "id": "mpwh6bga-4e5x653",
-    "customer_name": "Sarah Ahmed",
-    "name": "Sarah Ahmed",
-    "phone": "0300-9876543",
-    "email": "sarah@example.com",
-    "service_title": "Bridal Makeup",
-    "service": "Bridal Makeup",
-    "price": "",
-    "date": "2026-06-07",
-    "time": "14:00",
-    "notes": "",
-    "status": "pending",
-    "created_at": "2026-06-02T10:08:53.110Z"
+    "id": "mpx2sd6w-2wap6el",
+    "customer_name": "Automated Test",
+    "name": "Automated Test",
+    "phone": "0000000000",
+    "email": "auto@test.example",
+    "service_title": "Test Service",
+    "service": "Test Service",
+    "price": "0",
+    "date": "2026-06-10",
+    "time": "10:00",
+    "notes": "Inserted by automated test",
+    "status": "cancelled",
+    "created_at": "2026-06-02T20:13:55.014Z"
   },
   {
     "id": "mptnqshw-rqvnf2q",
@@ -28,20 +28,5 @@
     "notes": "",
     "status": "pending",
     "created_at": "2026-05-31T10:49:28.770Z"
-  },
-  {
-    "id": "mptnqroz-uobdrqo",
-    "customer_name": "raja aqib ali",
-    "name": "raja aqib ali",
-    "phone": "03378418500",
-    "email": "hammadrana122a1@gmail.com",
-    "service_title": "Simple Party Makeup",
-    "service": "Simple Party Makeup",
-    "price": "Rs. 6,000",
-    "date": "2026-06-03",
-    "time": "01:00 PM",
-    "notes": "",
-    "status": "pending",
-    "created_at": "2026-05-31T10:49:27.730Z"
   }
 ]

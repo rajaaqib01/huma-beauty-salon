@@ -64,53 +64,57 @@ async function sendEmailHandler(req, res) {
   }
 
   try {
-    // Only attempt to send email if credentials are configured
-    const canSendEmail = Boolean(emailUser && emailPassword)
-    if (canSendEmail) {
-      try {
-        // Create a transporter using Gmail
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: emailUser,
-            pass: emailPassword,
-          },
-        });
-
-        // Verify the transporter before sending the message
-        await transporter.verify();
-
-        // Email to salon owner
-        await transporter.sendMail({
-          from: emailUser,
-          to: emailRecipient,
-          subject: `New Contact Form Message: ${safeSubject}`,
-          html: `\n            <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">\n              <h2 style="color: #6e3b52;">New Message from Contact Form</h2>\n              <hr style="border: 1px solid #ddd;">\n              <p><strong>Name:</strong> ${safeName}</p>\n              <p><strong>Phone:</strong> ${safePhone}</p>\n              <p><strong>Email:</strong> ${safeEmail}</p>\n              <p><strong>Subject:</strong> ${safeSubject}</p>\n              <hr style="border: 1px solid #ddd;">\n              <p><strong>Message:</strong></p>\n              <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #6e3b52;">\n                ${safeMessage}\n              </p>\n              <hr style="border: 1px solid #ddd;">\n              <p style="font-size: 12px; color: #999;">\n                This message was sent via Huma Beauty Saloon website contact form.\n              </p>\n            </div>\n          `,
-        });
-
-        // Email to user (if email provided)
-        if (email) {
-          await transporter.sendMail({
-            from: emailUser,
-            to: email,
-            subject: 'We Received Your Message - Huma Beauty Saloon',
-            html: `\n              <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">\n                <h2 style="color: #6e3b52;">Thank You, ${safeName}! 💄</h2>\n                <p>We have received your message and will get back to you within 24 hours.</p>\n                <p>For urgent queries, please reach out to us on WhatsApp: <strong>+92 335 5462214</strong></p>\n                <hr style="border: 1px solid #ddd;">\n                <p><strong>Your Message:</strong></p>\n                <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #d4a5a5;">\n                  ${safeMessage}\n                </p>\n                <hr style="border: 1px solid #ddd;">\n                <p>Best regards,<br><strong>Huma Beauty Saloon Team</strong></p>\n              </div>\n            `,
-          });
-        }
-      } catch (e) {
-        console.error('Email send failed:', e)
-      }
-    }
-
     if (persisted) {
-      return res.status(200).json({ success: true, message: canSendEmail ? 'Message saved and email sent (if configured)' : 'Message saved (email not configured)' })
+      // Return success immediately after message is saved
+      res.status(200).json({ success: true, message: 'Message received! We will contact you soon.' })
+      
+      // Send email in background (non-blocking)
+      const canSendEmail = Boolean(emailUser && emailPassword)
+      if (canSendEmail) {
+        setImmediate(async () => {
+          try {
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: emailUser,
+                pass: emailPassword,
+              },
+              connectionTimeout: 5000,
+              socketTimeout: 5000,
+            });
+
+            // Email to salon owner
+            await transporter.sendMail({
+              from: emailUser,
+              to: emailRecipient,
+              subject: `New Contact Form Message: ${safeSubject}`,
+              html: `\n            <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">\n              <h2 style="color: #6e3b52;">New Message from Contact Form</h2>\n              <hr style="border: 1px solid #ddd;">\n              <p><strong>Name:</strong> ${safeName}</p>\n              <p><strong>Phone:</strong> ${safePhone}</p>\n              <p><strong>Email:</strong> ${safeEmail}</p>\n              <p><strong>Subject:</strong> ${safeSubject}</p>\n              <hr style="border: 1px solid #ddd;">\n              <p><strong>Message:</strong></p>\n              <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #6e3b52;">\n                ${safeMessage}\n              </p>\n              <hr style="border: 1px solid #ddd;">\n              <p style="font-size: 12px; color: #999;">\n                This message was sent via Huma Beauty Saloon website contact form.\n              </p>\n            </div>\n          `,
+            });
+
+            // Email to user (if email provided)
+            if (email) {
+              await transporter.sendMail({
+                from: emailUser,
+                to: email,
+                subject: 'We Received Your Message - Huma Beauty Saloon',
+                html: `\n              <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">\n                <h2 style="color: #6e3b52;">Thank You, ${safeName}! 💄</h2>\n                <p>We have received your message and will get back to you within 24 hours.</p>\n                <p>For urgent queries, please reach out to us on WhatsApp: <strong>+92 335 5462214</strong></p>\n                <hr style="border: 1px solid #ddd;">\n                <p><strong>Your Message:</strong></p>\n                <p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #d4a5a5;">\n                  ${safeMessage}\n                </p>\n                <hr style="border: 1px solid #ddd;">\n                <p>Best regards,<br><strong>Huma Beauty Saloon Team</strong></p>\n              </div>\n            `,
+              });
+            }
+            
+            console.log('Email sent successfully for:', safeName)
+          } catch (emailError) {
+            console.error('Background email send failed:', emailError)
+          }
+        });
+      }
+    } else {
+      // If persistence failed, return server error
+      return res.status(500).json({ error: 'Failed to save message. Please try again later.' })
     }
-    // If persistence failed, return server error
-    return res.status(500).json({ error: 'Failed to persist message. Please try again later.' })
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('Error handling contact form:', error);
     // Don't expose error details to client
-    res.status(500).json({ error: 'Failed to send email. Please try again later.' });
+    res.status(500).json({ error: 'Failed to process your request. Please try again later.' });
   }
 }
 

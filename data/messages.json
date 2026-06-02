@@ -1,5 +1,15 @@
 [
   {
+    "id": "mpx2sd70-igjrpnx",
+    "name": "Automated Tester",
+    "phone": "0000000000",
+    "email": "auto-message@test.example",
+    "subject": "Test Message",
+    "message": "This is a test message inserted by automated script",
+    "created_at": "2026-06-02T20:13:55.014Z",
+    "status": "new"
+  },
+  {
     "id": "mpwwaycv-0x7xzk0",
     "name": "Test User",
     "phone": "03001234567",
@@ -7,36 +17,6 @@
     "subject": "Test",
     "message": "This is a test message.",
     "created_at": "2026-06-02T17:12:24.278Z",
-    "status": "new"
-  },
-  {
-    "id": "mpwhdxvc-rrh19qd",
-    "name": "Fatima Khan",
-    "phone": "0321-9876543",
-    "email": "fatima.khan@example.com",
-    "subject": "General Inquiry",
-    "message": "I am very interested in your bridal makeup services. Can you provide me with more details about your packages?",
-    "created_at": "2026-06-02T10:14:49.842Z",
-    "status": "new"
-  },
-  {
-    "id": "mptnimft-la2otds",
-    "name": "raja aqib ali",
-    "phone": "03378418500",
-    "email": "hammadrana122a1@gmail.com",
-    "subject": "General Inquiry",
-    "message": "NSHAIOCHANM ",
-    "created_at": "2026-05-31T10:43:07.659Z",
-    "status": "new"
-  },
-  {
-    "id": "mptnhr30-9el6m55",
-    "name": "Test User",
-    "phone": "03001234567",
-    "email": "test@example.com",
-    "subject": "General Inquiry",
-    "message": "This is a test message from curl.",
-    "created_at": "2026-05-31T10:42:27.030Z",
     "status": "new"
   }
 ]

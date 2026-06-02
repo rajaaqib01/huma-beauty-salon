@@ -1,11 +1,49 @@
 import Link from 'next/link'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import AdminShell from '../../components/AdminShell'
+import { useEffect } from 'react'
+import { supabase } from '../../lib/supabaseClient'
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function AdminDashboard() {
   const { data: stats } = useSWR('/api/admin/stats', fetcher)
+
+  useEffect(() => {
+    if (!supabase) return undefined
+
+    // Subscribe to bookings, messages and services changes and revalidate stats
+    const bookingsChannel = supabase
+      .channel('public:bookings')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
+        mutate('/api/admin/stats')
+      })
+      .subscribe()
+
+    const messagesChannel = supabase
+      .channel('public:messages')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
+        mutate('/api/admin/stats')
+      })
+      .subscribe()
+
+    const servicesChannel = supabase
+      .channel('public:services')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'services' }, () => {
+        mutate('/api/admin/stats')
+      })
+      .subscribe()
+
+    return () => {
+      try {
+        bookingsChannel.unsubscribe()
+        messagesChannel.unsubscribe()
+        servicesChannel.unsubscribe()
+      } catch (e) {
+        // ignore cleanup errors
+      }
+    }
+  }, [])
 
   return (
     <AdminShell title="Dashboard">
