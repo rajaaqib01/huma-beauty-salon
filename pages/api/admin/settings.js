@@ -1,5 +1,6 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
+import { sanitizeObject } from '../utils/security'
 
 async function handler(req, res) {
   if (!supabaseServer) {
@@ -14,7 +15,7 @@ async function handler(req, res) {
   }
 
   if (method === 'PUT') {
-    const payload = req.body
+    const payload = sanitizeObject(req.body)
     const exists = await supabaseServer.from('settings').select('*').limit(1).single()
     if (exists.error) return res.status(500).json({ error: exists.error.message })
     if (exists.data) {

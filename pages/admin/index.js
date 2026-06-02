@@ -16,17 +16,17 @@ export default function AdminDashboard() {
         </div>
         <div className="admin-card admin-stat-card">
           <p className="admin-panel-label">Confirmed</p>
-          <p className="text-5xl font-bold text-emerald-400">{stats?.confirmed ?? '—'}</p>
+          <p className="text-5xl font-bold" style={{ color: '#0F4C45' }}>{stats?.confirmed ?? '—'}</p>
         </div>
         <div className="admin-card admin-stat-card">
           <p className="admin-panel-label">Pending</p>
-          <p className="text-5xl font-bold text-amber-400">{stats?.pending ?? '—'}</p>
+          <p className="text-5xl font-bold" style={{ color: '#D4AF37' }}>{stats?.pending ?? '—'}</p>
         </div>
       </div>
       <div className="admin-grid-3">
         <div className="admin-card admin-stat-card">
           <p className="admin-panel-label">Cancelled</p>
-          <p className="text-5xl font-bold text-red-400">{stats?.cancelled ?? '—'}</p>
+          <p className="text-5xl font-bold" style={{ color: '#E74C3C' }}>{stats?.cancelled ?? '—'}</p>
         </div>
         <div className="admin-card admin-stat-card">
           <p className="admin-panel-label">Total Services</p>

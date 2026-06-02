@@ -1,6 +1,7 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { sanitizeObject } from '../utils/security'
 
 async function handler(req, res){
   if (!supabaseServer) {
@@ -40,7 +41,7 @@ async function handler(req, res){
   }
 
   if(req.method === 'POST'){
-    const body = req.body
+    const body = sanitizeObject(req.body)
     if (!supabaseServer) {
       try{
         const obj = await localInsert('services', body)
@@ -57,7 +58,7 @@ async function handler(req, res){
 
   if(req.method === 'PUT'){
     const { id } = req.query
-    const body = req.body
+    const body = sanitizeObject(req.body)
     if (!supabaseServer) {
       try{
         const updated = await localUpdate('services', id, { ...body, updated_at: new Date() })

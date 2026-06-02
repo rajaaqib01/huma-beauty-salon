@@ -76,14 +76,16 @@ export const validateBookingForm = (data) => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
-    
-    if (selectedDate < tomorrow) {
+
+    if (Number.isNaN(selectedDate.getTime())) {
+      errors.date = 'Valid date is required';
+    } else if (selectedDate < tomorrow) {
       errors.date = 'Date must be in the future';
     }
   }
 
   // Time validation
-  if (!data.time || typeof data.time !== 'string' || !/^\d{2}:\d{2}/.test(data.time)) {
+  if (!data.time || typeof data.time !== 'string' || !/^([01]\d|2[0-3]):([0-5]\d)$/.test(data.time)) {
     errors.time = 'Valid time required';
   }
 
@@ -91,6 +93,13 @@ export const validateBookingForm = (data) => {
   if (data.notes && typeof data.notes === 'string') {
     if (data.notes.length > 1000) {
       errors.notes = 'Notes must be less than 1000 characters';
+    }
+  }
+
+  // Price validation (optional but if provided must be valid)
+  if (data.price && typeof data.price === 'string') {
+    if (data.price.length > 100) {
+      errors.price = 'Price must be less than 100 characters';
     }
   }
 

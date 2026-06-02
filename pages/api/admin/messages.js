@@ -1,6 +1,7 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { sanitizeObject } from '../utils/security'
 
 async function handler(req, res){
   if (!supabaseServer) {
@@ -17,7 +18,7 @@ async function handler(req, res){
 
     if(req.method === 'POST'){
       try{
-        const obj = await localInsert('messages', req.body)
+        const obj = await localInsert('messages', sanitizeObject(req.body))
         return res.status(201).json(obj)
       } catch (e){
         console.error('Local message insert error:', e)
@@ -28,7 +29,7 @@ async function handler(req, res){
     if(req.method === 'PUT'){
       const { id } = req.query
       try{
-        const updated = await localUpdate('messages', id, req.body)
+        const updated = await localUpdate('messages', id, sanitizeObject(req.body))
         return res.json(updated)
       } catch (e){
         console.error('Local message update error:', e)
@@ -56,7 +57,7 @@ async function handler(req, res){
   }
 
   if(req.method === 'POST'){
-    const body = req.body
+    const body = sanitizeObject(req.body)
     const { data, error } = await supabaseServer.from('messages').insert([{ ...body }]).select()
     if(error) return res.status(500).json({ error: error.message })
     return res.status(201).json(data[0])
@@ -64,7 +65,7 @@ async function handler(req, res){
 
   if(req.method === 'PUT'){
     const { id } = req.query
-    const body = req.body
+    const body = sanitizeObject(req.body)
     const { data, error } = await supabaseServer.from('messages').update({ ...body }).eq('id', id).select()
     if(error) return res.status(500).json({ error: error.message })
     return res.json(data[0])

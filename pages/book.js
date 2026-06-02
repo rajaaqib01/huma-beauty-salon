@@ -71,13 +71,28 @@ export default function Book() {
   const next = () => { if (validate()) setStep(s => s + 1); };
   const prev = () => { setStep(s => s - 1); setErrors({}); };
 
+  const convertTo24Hour = (time12) => {
+    if (!time12) return '';
+    const [time, period] = time12.split(' ');
+    let [hours, minutes] = time.split(':');
+    hours = parseInt(hours);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
+  };
+
   const submit = async () => {
     setIsLoading(true);
     try {
+      const submissionData = {
+        ...form,
+        time: convertTo24Hour(form.time),
+      };
+
       const response = await fetch('/api/book-appointment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(submissionData),
       });
 
       if (!response.ok) {

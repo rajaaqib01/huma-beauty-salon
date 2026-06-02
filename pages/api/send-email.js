@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { escapeHtml } from './utils/security';
+import { escapeHtml, sanitizeObject } from './utils/security';
 import { validateContactForm, validateRequestSize } from './utils/validation';
 import { rateLimit } from './utils/rateLimit';
 import { supabaseServer } from '../../lib/supabaseServer'
@@ -18,7 +18,8 @@ async function sendEmailHandler(req, res) {
     return res.status(413).json({ error: 'Request payload too large' });
   }
 
-  const { name, phone, email, subject, message } = req.body;
+  const body = sanitizeObject(req.body);
+  const { name, phone, email, subject, message } = body;
 
   // Validate form data
   const { valid, errors } = validateContactForm({ name, phone, email, message });

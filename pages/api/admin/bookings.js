@@ -1,6 +1,7 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { sanitizeObject } from '../utils/security'
 
 async function publicBookingHandler(req, res) {
   if (!supabaseServer) {
@@ -8,7 +9,7 @@ async function publicBookingHandler(req, res) {
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method Not Allowed' })
     }
-    const body = req.body
+    const body = sanitizeObject(req.body)
     try {
       const obj = await localInsert('bookings', body)
       return res.status(201).json(obj)
@@ -22,7 +23,7 @@ async function publicBookingHandler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const body = req.body
+  const body = sanitizeObject(req.body)
   const { data, error } = await supabaseServer.from('bookings').insert([{ ...body }]).select()
   if (error) return res.status(500).json({ error: 'Failed to create booking' })
   return res.status(201).json(data[0])
@@ -44,7 +45,7 @@ async function adminBookingHandler(req, res) {
     if (req.method === 'PUT') {
       const { id } = req.query
       if (!id) return res.status(400).json({ error: 'Missing booking id' })
-      const body = req.body
+      const body = sanitizeObject(req.body)
       try {
         const updated = await localUpdate('bookings', id, body)
         if (!updated) return res.status(500).json({ error: 'Failed to update booking' })
@@ -78,7 +79,7 @@ async function adminBookingHandler(req, res) {
   if (req.method === 'PUT') {
     const { id } = req.query
     if (!id) return res.status(400).json({ error: 'Missing booking id' })
-    const body = req.body
+    const body = sanitizeObject(req.body)
     const { data, error } = await supabaseServer.from('bookings').update({ ...body }).eq('id', id).select()
     if (error) return res.status(500).json({ error: 'Failed to update booking' })
     return res.json(data[0])

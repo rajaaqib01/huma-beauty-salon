@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { escapeHtml } from './utils/security';
+import { escapeHtml, sanitizeObject } from './utils/security';
 import { validateBookingForm, validateEnv, validateRequestSize } from './utils/validation';
 import { rateLimit } from './utils/rateLimit';
 import { supabaseServer } from '../../lib/supabaseServer';
@@ -15,7 +15,8 @@ async function bookAppointmentHandler(req, res) {
     return res.status(413).json({ error: 'Request payload too large' });
   }
 
-  const { name, phone, email, service, price, date, time, notes } = req.body;
+  const body = sanitizeObject(req.body);
+  const { name, phone, email, service, price, date, time, notes } = body;
 
   // Validate form data
   const { valid, errors } = validateBookingForm({ name, phone, email, service, date, time, notes });

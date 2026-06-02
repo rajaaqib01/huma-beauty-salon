@@ -18,7 +18,7 @@ export default function Bookings(){
           <div className="admin-empty-state">Unable to load bookings. Please refresh.</div>
         ) : bookings.length > 0 ? (
           bookings.map(b => (
-            <div key={b.id} className="admin-card" style={{ borderColor: b.status === 'confirmed' ? 'rgba(34,197,94,0.35)' : b.status === 'pending' ? 'rgba(234,179,8,0.35)' : 'rgba(239,68,68,0.35)' }}>
+            <div key={b.id} className="admin-card" style={{ borderColor: b.status === 'confirmed' ? 'rgba(15, 76, 69, 0.35)' : b.status === 'pending' ? 'rgba(212, 175, 55, 0.35)' : 'rgba(231, 76, 60, 0.35)' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '12px' }}>
                 <div>
                   <h3 className="text-2xl font-semibold">{b.customer_name}</h3>

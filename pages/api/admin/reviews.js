@@ -1,5 +1,6 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
+import { sanitizeObject } from '../utils/security'
 
 async function handler(req, res) {
   if (!supabaseServer) {
@@ -18,12 +19,14 @@ async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { data, error } = await supabaseServer.from('reviews').insert([req.body]).select()
+    const body = sanitizeObject(req.body)
+    const { data, error } = await supabaseServer.from('reviews').insert([body]).select()
     return error ? res.status(500).json({ error: error.message }) : res.status(201).json(data[0])
   }
 
   if (method === 'PUT') {
-    const { data, error } = await supabaseServer.from('reviews').update({ ...req.body }).eq('id', id).select()
+    const body = sanitizeObject(req.body)
+    const { data, error } = await supabaseServer.from('reviews').update({ ...body }).eq('id', id).select()
     return error ? res.status(500).json({ error: error.message }) : res.json(data[0])
   }
 

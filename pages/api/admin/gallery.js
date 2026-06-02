@@ -1,6 +1,7 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { sanitizeObject } from '../utils/security'
 
 async function handler(req, res) {
   if (!supabaseServer) {
@@ -25,7 +26,7 @@ async function handler(req, res) {
 
     if (method === 'POST') {
       try {
-        const obj = await localInsert('gallery', req.body)
+        const obj = await localInsert('gallery', sanitizeObject(req.body))
         return res.status(201).json(obj)
       } catch (e) {
         console.error('Local gallery insert error:', e)
@@ -36,7 +37,7 @@ async function handler(req, res) {
     if (method === 'PUT') {
       const { id } = req.query
       try {
-        const updated = await localUpdate('gallery', id, req.body)
+        const updated = await localUpdate('gallery', id, sanitizeObject(req.body))
         return res.json(updated)
       } catch (e) {
         console.error('Local gallery update error:', e)
@@ -66,12 +67,14 @@ async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { data, error } = await supabaseServer.from('gallery').insert([req.body]).select()
+    const body = sanitizeObject(req.body)
+    const { data, error } = await supabaseServer.from('gallery').insert([body]).select()
     return error ? res.status(500).json({ error: error.message }) : res.status(201).json(data[0])
   }
 
   if (method === 'PUT') {
-    const { data, error } = await supabaseServer.from('gallery').update({ ...req.body }).eq('id', id).select()
+    const body = sanitizeObject(req.body)
+    const { data, error } = await supabaseServer.from('gallery').update({ ...body }).eq('id', id).select()
     return error ? res.status(500).json({ error: error.message }) : res.json(data[0])
   }
 
