@@ -11,8 +11,9 @@
     "date": "2026-06-13",
     "time": "10:00",
     "notes": "",
-    "status": "pending",
-    "created_at": "2026-06-05T08:11:49.622Z"
+    "status": "cancelled",
+    "created_at": "2026-06-05T08:11:49.622Z",
+    "read": true
   },
   {
     "id": "mpx2sd6w-2wap6el",
@@ -27,7 +28,8 @@
     "time": "10:00",
     "notes": "Inserted by automated test",
     "status": "cancelled",
-    "created_at": "2026-06-02T20:13:55.014Z"
+    "created_at": "2026-06-02T20:13:55.014Z",
+    "read": true
   },
   {
     "id": "mptnqshw-rqvnf2q",

@@ -45,7 +45,8 @@ async function sendEmailHandler(req, res) {
     subject: safeSubject,
     message: safeMessage,
     created_at: new Date().toISOString(),
-    status: 'new'
+    status: 'new',
+    read: false,
   }
 
   // Persist message (Supabase if available, else local JSON)

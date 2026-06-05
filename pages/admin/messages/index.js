@@ -7,29 +7,71 @@ const fetcher = async (url) => {
   return res.json()
 }
 
-export default function Messages(){
-  const { data } = useSWR('/api/admin/messages', fetcher)
+function messageCardClass(read) {
+  const readState = read ? 'read' : 'unread'
+  return `admin-message-card admin-message-card--${readState}`
+}
+
+export default function Messages() {
+  const { data, error, mutate } = useSWR('/api/admin/messages', fetcher)
+  const messages = Array.isArray(data) ? data : []
+
+  const updateMessage = async (id, patch) => {
+    const res = await fetch(`/api/admin/messages?id=${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    })
+    if (!res.ok) return
+    const updated = await res.json()
+    mutate(
+      messages.map(m => (String(m.id) === String(id) ? { ...m, ...updated, ...patch } : m)),
+      false
+    )
+  }
+
+  const deleteMessage = async (id) => {
+    if (!confirm('Delete this message?')) return
+    const res = await fetch(`/api/admin/messages?id=${id}`, { method: 'DELETE' })
+    if (!res.ok) return
+    mutate(messages.filter(m => String(m.id) !== String(id)), false)
+  }
 
   return (
     <AdminShell title="Messages">
       <div className="admin-grid-2">
-        {data?.map(m=> (
-          <div key={m.id} className="admin-card">
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '14px' }}>
-              <div>
-                <h3 className="text-2xl font-semibold">{m.subject || 'No Subject'}</h3>
-                <p className="text-slate-300">{m.name} • {m.email} • {m.phone}</p>
+        {error ? (
+          <div className="admin-empty-state">Unable to load messages. Please refresh.</div>
+        ) : messages.length > 0 ? (
+          messages.map(m => {
+            const isRead = Boolean(m.read)
+            return (
+              <div key={m.id} className={messageCardClass(isRead)}>
+                <div className="admin-message-card-header">
+                  <div>
+                    <div className="admin-message-card-topline">
+                      <h3 className="admin-message-card-title">{m.subject || 'No Subject'}</h3>
+                      {!isRead && <span className="admin-message-badge admin-message-badge-new">New</span>}
+                      <span className={`admin-message-badge admin-message-badge-${isRead ? 'read' : 'unread'}`}>
+                        {isRead ? 'Read' : 'Unread'}
+                      </span>
+                    </div>
+                    <p className="admin-message-card-meta">{m.name} • {m.email} • {m.phone}</p>
+                  </div>
+                  <p className="admin-message-card-date">{new Date(m.created_at).toLocaleString()}</p>
+                </div>
+                <p className="admin-message-card-body">{m.message}</p>
+                <div className="admin-section-actions">
+                  <button onClick={() => updateMessage(m.id, { read: true })} className="admin-button admin-button-primary">Mark Read</button>
+                  <button onClick={() => updateMessage(m.id, { read: false })} className="admin-button admin-button-warning">Mark Unread</button>
+                  <button onClick={() => deleteMessage(m.id)} className="admin-button admin-button-danger">Delete</button>
+                </div>
               </div>
-              <p className="text-slate-400" style={{ fontSize: '0.95rem' }}>{new Date(m.created_at).toLocaleString()}</p>
-            </div>
-            <p className="text-slate-200" style={{ marginTop: '18px', whiteSpace: 'pre-wrap' }}>{m.message}</p>
-            <div className="admin-section-actions">
-              <button onClick={async()=>{ await fetch(`/api/admin/messages?id=${m.id}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ read: true }) }); window.location.reload() }} className="admin-button admin-button-primary">Mark Read</button>
-              <button onClick={async()=>{ await fetch(`/api/admin/messages?id=${m.id}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ read: false }) }); window.location.reload() }} className="admin-button admin-button-warning">Mark Unread</button>
-              <button onClick={async()=>{ if(confirm('Delete this message?')){ await fetch(`/api/admin/messages?id=${m.id}`, { method: 'DELETE' }); window.location.reload() }}} className="admin-button admin-button-danger">Delete</button>
-            </div>
-          </div>
-        )) || <div className="admin-empty-state">No messages found.</div>}
+            )
+          })
+        ) : (
+          <div className="admin-empty-state">No messages found.</div>
+        )}
       </div>
     </AdminShell>
   )
