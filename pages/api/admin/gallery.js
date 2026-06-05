@@ -24,8 +24,13 @@ async function handler(req, res) {
 
     if (method === 'POST') {
       try {
+        const { title, image_url } = req.body || {}
+        if (!image_url || !String(image_url).trim()) {
+          return res.status(400).json({ error: 'Image URL or uploaded file is required' })
+        }
         const obj = await localInsert('gallery', {
-          ...sanitizeObject(req.body),
+          title: title ? sanitizeObject({ title }).title : '',
+          image_url: String(image_url).trim(),
           created_at: new Date().toISOString(),
         })
         return res.status(201).json(obj)
@@ -37,10 +42,11 @@ async function handler(req, res) {
 
     if (method === 'PUT') {
       try {
-        const updated = await localUpdate('gallery', id, {
-          ...sanitizeObject(req.body),
-          updated_at: new Date().toISOString(),
-        })
+        const { title, image_url } = req.body || {}
+        const patch = { updated_at: new Date().toISOString() }
+        if (title !== undefined) patch.title = sanitizeObject({ title }).title
+        if (image_url !== undefined) patch.image_url = String(image_url).trim()
+        const updated = await localUpdate('gallery', id, patch)
         if (!updated) return res.status(404).json({ error: 'Gallery item not found' })
         return res.json(updated)
       } catch (e) {
@@ -74,7 +80,15 @@ async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const body = sanitizeObject(req.body)
+    const { title, image_url } = req.body || {}
+    if (!image_url || !String(image_url).trim()) {
+      return res.status(400).json({ error: 'Image URL or uploaded file is required' })
+    }
+    const body = {
+      title: title ? sanitizeObject({ title }).title : '',
+      image_url: String(image_url).trim(),
+      created_at: new Date().toISOString(),
+    }
     const { data, error } = await supabaseServer.from('gallery').insert([body]).select()
     return error ? res.status(500).json({ error: error.message }) : res.status(201).json(data[0])
   }

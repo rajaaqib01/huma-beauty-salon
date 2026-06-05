@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huma Beauty Saloon — Project Documentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@400;500;600;700&display=swap');
+
+    :root {
+      --teal: #0F4C45;
+      --teal-light: #1A6B5E;
+      --gold: #D4AF37;
+      --cream: #FAF7F2;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: rgba(15, 76, 69, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      color: var(--text);
+      background: #e8e8e8;
+      line-height: 1.65;
+      font-size: 11pt;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 16px auto;
+      background: white;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      padding: 22mm 20mm;
+      page-break-after: always;
+      position: relative;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    /* Cover */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 253mm;
+      background: linear-gradient(160deg, var(--teal) 0%, var(--teal-light) 55%, #238b7a 100%);
+      color: white;
+      margin: -22mm -20mm;
+      padding: 22mm 20mm;
+    }
+
+    .cover-badge {
+      font-size: 0.75rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 8px 20px;
+      border-radius: 999px;
+    }
+
+    .cover h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.2rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .cover h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .cover-sub {
+      font-size: 1.05rem;
+      opacity: 0.88;
+      max-width: 420px;
+      margin-bottom: 48px;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 40px;
+      text-align: left;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 28px 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .cover-meta dt {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .cover-meta dd {
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* Typography */
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      color: var(--teal);
+      margin-bottom: 6px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin: 22px 0 10px;
+    }
+
+    p { margin-bottom: 10px; color: var(--text); }
+
+    .section-num {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .page-footer {
+      position: absolute;
+      bottom: 16mm;
+      left: 20mm;
+      right: 20mm;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    /* TOC */
+    .toc-list { list-style: none; margin-top: 16px; }
+    .toc-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 0.92rem;
+    }
+    .toc-list li span:last-child { color: var(--muted); }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      font-size: 0.86rem;
+    }
+
+    th {
+      background: var(--teal);
+      color: white;
+      text-align: left;
+      padding: 9px 12px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: var(--cream); }
+
+    /* Lists */
+    ul, ol { margin: 8px 0 14px 20px; }
+    li { margin-bottom: 5px; }
+
+    /* Boxes */
+    .info-box {
+      background: var(--cream);
+      border-left: 4px solid var(--teal);
+      padding: 14px 16px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .info-box strong { color: var(--teal); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 14px 0;
+    }
+
+    .card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .card h4 {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+
+    code, .code-block {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    code { padding: 2px 6px; }
+
+    .code-block {
+      display: block;
+      padding: 14px 16px;
+      margin: 12px 0;
+      white-space: pre-wrap;
+      border: 1px solid var(--border);
+      line-height: 1.5;
+    }
+
+    .flow {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      margin: 14px 0;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 6px 0;
+    }
+
+    .flow-box {
+      background: var(--teal);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .flow-arrow { color: var(--gold); font-weight: 700; }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 16px 10px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+    }
+
+    .stat .num { font-size: 1.6rem; font-weight: 700; }
+    .stat .lbl { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+
+    .stat-teal { background: linear-gradient(135deg, #0F4C45, #1A6B5E); color: white; }
+    .stat-green { background: linear-gradient(135deg, #bbf7d0, #86efac); color: #15803d; }
+    .stat-gold { background: linear-gradient(135deg, #fde68a, #fcd34d); color: #b45309; }
+    .stat-red { background: linear-gradient(135deg, #fecaca, #fca5a5); color: #dc2626; }
+    .stat-mint { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #0F4C45; }
+
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--teal);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(15,76,69,0.3);
+      z-index: 1000;
+      letter-spacing: 0.06em;
+    }
+
+    .print-btn:hover { background: var(--teal-light); }
+
+    @media print {
+      body { background: white; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        width: 100%;
+        min-height: auto;
+      }
+      .print-btn { display: none; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .stat, th, .flow-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Save as PDF / Print</button>
+
+<!-- PAGE 1: COVER -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-badge">Complete Project Documentation</div>
+    <h1>Huma <em>Beauty</em> Saloon</h1>
+    <p class="cover-sub">Full-stack beauty salon website with public booking system and admin dashboard — Jhelum, Pakistan</p>
+    <dl class="cover-meta">
+      <dt>Version</dt><dd>1.0</dd>
+      <dt>Date</dt><dd>June 2026</dd>
+      <dt>Website</dt><dd>humabeautysaloon.site</dd>
+      <dt>Repository</dt><dd>github.com/aqiraja078/huma_beauty_saloon</dd>
+      <dt>Framework</dt><dd>Next.js 16 + React 19</dd>
+      <dt>Contact</dt><dd>+92 335 5462214</dd>
+    </dl>
+  </div>
+</div>
+
+<!-- PAGE 2: TABLE OF CONTENTS -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Table of Contents</span>
+  </div>
+  <div class="section-num">Contents</div>
+  <h2>Document Overview</h2>
+  <ul class="toc-list">
+    <li><span>1. Executive Summary</span><span>03</span></li>
+    <li><span>2. Technology Stack</span><span>03</span></li>
+    <li><span>3. System Architecture</span><span>04</span></li>
+    <li><span>4. Public Website Pages</span><span>05</span></li>
+    <li><span>5. Services & Categories</span><span>06</span></li>
+    <li><span>6. Booking System</span><span>07</span></li>
+    <li><span>7. Admin Dashboard</span><span>08</span></li>
+    <li><span>8. API Reference</span><span>09</span></li>
+    <li><span>9. Data & Database</span><span>10</span></li>
+    <li><span>10. Security Features</span><span>11</span></li>
+    <li><span>11. Design & Branding</span><span>11</span></li>
+    <li><span>12. Environment Setup</span><span>12</span></li>
+    <li><span>13. Deployment Guide</span><span>12</span></li>
+    <li><span>14. Project File Structure</span><span>13</span></li>
+    <li><span>15. User & Admin Workflows</span><span>14</span></li>
+  </ul>
+
+  <div class="info-box" style="margin-top: 32px;">
+    <strong>How to save as PDF:</strong> Click the <em>Save as PDF / Print</em> button (top-right), or press <code>Ctrl+P</code> / <code>Cmd+P</code>, then choose <strong>Save as PDF</strong> as the destination.
+  </div>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+<!-- PAGE 3: EXECUTIVE SUMMARY + TECH -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Overview & Technology</span>
+  </div>
+
+  <div class="section-num">Section 01</div>
+  <h2>Executive Summary</h2>
+  <p><strong>Huma Beauty Saloon</strong> is a professional, full-featured web application built for a luxury beauty salon in Jhelum, Pakistan. The platform enables customers to browse services, view offers and gallery, book appointments online, and contact the salon — while giving salon staff a complete admin panel to manage all content and customer requests.</p>
+
+  <div class="stat-grid">
+    <div class="stat stat-teal"><div class="num">48</div><div class="lbl">Services</div></div>
+    <div class="stat stat-green"><div class="num">6</div><div class="lbl">Categories</div></div>
+    <div class="stat stat-gold"><div class="num">8</div><div class="lbl">Admin Modules</div></div>
+    <div class="stat stat-mint"><div class="num">6</div><div class="lbl">Public Pages</div></div>
+    <div class="stat stat-red"><div class="num">15+</div><div class="lbl">API Endpoints</div></div>
+    <div class="stat stat-teal"><div class="num">2</div><div class="lbl">Data Backends</div></div>
+  </div>
+
+  <h3>Key Capabilities</h3>
+  <ul>
+    <li>Dynamic service listings managed from admin panel</li>
+    <li>3-step online booking with email notifications</li>
+    <li>Contact form with message storage and email alerts</li>
+    <li>Offers and gallery pages linked to admin content</li>
+    <li>Color-coded admin dashboard for bookings and messages</li>
+    <li>Dual database support: Supabase cloud or local JSON files</li>
+    <li>WhatsApp integration for instant customer contact</li>
+    <li>SEO-optimized pages with responsive mobile design</li>
+  </ul>
+
+  <div class="section-num" style="margin-top: 28px;">Section 02</div>
+  <h2>Technology Stack</h2>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Version</th></tr>
+    <tr><td>Framework</td><td>Next.js (Pages Router)</td><td>16.2.6</td></tr>
+    <tr><td>UI Library</td><td>React</td><td>19.2.4</td></tr>
+    <tr><td>Styling</td><td>Custom CSS</td><td>globals.css</td></tr>
+    <tr><td>Admin Data Fetching</td><td>SWR</td><td>2.4.1</td></tr>
+    <tr><td>Cloud Database</td><td>Supabase</td><td>2.106.2</td></tr>
+    <tr><td>Local Database</td><td>JSON Files</td><td>/data/*.json</td></tr>
+    <tr><td>Authentication</td><td>JWT (jsonwebtoken)</td><td>9.0.3</td></tr>
+    <tr><td>Email</td><td>Nodemailer (Gmail SMTP)</td><td>8.0.9</td></tr>
+    <tr><td>Deployment</td><td>Netlify + Next.js Plugin</td><td>5.15.11</td></tr>
+    <tr><td>Testing</td><td>Vitest</td><td>1.3.9</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 3</span>
+  </div>
+</div>
+
+<!-- PAGE 4: ARCHITECTURE -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Architecture</span>
+  </div>
+
+  <div class="section-num">Section 03</div>
+  <h2>System Architecture</h2>
+  <p>The application uses a <strong>dual-storage architecture</strong>. When Supabase environment variables are configured, all data is stored in the cloud database. Without Supabase, the system automatically falls back to local JSON files — making development and small deployments simple.</p>
+
+  <div class="flow">
+    <div class="flow-row">
+      <span class="flow-box">Public Website</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-box">API Routes</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-box">Supabase / JSON</span>
+    </div>
+    <div class="flow-row" style="margin-top: 12px;">
+      <span class="flow-box">Admin Panel</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-box">Protected APIs</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-box">Supabase / JSON</span>
+    </div>
+  </div>
+
+  <h3>Data Flow — Admin to Public</h3>
+  <ol>
+    <li>Admin adds or edits a service in <code>/admin/services</code></li>
+    <li>Data saved to Supabase table or <code>data/services.json</code></li>
+    <li>Public pages fetch via <code>getServerSideProps</code> or API routes</li>
+    <li>Home page shows curated featured services; full list on <code>/services</code></li>
+    <li>Booking page loads live service names and prices for selection</li>
+  </ol>
+
+  <h3>Core Library Modules</h3>
+  <table>
+    <tr><th>File</th><th>Purpose</th></tr>
+    <tr><td><code>lib/services.js</code></td><td>Fetch, group, and format services for pages</td></tr>
+    <tr><td><code>lib/serviceConfig.js</code></td><td>Section definitions and home featured list</td></tr>
+    <tr><td><code>lib/offers.js</code></td><td>Offer fetching and active-date filtering</td></tr>
+    <tr><td><code>lib/gallery.js</code></td><td>Gallery image fetching and display mapping</td></tr>
+    <tr><td><code>lib/localDb.js</code></td><td>JSON file CRUD (list, insert, update, remove)</td></tr>
+    <tr><td><code>lib/adminSession.js</code></td><td>JWT sign/verify and cookie management</td></tr>
+    <tr><td><code>lib/apiUtils/</code></td><td>Validation, rate limiting, input sanitization</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 4</span>
+  </div>
+</div>
+
+<!-- PAGE 5: PUBLIC PAGES -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Public Website</span>
+  </div>
+
+  <div class="section-num">Section 04</div>
+  <h2>Public Website Pages</h2>
+
+  <table>
+    <tr><th>URL</th><th>Page</th><th>Description</th></tr>
+    <tr><td><code>/</code></td><td>Home</td><td>Hero, featured services (6 sections), testimonials, TikTok CTA, booking CTA</td></tr>
+    <tr><td><code>/services</code></td><td>Services</td><td>All 48 services grouped by category with Book Now buttons</td></tr>
+    <tr><td><code>/book</code></td><td>Booking</td><td>3-step appointment form with dynamic services</td></tr>
+    <tr><td><code>/offers</code></td><td>Offers</td><td>Active promotional offers from admin</td></tr>
+    <tr><td><code>/gallery</code></td><td>Gallery</td><td>Salon work photos managed in admin</td></tr>
+    <tr><td><code>/contact</code></td><td>Contact</td><td>Contact form with email and message storage</td></tr>
+  </table>
+
+  <h3>Home Page Sections</h3>
+  <div class="two-col">
+    <div class="card">
+      <h4>Above the Fold</h4>
+      <ul>
+        <li>Hero banner with background image</li>
+        <li>Book Appointment + Contact CTAs</li>
+        <li>Quick booking guide card</li>
+        <li>WhatsApp chat link</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Below the Fold</h4>
+      <ul>
+        <li>6 featured service sections</li>
+        <li>Why Choose Us (5 promise cards)</li>
+        <li>Client testimonials (8 reviews)</li>
+        <li>TikTok embed + gallery link</li>
+        <li>Final booking CTA banner</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Shared Components</h3>
+  <ul>
+    <li><strong>Navbar</strong> — Fixed header, scroll effect, mobile hamburger menu</li>
+    <li><strong>Footer</strong> — Site links, contact info, social links</li>
+    <li><strong>ServiceCard</strong> — Image, name, description, price, Book Now</li>
+    <li><strong>ServiceSection</strong> — Section heading + grid + optional More Services link</li>
+    <li><strong>WhatsAppFloat</strong> — Floating WhatsApp button on all pages</li>
+    <li><strong>SEO</strong> — Per-page title, description, canonical URL, OG image</li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 5</span>
+  </div>
+</div>
+
+<!-- PAGE 6: SERVICES -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Services</span>
+  </div>
+
+  <div class="section-num">Section 05</div>
+  <h2>Services & Categories</h2>
+  <p>The salon offers <strong>48 services</strong> across <strong>6 categories</strong> (8 services each). Admin category values must match exactly for correct grouping on public pages.</p>
+
+  <table>
+    <tr><th>Category</th><th>Section Title</th><th>Count</th><th>Example Services</th></tr>
+    <tr><td>Makeup</td><td>Bridal & Party Makeup</td><td>8</td><td>Engagement, Mehndi, Bridal, Luxury Bridal</td></tr>
+    <tr><td>Hair</td><td>Hair Care & Styling</td><td>8</td><td>Hair Cut, Color, Highlights, Keratin</td></tr>
+    <tr><td>Facial</td><td>Facials & Skin Treatments</td><td>8</td><td>Cleanup, Gold, Hydra, Luxury Glow</td></tr>
+    <tr><td>Nails</td><td>Nail Art & Lashes</td><td>8</td><td>Simple Paint, French, Glitter, Luxury</td></tr>
+    <tr><td>Mehndi</td><td>Mehndi & Henna</td><td>8</td><td>Simple, Front Hand, Customized, Bridal</td></tr>
+    <tr><td>Waxing</td><td>Waxing & Threading</td><td>8</td><td>Upper Lips, Eyebrows, Legs, Manicure</td></tr>
+  </table>
+
+  <h3>Home Page Featured Services (26 total)</h3>
+  <p>Only curated services appear on the home page. Each section includes a <strong>"More Services →"</strong> link to the full list on <code>/services#section</code>.</p>
+
+  <table>
+    <tr><th>Section</th><th>Featured on Home</th></tr>
+    <tr><td>Makeup</td><td>Engagement Makeup, Mehndi Makeup, Bridal Makeup, Luxury Bridal</td></tr>
+    <tr><td>Hair</td><td>Hair Cut, Hair Color, Highlights, Keratin Treatment</td></tr>
+    <tr><td>Facial</td><td>Cleanup Facial, Gold Facial, Hydra Facial, Luxury Glow Facial</td></tr>
+    <tr><td>Nails</td><td>Simple Nail Paint, French Nail Art, Glitter Nail Art, Luxury Nail Art</td></tr>
+    <tr><td>Mehndi</td><td>Simple Mehndi Design, Front Hand Mehndi, Customized Mehndi Design, Bridal Mehndi</td></tr>
+    <tr><td>Waxing</td><td>Upper Lips, Eyebrows, Legs Wax, Full Body Wax, Manicure, Pedicure</td></tr>
+  </table>
+
+  <div class="info-box">
+    <strong>Admin tip:</strong> Service titles in admin must match the featured list names exactly for them to appear on the home page. All services always appear on the full <code>/services</code> page regardless of featured status.
+  </div>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 6</span>
+  </div>
+</div>
+
+<!-- PAGE 7: BOOKING -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Booking System</span>
+  </div>
+
+  <div class="section-num">Section 06</div>
+  <h2>Booking System</h2>
+  <p>The booking form at <code>/book</code> is a guided 3-step wizard that collects customer details, preferred date/time, and shows a confirmation summary before submission.</p>
+
+  <h3>Step 1 — Your Details</h3>
+  <ul>
+    <li>Full name (required)</li>
+    <li>Phone number (required)</li>
+    <li>Email address (required, validated)</li>
+    <li>Service selection from live admin-managed list</li>
+    <li>Pre-fill support via URL: <code>/book?service=Bridal+Makeup&price=Rs.+18000</code></li>
+  </ul>
+
+  <h3>Step 2 — Date & Time</h3>
+  <ul>
+    <li>Date picker (minimum: tomorrow)</li>
+    <li>Time field with dropdown suggestions (9:00 AM – 8:00 PM)</li>
+    <li>Custom time entry supported (e.g. 3:30 PM, 15:30, 2 PM)</li>
+    <li>Optional special requests / notes textarea</li>
+  </ul>
+
+  <h3>Step 3 — Confirm</h3>
+  <ul>
+    <li>Review all entered details</li>
+    <li>Submit to <code>/api/book-appointment</code></li>
+    <li>Booking saved with status <code>pending</code> and <code>read: false</code></li>
+    <li>Email notification sent to salon (if email configured)</li>
+    <li>Confirmation email sent to customer</li>
+  </ul>
+
+  <h3>Backend Processing</h3>
+  <table>
+    <tr><th>Check</th><th>Detail</th></tr>
+    <tr><td>Rate Limit</td><td>5 requests per minute per IP</td></tr>
+    <tr><td>Validation</td><td>Name, phone, email, service, future date, valid time (HH:MM)</td></tr>
+    <tr><td>Sanitization</td><td>HTML escape on all fields</td></tr>
+    <tr><td>Storage</td><td>Supabase <code>bookings</code> table or <code>data/bookings.json</code></td></tr>
+    <tr><td>Email</td><td>Nodemailer via Gmail (optional, requires env vars)</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 7</span>
+  </div>
+</div>
+
+<!-- PAGE 8: ADMIN -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Admin Dashboard</span>
+  </div>
+
+  <div class="section-num">Section 07</div>
+  <h2>Admin Dashboard</h2>
+  <p>Protected admin area at <code>/admin</code> with JWT cookie authentication (8-hour session). All admin API routes require valid session token.</p>
+
+  <h3>Login</h3>
+  <p>URL: <code>/admin/login</code> — Credentials set via <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> environment variables.</p>
+
+  <h3>Dashboard Overview</h3>
+  <div class="stat-grid">
+    <div class="stat stat-teal"><div class="num">📅</div><div class="lbl">Total Bookings</div></div>
+    <div class="stat stat-green"><div class="num">✓</div><div class="lbl">Confirmed</div></div>
+    <div class="stat stat-gold"><div class="num">⏳</div><div class="lbl">Pending</div></div>
+    <div class="stat stat-red"><div class="num">✕</div><div class="lbl">Cancelled</div></div>
+    <div class="stat stat-gold"><div class="num">💅</div><div class="lbl">Services</div></div>
+    <div class="stat stat-mint"><div class="num">✉</div><div class="lbl">Messages</div></div>
+  </div>
+
+  <h3>Admin Modules</h3>
+  <table>
+    <tr><th>Module</th><th>URL</th><th>Features</th></tr>
+    <tr><td>Services</td><td>/admin/services</td><td>Add, edit, delete services with image, price, category</td></tr>
+    <tr><td>Bookings</td><td>/admin/bookings</td><td>Color-coded cards by status; Confirm, Pending, Cancel, Delete</td></tr>
+    <tr><td>Messages</td><td>/admin/messages</td><td>Read/unread color cards; Mark Read / Mark Unread</td></tr>
+    <tr><td>Gallery</td><td>/admin/gallery</td><td>Upload and manage gallery images</td></tr>
+    <tr><td>Offers</td><td>/admin/offers</td><td>Create offers with discount, dates, images</td></tr>
+    <tr><td>Reviews</td><td>/admin/reviews</td><td>Approve, reject, or delete customer reviews</td></tr>
+    <tr><td>Settings</td><td>/admin/settings</td><td>Salon name, contact, social links, hero text</td></tr>
+  </table>
+
+  <h3>Booking Card Colors</h3>
+  <table>
+    <tr><th>Status</th><th>Unread</th><th>Read</th></tr>
+    <tr><td>Confirmed</td><td>Bright green gradient</td><td>Soft green gradient</td></tr>
+    <tr><td>Pending</td><td>Bright amber gradient</td><td>Soft amber gradient</td></tr>
+    <tr><td>Cancelled</td><td>Bright red gradient</td><td>Soft red gradient</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 8</span>
+  </div>
+</div>
+
+<!-- PAGE 9: APIs -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>API Reference</span>
+  </div>
+
+  <div class="section-num">Section 08</div>
+  <h2>API Reference</h2>
+
+  <h3>Public APIs</h3>
+  <table>
+    <tr><th>Endpoint</th><th>Method</th><th>Auth</th><th>Purpose</th></tr>
+    <tr><td>/api/services</td><td>GET</td><td>None</td><td>Return all services</td></tr>
+    <tr><td>/api/offers</td><td>GET</td><td>None</td><td>Return active offers</td></tr>
+    <tr><td>/api/gallery</td><td>GET</td><td>None</td><td>Return gallery images</td></tr>
+    <tr><td>/api/book-appointment</td><td>POST</td><td>None</td><td>Submit booking (rate limited)</td></tr>
+    <tr><td>/api/send-email</td><td>POST</td><td>None</td><td>Contact form (rate limited)</td></tr>
+  </table>
+
+  <h3>Admin APIs (JWT Required)</h3>
+  <table>
+    <tr><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr>
+    <tr><td>/api/admin/login</td><td>POST</td><td>Authenticate admin, set cookie</td></tr>
+    <tr><td>/api/admin/logout</td><td>POST</td><td>Clear session cookie</td></tr>
+    <tr><td>/api/admin/me</td><td>GET</td><td>Get current admin session</td></tr>
+    <tr><td>/api/admin/stats</td><td>GET</td><td>Dashboard statistics</td></tr>
+    <tr><td>/api/admin/services</td><td>GET, POST, PUT, DELETE</td><td>Manage services</td></tr>
+    <tr><td>/api/admin/bookings</td><td>GET, PUT, DELETE</td><td>Manage bookings</td></tr>
+    <tr><td>/api/admin/messages</td><td>GET, PUT, DELETE</td><td>Manage messages</td></tr>
+    <tr><td>/api/admin/gallery</td><td>GET, POST, PUT, DELETE</td><td>Manage gallery</td></tr>
+    <tr><td>/api/admin/offers</td><td>GET, POST, PUT, DELETE</td><td>Manage offers</td></tr>
+    <tr><td>/api/admin/reviews</td><td>GET, POST, PUT, DELETE</td><td>Manage reviews</td></tr>
+    <tr><td>/api/admin/settings</td><td>GET, PUT</td><td>Salon settings</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 9</span>
+  </div>
+</div>
+
+<!-- PAGE 10: DATA + SECURITY -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Data & Security</span>
+  </div>
+
+  <div class="section-num">Section 09</div>
+  <h2>Data & Database</h2>
+
+  <h3>Local JSON Files (/data)</h3>
+  <table>
+    <tr><th>File</th><th>Records</th><th>Contents</th></tr>
+    <tr><td>services.json</td><td>48</td><td>All salon services</td></tr>
+    <tr><td>bookings.json</td><td>Dynamic</td><td>Customer booking requests</td></tr>
+    <tr><td>messages.json</td><td>Dynamic</td><td>Contact form messages</td></tr>
+    <tr><td>offers.json</td><td>Dynamic</td><td>Promotional offers</td></tr>
+    <tr><td>gallery.json</td><td>Dynamic</td><td>Gallery images</td></tr>
+    <tr><td>reviews.json</td><td>Dynamic</td><td>Customer reviews</td></tr>
+  </table>
+
+  <h3>Supabase Tables (sql/schema.sql)</h3>
+  <p>services, bookings, messages, gallery, reviews, offers, settings, admin_users — with indexes on bookings status, created_at, and services category.</p>
+
+  <div class="section-num" style="margin-top: 24px;">Section 10</div>
+  <h2>Security Features</h2>
+  <table>
+    <tr><th>Feature</th><th>Implementation</th></tr>
+    <tr><td>Rate Limiting</td><td>Booking: 5 req/min; Email: 12 req/min per IP</td></tr>
+    <tr><td>Input Sanitization</td><td>escapeHtml + sanitizeObject on all API inputs</td></tr>
+    <tr><td>Form Validation</td><td>Server-side validation for all forms</td></tr>
+    <tr><td>Request Size Limit</td><td>Maximum 50KB payload</td></tr>
+    <tr><td>Admin Auth</td><td>JWT in HttpOnly, SameSite=Lax cookie</td></tr>
+    <tr><td>Route Protection</td><td>requireAdmin middleware on all admin APIs</td></tr>
+    <tr><td>Production Cookies</td><td>Secure flag enabled in production</td></tr>
+  </table>
+
+  <div class="section-num" style="margin-top: 24px;">Section 11</div>
+  <h2>Design & Branding</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>Color Palette</h4>
+      <ul>
+        <li>Primary Teal: #0F4C45</li>
+        <li>Teal Light: #1A6B5E</li>
+        <li>Champagne Gold: #D4AF37</li>
+        <li>Cream Background: #FAF7F2</li>
+        <li>Success Green: #16a34a</li>
+        <li>Warning Amber: #f59e0b</li>
+        <li>Danger Red: #ef4444</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Typography</h4>
+      <ul>
+        <li>Great Vibes — decorative script</li>
+        <li>Cormorant Garamond — headings</li>
+        <li>Jost — body text and UI</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 10</span>
+  </div>
+</div>
+
+<!-- PAGE 11: SETUP + DEPLOY -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Setup & Deployment</span>
+  </div>
+
+  <div class="section-num">Section 12</div>
+  <h2>Environment Setup</h2>
+  <p>Create a <code>.env.local</code> file in the project root:</p>
+  <div class="code-block"># Admin Login
+ADMIN_EMAIL=your@email.com
+ADMIN_PASSWORD=your-secure-password
+ADMIN_SESSION_SECRET=long-random-secret-string
+
+# Email (Gmail App Password)
+EMAIL_USER=your@gmail.com
+EMAIL_PASSWORD=your-16-char-app-password
+EMAIL_RECIPIENT=humaaqi96@gmail.com
+
+# Supabase (optional — without these, JSON files are used)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=</div>
+
+  <h3>Local Development</h3>
+  <div class="code-block">npm install
+npm run dev
+# Open http://localhost:3000
+# Admin: http://localhost:3000/admin/login</div>
+
+  <div class="section-num" style="margin-top: 24px;">Section 13</div>
+  <h2>Deployment Guide</h2>
+  <p>Configured for <strong>Netlify</strong> deployment with the official Next.js plugin.</p>
+  <ol>
+    <li>Push code to GitHub repository</li>
+    <li>Connect repo to Netlify</li>
+    <li>Set all environment variables in Netlify dashboard</li>
+    <li>Build command: <code>npm run build</code> (auto from netlify.toml)</li>
+    <li>Deploy and verify all pages and admin login</li>
+  </ol>
+
+  <div class="info-box">
+    <strong>Email setup:</strong> Enable 2-Factor Authentication on Gmail, generate an App Password at myaccount.google.com/apppasswords, and add it to EMAIL_PASSWORD. See EMAIL_SETUP.md in the project for full instructions.
+  </div>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 11</span>
+  </div>
+</div>
+
+<!-- PAGE 12: FILE STRUCTURE + WORKFLOWS -->
+<div class="page">
+  <div class="page-header">
+    <span>Huma Beauty Saloon</span>
+    <span>Structure & Workflows</span>
+  </div>
+
+  <div class="section-num">Section 14</div>
+  <h2>Project File Structure</h2>
+  <div class="code-block">huma_beauty_saloon-main/
+├── components/       Navbar, Footer, ServiceCard, AdminShell, SEO
+├── data/             Local JSON database (services, bookings, etc.)
+├── docs/             Project documentation (this file)
+├── lib/              Business logic and utilities
+│   ├── services.js, serviceConfig.js
+│   ├── offers.js, gallery.js
+│   ├── localDb.js, adminSession.js
+│   └── apiUtils/     validation, rateLimit, security
+├── pages/
+│   ├── index.js      Home page
+│   ├── services.js   All services
+│   ├── book.js       Booking form
+│   ├── contact.js    Contact form
+│   ├── offers.js     Offers page
+│   ├── gallery.js    Gallery page
+│   ├── admin/        Admin dashboard (8 modules)
+│   └── api/          Backend API routes
+├── public/images/    Static image assets
+├── sql/schema.sql    Supabase database schema
+├── styles/globals.css
+├── netlify.toml      Deployment configuration
+└── package.json</div>
+
+  <div class="section-num" style="margin-top: 24px;">Section 15</div>
+  <h2>User & Admin Workflows</h2>
+
+  <h3>Customer Journey</h3>
+  <ol>
+    <li>Visits website → browses featured services on home page</li>
+    <li>Clicks Book Now or selects a specific service card</li>
+    <li>Fills 3-step booking form (details → date/time → confirm)</li>
+    <li>Booking saved; email sent to salon</li>
+    <li>Salon confirms appointment via WhatsApp (+92 335 5462214)</li>
+  </ol>
+
+  <h3>Admin Journey</h3>
+  <ol>
+    <li>Logs in at /admin/login</li>
+    <li>Views color-coded dashboard statistics</li>
+    <li>Manages bookings (confirm/pending/cancel)</li>
+    <li>Reads and responds to customer messages</li>
+    <li>Updates services, offers, gallery as needed</li>
+    <li>Changes reflect immediately on public website</li>
+  </ol>
+
+  <div class="info-box" style="margin-top: 20px; text-align: center;">
+    <strong>End of Document</strong><br />
+    Huma Beauty Saloon — Project Documentation v1.0 — June 2026<br />
+    Prepared for Huma Beauty Saloon, Jhelum, Pakistan
+  </div>
+
+  <div class="page-footer">
+    <span>Huma Beauty Saloon — Project Guide</span>
+    <span>Page 12</span>
+  </div>
+</div>
+
+</body>
+</html>

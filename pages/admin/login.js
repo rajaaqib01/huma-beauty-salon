@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -31,19 +32,25 @@ export default function AdminLogin() {
   }
 
   return (
+    <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
     <div className="admin-login-shell">
       <form onSubmit={handleLogin} className="admin-login-card">
         <h2 className="admin-login-title">Admin Login</h2>
-        <label className="admin-field-label">Email</label>
+        <label className="admin-field-label" htmlFor="admin-email">Email</label>
         <input
+          id="admin-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="admin-input"
           placeholder="admin@example.com"
         />
-        <label className="admin-field-label">Password</label>
+        <label className="admin-field-label" htmlFor="admin-password">Password</label>
         <input
+          id="admin-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -59,5 +66,6 @@ export default function AdminLogin() {
         )}
       </form>
     </div>
+    </>
   )
 }

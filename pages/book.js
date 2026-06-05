@@ -28,6 +28,7 @@ export default function Book({ bookingServices = [] }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [serviceFromUrl, setServiceFromUrl] = useState('');
   const [priceFromUrl, setPriceFromUrl] = useState('');
 
@@ -60,7 +61,8 @@ export default function Book({ bookingServices = [] }) {
     }
     if (step === 1) {
       if (!form.date) e.date = 'Please select a date';
-      if (!form.time) e.time = 'Please select a time';
+      if (!form.time.trim()) e.time = 'Please select or enter a time';
+      else if (!convertTo24Hour(form.time)) e.time = 'Enter a valid time (e.g. 3:30 PM or 15:30)';
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -69,17 +71,48 @@ export default function Book({ bookingServices = [] }) {
   const next = () => { if (validate()) setStep(s => s + 1); };
   const prev = () => { setStep(s => s - 1); setErrors({}); };
 
-  const convertTo24Hour = (time12) => {
-    if (!time12) return '';
-    const [time, period] = time12.split(' ');
-    let [hours, minutes] = time.split(':');
-    hours = parseInt(hours);
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
-    return `${String(hours).padStart(2, '0')}:${minutes}`;
+  const convertTo24Hour = (timeInput) => {
+    if (!timeInput || typeof timeInput !== 'string') return '';
+    const trimmed = timeInput.trim();
+
+    if (/^([01]\d|2[0-3]):([0-5]\d)$/.test(trimmed)) return trimmed;
+
+    const match12 = trimmed.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (match12) {
+      let hours = parseInt(match12[1], 10);
+      const minutes = match12[2];
+      const period = match12[3].toUpperCase();
+      if (hours < 1 || hours > 12) return '';
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      return `${String(hours).padStart(2, '0')}:${minutes}`;
+    }
+
+    const match12NoMin = trimmed.match(/^(\d{1,2})\s*(AM|PM)$/i);
+    if (match12NoMin) {
+      let hours = parseInt(match12NoMin[1], 10);
+      const period = match12NoMin[2].toUpperCase();
+      if (hours < 1 || hours > 12) return '';
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      return `${String(hours).padStart(2, '0')}:00`;
+    }
+
+    const match24 = trimmed.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+    if (match24) {
+      const hours = parseInt(match24[1], 10);
+      const minutes = match24[2];
+      if (hours >= 0 && hours <= 23) {
+        return `${String(hours).padStart(2, '0')}:${minutes}`;
+      }
+    }
+
+    return '';
   };
 
   const submit = async () => {
+    if (isLoading) return;
+    setSubmitError('');
     setIsLoading(true);
     try {
       const submissionData = {
@@ -101,7 +134,7 @@ export default function Book({ bookingServices = [] }) {
       setSubmitted(true);
     } catch (error) {
       console.error('Booking submission error:', error);
-      alert('Unable to submit your booking request right now. Please try again or contact us on WhatsApp.');
+      setSubmitError(error.message || 'Unable to submit your booking request right now. Please try again or contact us on WhatsApp.');
     } finally {
       setIsLoading(false);
     }
@@ -276,7 +309,7 @@ export default function Book({ bookingServices = [] }) {
                   {step === 1 && (
                     <div style={stepCardStyle}>
                       <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: 'var(--text-dark)', marginBottom: 8 }}>Pick Date & Time</h2>
-                      <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Choose your preferred appointment slot.</p>
+                      <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Pick a suggested slot or type your own preferred time.</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                         <div>
                           <label htmlFor="booking-date" style={labelStyle}>Preferred Date *</label>
@@ -286,23 +319,31 @@ export default function Book({ bookingServices = [] }) {
                           {errors.date && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.date}</p>}
                         </div>
                         <div>
-                          <label style={labelStyle}>Preferred Time *</label>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: 8 }}>
+                          <label htmlFor="booking-time" style={labelStyle}>Preferred Time *</label>
+                          <input
+                            id="booking-time"
+                            list="booking-time-options"
+                            type="text"
+                            style={inputStyle('time')}
+                            value={form.time}
+                            onChange={e => update('time', e.target.value)}
+                            placeholder="Select or type time (e.g. 3:30 PM)"
+                            onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
+                            onBlur={e => e.target.style.borderColor = errors.time ? '#e57373' : 'var(--blush-mid)'}
+                          />
+                          <datalist id="booking-time-options">
                             {timeSlots.map(t => (
-                              <button key={t} onClick={() => update('time', t)} style={{
-                                padding: '9px 4px', borderRadius: 8, fontSize: '0.78rem', fontFamily: "'Jost', sans-serif", cursor: 'pointer', transition: 'all 0.2s',
-                                background: form.time === t ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)',
-                                color: form.time === t ? 'white' : 'var(--text-mid)',
-                                border: form.time === t ? 'none' : '1.5px solid var(--blush-mid)',
-                                fontWeight: form.time === t ? 600 : 400,
-                              }}>{t}</button>
+                              <option key={t} value={t} />
                             ))}
-                          </div>
+                          </datalist>
+                          <p style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 6 }}>
+                            Choose from suggestions or enter any time that suits you.
+                          </p>
                           {errors.time && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.time}</p>}
                         </div>
                         <div>
-                          <label style={labelStyle}>Special Requests (Optional)</label>
-                          <textarea rows={3} style={{ ...inputStyle('notes'), resize: 'vertical' }} value={form.notes} onChange={e => update('notes', e.target.value)} placeholder="Any special requests, allergies, or notes..."
+                          <label htmlFor="booking-notes" style={labelStyle}>Special Requests (Optional)</label>
+                          <textarea id="booking-notes" rows={3} style={{ ...inputStyle('notes'), resize: 'vertical' }} value={form.notes} onChange={e => update('notes', e.target.value)} placeholder="Any special requests, allergies, or notes..."
                             onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                             onBlur={e => e.target.style.borderColor = 'var(--blush-mid)'} />
                         </div>
@@ -344,11 +385,16 @@ export default function Book({ bookingServices = [] }) {
                       <button onClick={prev} className="btn-outline" style={{ padding: '13px 28px' }}>← Back</button>
                     ) : <div />}
                     {step < 2 ? (
-                      <button onClick={next} className="btn-rose" style={{ padding: '13px 28px' }}><span>Continue →</span></button>
+                      <button onClick={next} className="btn-rose" style={{ padding: '13px 28px' }} disabled={isLoading}><span>Continue →</span></button>
                     ) : (
-                      <button onClick={submit} className="btn-rose" style={{ padding: '13px 36px' }}><span>✦ Confirm Booking</span></button>
+                      <button onClick={submit} className="btn-rose" style={{ padding: '13px 36px' }} disabled={isLoading}>
+                        <span>{isLoading ? 'Submitting…' : '✦ Confirm Booking'}</span>
+                      </button>
                     )}
                   </div>
+                  {submitError && (
+                    <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 16, textAlign: 'center' }}>{submitError}</p>
+                  )}
                 </>
               )}
             </div>

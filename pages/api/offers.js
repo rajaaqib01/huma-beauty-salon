@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const offers = await getPublicOffers()
-    res.setHeader('Cache-Control', 'no-store')
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300')
     return res.json(offers)
   } catch (e) {
     console.error('Public offers load error:', e)

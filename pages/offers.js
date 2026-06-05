@@ -16,8 +16,8 @@ function OfferCard({ offer }) {
         <p className="offer-card-desc">{offer.description}</p>
         <p className="offer-card-dates">{offer.dates}</p>
         <div className="offer-card-actions">
-          <Link href="/book">
-            <button className="btn-rose btn-rose-small"><span>Book Now</span></button>
+          <Link href="/book" className="btn-rose btn-rose-small">
+            <span>Book Now</span>
           </Link>
           <Link href="/contact" className="offer-card-link">Contact Us →</Link>
         </div>
@@ -62,8 +62,8 @@ export default function OffersPage({ offers = [] }) {
                 <h2>No Active Offers Right Now</h2>
                 <p>Check back soon for new promotions, or contact us for the latest salon deals.</p>
                 <div className="offers-empty-actions">
-                  <Link href="/contact"><button className="btn-rose"><span>Contact Us</span></button></Link>
-                  <Link href="/book"><button className="btn-outline">Book Appointment</button></Link>
+                  <Link href="/contact" className="btn-rose"><span>Contact Us</span></Link>
+                  <Link href="/book" className="btn-outline">Book Appointment</Link>
                 </div>
               </div>
             )}
@@ -77,7 +77,7 @@ export default function OffersPage({ offers = [] }) {
               <p>WhatsApp us or visit the salon — our team will help you choose the best deal.</p>
               <div className="offers-cta-actions">
                 <a href="https://wa.me/923355462214" target="_blank" rel="noreferrer" className="btn-secondary">WhatsApp Us</a>
-                <Link href="/contact"><button className="btn-outline">Contact Page</button></Link>
+                <Link href="/contact" className="btn-outline">Contact Page</Link>
               </div>
             </div>
           </section>

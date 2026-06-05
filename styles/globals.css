@@ -82,6 +82,10 @@ img { max-width: 100%; display: block; }
 .btn-rose:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(15,76,69,0.45); }
 .btn-rose:hover::before { opacity: 1; }
 .btn-rose span { position: relative; z-index: 1; }
+.btn-rose-small {
+  padding: 10px 18px !important;
+  font-size: 0.72rem !important;
+}
 
 .btn-outline {
   display: inline-flex;
@@ -476,6 +480,40 @@ img { max-width: 100%; display: block; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
   gap: 28px;
+}
+.service-section-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.service-section-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 2px solid var(--rose-gold);
+  color: var(--rose-gold);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.contact-form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .contact-form-row-2 { grid-template-columns: 1fr; }
+}
+
+.service-section-more-link:hover {
+  background: var(--rose-gold);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 /* Services Page */
@@ -994,6 +1032,99 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   justify-content: space-between;
   min-height: 170px;
+  border-radius: 30px;
+  padding: 28px;
+  border: 2px solid transparent;
+  box-shadow: 0 20px 50px rgba(15, 76, 69, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.admin-stat-card:hover {
+  transform: translateY(-3px);
+}
+.admin-stat-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+.admin-stat-value {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Dashboard stat cards – theme colors */
+.admin-stat-card--bookings {
+  background: linear-gradient(135deg, #0F4C45 0%, #1A6B5E 55%, #238b7a 100%);
+  border-color: #0F4C45;
+  box-shadow: 0 24px 56px rgba(15, 76, 69, 0.28);
+}
+.admin-stat-card--bookings .admin-stat-label,
+.admin-stat-card--bookings .admin-stat-value {
+  color: #ffffff;
+}
+
+.admin-stat-card--confirmed {
+  background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+  border-color: #16a34a;
+  box-shadow: 0 20px 50px rgba(22, 163, 74, 0.22);
+}
+.admin-stat-card--confirmed .admin-stat-label {
+  color: #14532d;
+}
+.admin-stat-card--confirmed .admin-stat-value {
+  color: #15803d;
+}
+
+.admin-stat-card--pending {
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+  border-color: #f59e0b;
+  box-shadow: 0 20px 50px rgba(245, 158, 11, 0.22);
+}
+.admin-stat-card--pending .admin-stat-label {
+  color: #78350f;
+}
+.admin-stat-card--pending .admin-stat-value {
+  color: #b45309;
+}
+
+.admin-stat-card--cancelled {
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+  border-color: #ef4444;
+  box-shadow: 0 20px 50px rgba(239, 68, 68, 0.22);
+}
+.admin-stat-card--cancelled .admin-stat-label {
+  color: #7f1d1d;
+}
+.admin-stat-card--cancelled .admin-stat-value {
+  color: #dc2626;
+}
+
+.admin-stat-card--services {
+  background: linear-gradient(135deg, #fef9c3 0%, #fde68a 45%, #f5d76e 100%);
+  border-color: #D4AF37;
+  box-shadow: 0 20px 50px rgba(212, 175, 55, 0.24);
+}
+.admin-stat-card--services .admin-stat-label {
+  color: #713f12;
+}
+.admin-stat-card--services .admin-stat-value {
+  color: #0F4C45;
+}
+
+.admin-stat-card--messages {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #0F4C45;
+  box-shadow: 0 20px 50px rgba(15, 76, 69, 0.18);
+}
+.admin-stat-card--messages .admin-stat-label {
+  color: #134e4a;
+}
+.admin-stat-card--messages .admin-stat-value {
+  color: #0F4C45;
 }
 .admin-card-cta {
   display: flex;

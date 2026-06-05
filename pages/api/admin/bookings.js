@@ -1,37 +1,10 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { list as localList, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
-
-async function publicBookingHandler(req, res) {
-  if (!supabaseServer) {
-    // Fallback to local JSON store
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method Not Allowed' })
-    }
-    const body = sanitizeObject(req.body)
-    try {
-      const obj = await localInsert('bookings', body)
-      return res.status(201).json(obj)
-    } catch (e) {
-      console.error('Local booking create error:', e)
-      return res.status(500).json({ error: 'Failed to create booking' })
-    }
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' })
-  }
-
-  const body = sanitizeObject(req.body)
-  const { data, error } = await supabaseServer.from('bookings').insert([{ ...body }]).select()
-  if (error) return res.status(500).json({ error: 'Failed to create booking' })
-  return res.status(201).json(data[0])
-}
 
 async function adminBookingHandler(req, res) {
   if (!supabaseServer) {
-    // Local fallback handlers
     if (req.method === 'GET') {
       try {
         const items = await localList('bookings')
@@ -48,7 +21,7 @@ async function adminBookingHandler(req, res) {
       const body = sanitizeObject(req.body)
       try {
         const updated = await localUpdate('bookings', id, body)
-        if (!updated) return res.status(500).json({ error: 'Failed to update booking' })
+        if (!updated) return res.status(404).json({ error: 'Booking not found' })
         return res.json(updated)
       } catch (e) {
         console.error('Local booking update error:', e)
@@ -61,13 +34,16 @@ async function adminBookingHandler(req, res) {
       if (!id) return res.status(400).json({ error: 'Missing booking id' })
       try {
         const ok = await localRemove('bookings', id)
-        if (!ok) return res.status(500).json({ error: 'Failed to delete booking' })
+        if (!ok) return res.status(404).json({ error: 'Booking not found' })
         return res.status(204).end()
       } catch (e) {
         console.error('Local booking delete error:', e)
         return res.status(500).json({ error: 'Failed to delete booking' })
       }
     }
+
+    res.setHeader('Allow', 'GET,PUT,DELETE')
+    return res.status(405).end('Method Not Allowed')
   }
 
   if (req.method === 'GET') {
@@ -93,13 +69,8 @@ async function adminBookingHandler(req, res) {
     return res.status(204).end()
   }
 
-  res.setHeader('Allow', 'GET,POST,PUT,DELETE')
+  res.setHeader('Allow', 'GET,PUT,DELETE')
   return res.status(405).end('Method Not Allowed')
 }
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    return publicBookingHandler(req, res)
-  }
-  return requireAdmin(adminBookingHandler)(req, res)
-}
+export default requireAdmin(adminBookingHandler)

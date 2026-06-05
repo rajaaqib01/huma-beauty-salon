@@ -1,10 +1,11 @@
 import { createAdminCookie, signAdminSession } from '../../../lib/adminSession'
+import { rateLimit } from '../../../lib/apiUtils/rateLimit'
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@example.com'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change-me'
 const USE_DEV_FALLBACK = process.env.NODE_ENV !== 'production'
 
-export default async function handler(req, res) {
+async function loginHandler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
     return res.status(405).json({ error: 'Method Not Allowed' })
@@ -30,3 +31,5 @@ export default async function handler(req, res) {
   res.setHeader('Set-Cookie', createAdminCookie(token))
   return res.status(200).json({ user: { email } })
 }
+
+export default rateLimit(loginHandler, 5, 15 * 60 * 1000)

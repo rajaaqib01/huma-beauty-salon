@@ -8,7 +8,13 @@ function GalleryCard({ item }) {
   return (
     <article className="gallery-page-card">
       <div className="gallery-page-card-img-wrap">
-        <img src={item.img} alt={item.title} className="gallery-page-card-img" loading="lazy" />
+        <img
+          src={item.img}
+          alt={item.title}
+          className="gallery-page-card-img"
+          loading="lazy"
+          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80' }}
+        />
         <div className="gallery-page-card-overlay">
           <span>{item.title}</span>
         </div>
@@ -64,7 +70,7 @@ export default function GalleryPage({ gallery = [] }) {
                   <a href="https://www.instagram.com/huma_beauty.saloon/" target="_blank" rel="noreferrer" className="btn-rose">
                     <span>Visit Instagram</span>
                   </a>
-                  <Link href="/contact"><button className="btn-outline">Contact Us</button></Link>
+                  <Link href="/contact" className="btn-outline">Contact Us</Link>
                 </div>
               </div>
             )}
@@ -78,7 +84,8 @@ export default function GalleryPage({ gallery = [] }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ res }) {
+  res.setHeader('Cache-Control', 'no-store, must-revalidate')
   try {
     const { getPublicGallery } = await import('../lib/gallery');
     const gallery = await getPublicGallery();

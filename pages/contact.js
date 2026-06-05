@@ -7,6 +7,7 @@ import SEO from '../components/SEO';
 export default function Contact() {
   const [form, setForm] = useState({ name: '', phone: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [submittedName, setSubmittedName] = useState('');
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +37,7 @@ export default function Contact() {
       });
 
       if (response.ok) {
+        setSubmittedName(form.name);
         setSubmitted(true);
         setForm({ name: '', phone: '', email: '', subject: '', message: '' });
         setServerError('');
@@ -196,7 +198,7 @@ export default function Contact() {
                     <div style={{ textAlign: 'center', padding: '40px 0' }}>
                       <div style={{ fontSize: '3.5rem', marginBottom: 16 }}>✦</div>
                       <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: '2.2rem', color: 'var(--rose-gold)', marginBottom: 8 }}>Message Sent!</div>
-                      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.6rem', fontWeight: 400, color: 'var(--text-dark)', marginBottom: 12 }}>Thank You, {form.name}!</h3>
+                      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.6rem', fontWeight: 400, color: 'var(--text-dark)', marginBottom: 12 }}>Thank You, {submittedName}!</h3>
                       <p style={{ color: 'var(--text-light)', lineHeight: 1.7, fontSize: '0.9rem' }}>
                         We have received your message and will get back to you within 24 hours. For urgent queries, please WhatsApp us directly.
                       </p>
@@ -207,7 +209,7 @@ export default function Contact() {
                       <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Fill in the form and we will respond as soon as possible.</p>
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                        <div className="contact-form-row-2">
                           <div>
                             <label htmlFor="contact-name" style={labelStyle}>Name *</label>
                             <input id="contact-name" style={inputStyle('name')} value={form.name} onChange={e => update('name', e.target.value)} placeholder="Your name"
@@ -216,8 +218,8 @@ export default function Contact() {
                             {errors.name && <p style={{ color: '#c0392b', fontSize: '0.75rem', marginTop: 4 }}>{errors.name}</p>}
                           </div>
                           <div>
-                            <label style={labelStyle}>Phone *</label>
-                            <input style={inputStyle('phone')} value={form.phone} onChange={e => update('phone', e.target.value)} placeholder="0300-1234567"
+                            <label htmlFor="contact-phone" style={labelStyle}>Phone *</label>
+                            <input id="contact-phone" style={inputStyle('phone')} value={form.phone} onChange={e => update('phone', e.target.value)} placeholder="0300-1234567"
                               onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                               onBlur={e => e.target.style.borderColor = errors.phone ? '#e57373' : 'var(--blush-mid)'} />
                             {errors.phone && <p style={{ color: '#c0392b', fontSize: '0.75rem', marginTop: 4 }}>{errors.phone}</p>}

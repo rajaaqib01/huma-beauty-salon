@@ -1,6 +1,7 @@
+import Link from 'next/link';
 import ServiceCard from './ServiceCard';
 
-export default function ServiceSection({ id, label, title, italic, services, bg }) {
+export default function ServiceSection({ id, label, title, italic, services, bg, moreHref }) {
   if (!services?.length) return null;
 
   return (
@@ -14,6 +15,11 @@ export default function ServiceSection({ id, label, title, italic, services, bg 
             <ServiceCard key={s.id || s.name} service={s} />
           ))}
         </div>
+        {moreHref ? (
+          <div className="service-section-more">
+            <Link href={moreHref} className="service-section-more-link">More Services →</Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

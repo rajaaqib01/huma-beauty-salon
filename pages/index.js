@@ -6,7 +6,7 @@ import SEO from '../components/SEO';
 import ServiceSection from '../components/ServiceSection';
 import { SERVICE_SECTIONS } from '../lib/serviceConfig';
 
-const testimonials = [
+const FALLBACK_TESTIMONIALS = [
   { name: 'Ayesha Khan', loc: 'Jhelum', text: 'I got my bridal makeup done here and it was absolutely stunning! The team understood exactly what I wanted. Highly recommended!', stars: 5, img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80' },
   { name: 'Sana Malik', loc: 'Rawalpindi', text: "Best salon in the area. The keratin treatment transformed my hair completely. I've been coming here for 2 years now.", stars: 5, img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80' },
   { name: 'Fatima Raza', loc: 'Jhelum', text: 'The facials here are divine! My skin has never looked this glowing. The atmosphere is so relaxing and luxurious.', stars: 5, img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80' },
@@ -19,7 +19,7 @@ const testimonials = [
 const tiktokProfileLink = 'https://www.tiktok.com/@humabeautysaloonjhe';
 const tiktokVideoEmbedUrl = 'https://www.tiktok.com/embed/v2/7631137952298454292';
 
-export default function Home({ groupedServices = {} }) {
+export default function Home({ groupedServices = {}, testimonials = FALLBACK_TESTIMONIALS, settings = {} }) {
   return (
     <>
       <SEO
@@ -37,12 +37,12 @@ export default function Home({ groupedServices = {} }) {
           <div className="hero-inner">
             <div className="hero-copy">
               <div className="hero-label">Welcome to</div>
-              <h1>Huma <span>Beauty</span> Saloon</h1>
-              <p className="hero-subtitle">Luxury beauty services crafted for your perfect moment</p>
+              <h1>{settings.hero_title || 'Huma Beauty Saloon'}</h1>
+              <p className="hero-subtitle">{settings.hero_subtitle || 'Luxury beauty services crafted for your perfect moment'}</p>
               <p className="hero-text">We deliver bridal makeup, hair styling, facials, nails, and waxing with the same care, hygiene, and premium touch every time.</p>
               <div className="hero-ctas">
-                <Link href="/book"><button className="btn-rose">✦ Book Appointment</button></Link>
-                <Link href="/contact"><button className="btn-outline">Contact Us</button></Link>
+                <Link href="/book" className="btn-rose"><span>✦ Book Appointment</span></Link>
+                <Link href="/contact" className="btn-outline">Contact Us</Link>
               </div>
               <div className="hero-badges">
                 <span>Bridal Specialist</span>
@@ -75,6 +75,7 @@ export default function Home({ groupedServices = {} }) {
               italic={section.italic}
               services={groupedServices[section.id] || []}
               bg={section.bg}
+              moreHref={`/services#${section.id}`}
             />
           ))}
         </div>
@@ -123,8 +124,8 @@ export default function Home({ groupedServices = {} }) {
                       <div className="testimonial-name">{t.name}</div>
                       <div className="testimonial-loc">{t.loc}</div>
                     </div>
-                    <div className="testimonial-stars">
-                      {Array(t.stars).fill(0).map((_, j) => <span key={j}>★</span>)}
+                    <div className="testimonial-stars" aria-label={`${t.stars} out of 5 stars`}>
+                      {Array(t.stars).fill(0).map((_, j) => <span key={j} aria-hidden="true">★</span>)}
                     </div>
                   </div>
                 </div>
@@ -176,10 +177,8 @@ export default function Home({ groupedServices = {} }) {
             <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem, 5vw, 3rem)', color: 'white', fontWeight: 300, marginBottom: 16 }}>Book Your Beauty Experience Today</h2>
             <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.8)', marginBottom: 36, lineHeight: 1.7 }}>Whether it is a bridal transformation or a relaxing facial, our expert team is ready to make you feel extraordinary.</p>
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/book">
-                <button style={{ background: 'white', color: 'var(--rose-gold-dark)', fontFamily: "'Jost', sans-serif", fontWeight: 600, fontSize: '0.85rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '15px 34px', border: 'none', borderRadius: '50px', cursor: 'pointer', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', transition: 'all 0.3s' }}
-                  onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-                  onMouseOut={e => e.currentTarget.style.transform = 'none'}>✦ Book Appointment</button>
+              <Link href="/book" className="btn-rose" style={{ background: 'white', color: 'var(--rose-gold-dark)', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+                <span>✦ Book Appointment</span>
               </Link>
               <a href="https://wa.me/923355462214" target="_blank" rel="noreferrer" className="btn-secondary">WhatsApp Us</a>
             </div>
@@ -193,14 +192,31 @@ export default function Home({ groupedServices = {} }) {
 }
 
 export async function getServerSideProps() {
+  const empty = {};
+  for (const section of SERVICE_SECTIONS) empty[section.id] = [];
+
   try {
-    const { getGroupedServices } = await import('../lib/services');
-    const groupedServices = await getGroupedServices();
-    return { props: { groupedServices } };
+    const [{ getHomeGroupedServices }, { getApprovedReviews }, { getSettings }] = await Promise.all([
+      import('../lib/services'),
+      import('../lib/reviews'),
+      import('../lib/settings'),
+    ]);
+
+    const [groupedServices, approvedReviews, settings] = await Promise.all([
+      getHomeGroupedServices(),
+      getApprovedReviews(8),
+      getSettings(),
+    ]);
+
+    return {
+      props: {
+        groupedServices,
+        testimonials: approvedReviews.length > 0 ? approvedReviews : FALLBACK_TESTIMONIALS,
+        settings,
+      },
+    };
   } catch (e) {
-    console.error('Home page services load error:', e);
-    const empty = {};
-    for (const section of SERVICE_SECTIONS) empty[section.id] = [];
-    return { props: { groupedServices: empty } };
+    console.error('Home page load error:', e);
+    return { props: { groupedServices: empty, testimonials: FALLBACK_TESTIMONIALS, settings: {} } };
   }
 }

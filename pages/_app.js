@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       {isLoading && (
-        <div style={{
+        <div role="status" aria-live="polite" aria-label="Loading page" style={{
           position: 'fixed',
           inset: 0,
           background: 'linear-gradient(135deg, var(--text-dark) 0%, var(--rose-gold-dark) 100%)',

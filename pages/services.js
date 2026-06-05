@@ -27,7 +27,7 @@ export default function ServicesPage({ groupedServices = {} }) {
             <p className="services-page-hero-text">
               Premium beauty treatments managed and updated by our salon team — book your favourite service today.
             </p>
-            <Link href="/book"><button className="btn-rose"><span>Book Appointment</span></button></Link>
+            <Link href="/book" className="btn-rose"><span>Book Appointment</span></Link>
           </div>
         </section>
 
@@ -52,8 +52,8 @@ export default function ServicesPage({ groupedServices = {} }) {
               <h2>Services Coming Soon</h2>
               <p>Our service list is being updated. Please contact us or book a consultation.</p>
               <div className="services-page-empty-actions">
-                <Link href="/contact"><button className="btn-rose"><span>Contact Us</span></button></Link>
-                <Link href="/book"><button className="btn-outline">Book Appointment</button></Link>
+                <Link href="/contact" className="btn-rose"><span>Contact Us</span></Link>
+                <Link href="/book" className="btn-outline">Book Appointment</Link>
               </div>
             </div>
           </section>

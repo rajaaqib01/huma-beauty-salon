@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useAdminAuth from '../lib/useAdminAuth'
@@ -27,6 +28,10 @@ export default function AdminShell({ title, children }) {
   }
 
   return (
+    <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
     <div className="admin-shell">
       <div className="admin-shell-inner">
         <header className="admin-header">
@@ -55,5 +60,6 @@ export default function AdminShell({ title, children }) {
         <main className="admin-main">{children}</main>
       </div>
     </div>
+    </>
   )
 }

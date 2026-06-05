@@ -48,31 +48,31 @@ export default function AdminDashboard() {
   return (
     <AdminShell title="Dashboard">
       <div className="admin-grid-3">
-        <div className="admin-card admin-stat-card">
-          <p className="admin-panel-label">Total Bookings</p>
-          <p className="text-5xl font-bold">{stats?.total_bookings ?? '—'}</p>
+        <div className="admin-stat-card admin-stat-card--bookings">
+          <p className="admin-stat-label">Total Bookings</p>
+          <p className="admin-stat-value">{stats?.total_bookings ?? '—'}</p>
         </div>
-        <div className="admin-card admin-stat-card">
-          <p className="admin-panel-label">Confirmed</p>
-          <p className="text-5xl font-bold" style={{ color: '#0F4C45' }}>{stats?.confirmed ?? '—'}</p>
+        <div className="admin-stat-card admin-stat-card--confirmed">
+          <p className="admin-stat-label">Confirmed</p>
+          <p className="admin-stat-value">{stats?.confirmed ?? '—'}</p>
         </div>
-        <div className="admin-card admin-stat-card">
-          <p className="admin-panel-label">Pending</p>
-          <p className="text-5xl font-bold" style={{ color: '#D4AF37' }}>{stats?.pending ?? '—'}</p>
+        <div className="admin-stat-card admin-stat-card--pending">
+          <p className="admin-stat-label">Pending</p>
+          <p className="admin-stat-value">{stats?.pending ?? '—'}</p>
         </div>
       </div>
       <div className="admin-grid-3">
-        <div className="admin-card admin-stat-card">
-          <p className="admin-panel-label">Cancelled</p>
-          <p className="text-5xl font-bold" style={{ color: '#E74C3C' }}>{stats?.cancelled ?? '—'}</p>
+        <div className="admin-stat-card admin-stat-card--cancelled">
+          <p className="admin-stat-label">Cancelled</p>
+          <p className="admin-stat-value">{stats?.cancelled ?? '—'}</p>
         </div>
-        <div className="admin-card admin-stat-card">
-          <p className="admin-panel-label">Total Services</p>
-          <p className="text-5xl font-bold">{stats?.total_services ?? '—'}</p>
+        <div className="admin-stat-card admin-stat-card--services">
+          <p className="admin-stat-label">Total Services</p>
+          <p className="admin-stat-value">{stats?.total_services ?? '—'}</p>
         </div>
-        <div className="admin-card admin-stat-card">
-          <p className="admin-panel-label">Messages</p>
-          <p className="text-5xl font-bold">{stats?.total_messages ?? '—'}</p>
+        <div className="admin-stat-card admin-stat-card--messages">
+          <p className="admin-stat-label">Messages</p>
+          <p className="admin-stat-value">{stats?.total_messages ?? '—'}</p>
         </div>
       </div>
       <div className="admin-grid-2">
