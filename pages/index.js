@@ -171,12 +171,12 @@ export default function Home({ groupedServices = {}, testimonials = FALLBACK_TES
         </section>
 
         {/* CTA */}
-        <section style={{ background: 'linear-gradient(135deg, var(--rose-gold-dark), var(--rose-gold), var(--champagne))', padding: '80px 5%', textAlign: 'center' }}>
-          <div style={{ maxWidth: 700, margin: '0 auto' }}>
-            <div style={{ fontFamily: "'Great Vibes', cursive", fontSize: 'clamp(2rem, 5vw, 3rem)', color: 'rgba(255,255,255,0.8)', marginBottom: 8 }}>Ready to Glow?</div>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem, 5vw, 3rem)', color: 'white', fontWeight: 300, marginBottom: 16 }}>Book Your Beauty Experience Today</h2>
-            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.8)', marginBottom: 36, lineHeight: 1.7 }}>Whether it is a bridal transformation or a relaxing facial, our expert team is ready to make you feel extraordinary.</p>
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <section className="home-cta-section">
+          <div className="home-cta-inner">
+            <div className="home-cta-script">Ready to Glow?</div>
+            <h2 className="home-cta-title">Book Your Beauty Experience Today</h2>
+            <p className="home-cta-text">Whether it is a bridal transformation or a relaxing facial, our expert team is ready to make you feel extraordinary.</p>
+            <div className="home-cta-actions">
               <Link href="/book" className="btn-rose" style={{ background: 'white', color: 'var(--rose-gold-dark)', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
                 <span>✦ Book Appointment</span>
               </Link>

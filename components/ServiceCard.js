@@ -15,7 +15,6 @@ export default function ServiceCard({ service }) {
           <Link href={`/book?service=${encodeURIComponent(service.name)}&price=${encodeURIComponent(service.price)}`} className="btn-rose btn-rose-small">
             <span>Book Now</span>
           </Link>
-          <Link href="/contact" className="service-link">Enquire →</Link>
         </div>
       </div>
     </div>
