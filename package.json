@@ -1,0 +1,24 @@
+{
+  "name": "huma-beauty",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
+    "jsonwebtoken": "^9.0.3",
+    "next": "16.2.6",
+    "nodemailer": "^8.0.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "swr": "^2.4.1"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.11",
+    "vitest": "^1.3.9"
+  }
+}

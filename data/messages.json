@@ -1,0 +1,22 @@
+[
+  {
+    "id": "mpx2sd70-igjrpnx",
+    "name": "Automated Tester",
+    "phone": "0000000000",
+    "email": "auto-message@test.example",
+    "subject": "Test Message",
+    "message": "This is a test message inserted by automated script",
+    "created_at": "2026-06-02T20:13:55.014Z",
+    "status": "new"
+  },
+  {
+    "id": "mpwwaycv-0x7xzk0",
+    "name": "Test User",
+    "phone": "03001234567",
+    "email": "test@example.com",
+    "subject": "Test",
+    "message": "This is a test message.",
+    "created_at": "2026-06-02T17:12:24.278Z",
+    "status": "new"
+  }
+]

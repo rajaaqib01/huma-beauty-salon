@@ -1,0 +1,436 @@
+[
+  {
+    "id": "svc-makeup-1",
+    "title": "Everyday Makeup",
+    "description": "Fresh, natural makeup perfect for daily wear and casual occasions.",
+    "price": "3500",
+    "category": "Makeup",
+    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "updated_at": "2026-06-05T08:13:58.246Z"
+  },
+  {
+    "id": "svc-makeup-2",
+    "title": "Simple Party Makeup",
+    "description": "Elegant and subtle makeup for evening parties and casual gatherings.",
+    "price": "6500",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/736x/e6/af/b9/e6afb9c6a80772b09996759f53c95442.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "updated_at": "2026-06-05T08:22:57.003Z"
+  },
+  {
+    "id": "svc-makeup-3",
+    "title": "Glam Party Makeup",
+    "description": "Bold, glamorous looks for special celebrations and events.",
+    "price": "8000",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/736x/26/b4/3d/26b43dcf9d2c50d9ffdd4394608ca43a.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-makeup-4",
+    "title": "Engagement Makeup",
+    "description": "Radiant, camera-ready looks for your special engagement day.",
+    "price": "8000",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/736x/c6/17/c2/c617c29257fbaaf381ddb1f7b568fa94.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-makeup-5",
+    "title": "HD Makeup",
+    "description": "High-definition makeup designed for photos, videos, and close-ups.",
+    "price": "10000",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-makeup-6",
+    "title": "Mehndi Makeup",
+    "description": "Beautiful, coordinated makeup for mehndi ceremonies and celebrations.",
+    "price": "10000",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/736x/93/cc/ed/93ccedb118f1336dc9f09c0a56873e86.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-makeup-7",
+    "title": "Bridal Makeup",
+    "description": "Flawless, long-lasting bridal looks tailored to your style and dress.",
+    "price": "18000",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/1200x/22/8a/fd/228afd7f46f794cf0e8c2f11f19863ea.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-makeup-8",
+    "title": "Luxury Bridal",
+    "description": "Premium, high-end bridal makeup with premium products and services.",
+    "price": "25000",
+    "category": "Makeup",
+    "image_url": "https://i.pinimg.com/736x/c8/2a/24/c82a24c245509066b76b3dc347924b15.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-1",
+    "title": "Hair Cut",
+    "description": "Precision haircuts tailored to your face shape and style.",
+    "price": "1000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/1200x/7e/ee/ce/7eeece0d44b374dfe75cc09232162440.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-2",
+    "title": "Hair Spa",
+    "description": "Deep conditioning and scalp therapy to restore shine and bounce.",
+    "price": "3500",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/1200x/83/08/ae/8308ae065f6981ce3716760be8124943.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-3",
+    "title": "Hair Protein",
+    "description": "Protein treatment to strengthen hair and reduce breakage.",
+    "price": "8000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/1200x/4e/f4/a8/4ef4a87c4da99edefc6c7b97d173a5cc.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-4",
+    "title": "Hair Color",
+    "description": "Full hair coloring services including fashion and natural shades.",
+    "price": "9000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/736x/30/76/97/30769764d31c49e940676ffb652d79be.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-5",
+    "title": "Highlights",
+    "description": "Custom highlights and balayage for dimension and brightness.",
+    "price": "12000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/736x/56/4e/25/564e25677bf29e7689469546211441f4.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-6",
+    "title": "Keratin Treatment",
+    "description": "Professional keratin smoothing for frizz-free, sleek hair.",
+    "price": "15000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/736x/03/69/81/036981fd429c8d3dd07c1c450cae0c13.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-7",
+    "title": "Rebonding",
+    "description": "Chemical straightening treatment for permanently smooth hair.",
+    "price": "18000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/736x/57/16/42/571642770c4147fad0d25b1be91ad17d.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-hair-8",
+    "title": "Hair Botox",
+    "description": "Advanced restorative treatment to repair and rejuvenate hair.",
+    "price": "25000",
+    "category": "Hair",
+    "image_url": "https://i.pinimg.com/736x/70/42/e7/7042e76897c8be684370361200c0ccbd.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-1",
+    "title": "Cleanup Facial",
+    "description": "Deep cleansing treatment to remove impurities and refresh your skin.",
+    "price": "2000",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/1200x/cc/1a/4e/cc1a4e2f556732f7a884890488a64290.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-2",
+    "title": "Basic Facial",
+    "description": "Classic facial treatment for maintaining healthy, glowing skin.",
+    "price": "2500",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/736x/0b/dc/1b/0bdc1b13923be2b4686488a874f7b353.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-3",
+    "title": "Whitening Facial",
+    "description": "Brighten and even skin tone with our signature treatment.",
+    "price": "4500",
+    "category": "Facial",
+    "image_url": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-4",
+    "title": "Gold Facial",
+    "description": "Luxurious gold-infused facial for radiant and youthful skin.",
+    "price": "5500",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/1200x/86/24/96/86249669d6cb25d9dcc5053a8f22bd78.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-5",
+    "title": "Hydra Facial",
+    "description": "Deep hydration and rejuvenation for plump, glowing skin.",
+    "price": "8000",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/736x/8e/2b/0f/8e2b0f96ad3dacf95330a05ab6a13bd0.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-6",
+    "title": "Acne Facial",
+    "description": "Specialized treatment to reduce acne, scars, and breakouts.",
+    "price": "5000",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/736x/53/ac/8f/53ac8fd0ccc2939742e096c68e9c5867.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-7",
+    "title": "Anti-Aging Facial",
+    "description": "Reduce fine lines and restore youthful radiance and firmness.",
+    "price": "7000",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/736x/8b/67/46/8b6746d604826728cf433b1ed3d87cd7.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-facial-8",
+    "title": "Luxury Glow Facial",
+    "description": "Premium facial with exclusive products for ultimate luxury glow.",
+    "price": "10000",
+    "category": "Facial",
+    "image_url": "https://i.pinimg.com/1200x/25/a5/4b/25a54bd9f0bbb32608305d744d32c201.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-1",
+    "title": "Simple Mehndi Design",
+    "description": "Delicate, minimal designs perfect for casual events.",
+    "price": "500",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/736x/2d/86/59/2d86596f9bbb18306ac58f16ac9baf17.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-2",
+    "title": "Arabic Mehndi",
+    "description": "Bold, flowing Arabic-style designs for hands and feet.",
+    "price": "1500",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/736x/c0/89/dd/c089dd6e28cf82bee8f288f5e2524012.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-3",
+    "title": "Front Hand Mehndi",
+    "description": "Intricate front hand designs focused on the palm and fingers.",
+    "price": "1000",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/736x/96/6d/13/966d1356f472a18f3ff0335bb1778611.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-4",
+    "title": "Full Hand Mehndi",
+    "description": "Full hand coverage with detailed bridal-style patterns.",
+    "price": "3000",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/1200x/ff/0d/36/ff0d36ac307e3915188f2176e577feec.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-5",
+    "title": "Feet Mehndi",
+    "description": "Beautiful mehndi designs for the feet and ankles.",
+    "price": "2000",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/736x/13/5c/f1/135cf18c303293ec0535d2a7009c93ab.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-6",
+    "title": "Customized Mehndi Design",
+    "description": "Bespoke designs tailored to your theme and preference.",
+    "price": "5000",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/1200x/09/81/38/098138407955270eb4d8f77764fb25e3.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-7",
+    "title": "Bridal Mehndi",
+    "description": "Traditional bridal mehndi with elaborate motifs and shading.",
+    "price": "8000",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/736x/f7/b1/bb/f7b1bba43a6f56718ea6c53382f51247.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-mehndi-8",
+    "title": "Royal Bridal Mehndi",
+    "description": "Opulent, full-coverage bridal mehndi fit for royalty.",
+    "price": "15000",
+    "category": "Mehndi",
+    "image_url": "https://i.pinimg.com/736x/d0/dd/44/d0dd448ae5bf5fefbfd638bcac805417.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-1",
+    "title": "Simple Nail Paint",
+    "description": "Quick polish application in your chosen color for a neat look.",
+    "price": "500",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/f5/7a/07/f57a0701d73af79030afb2626dd87f56.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-2",
+    "title": "Gel Nail Paint",
+    "description": "Long-lasting gel polish cured under UV/LED for chip-free wear.",
+    "price": "1500",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/70/e8/84/70e8842c746f2324de6cc999635af132.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-3",
+    "title": "Basic Nail Art",
+    "description": "Simple patterns and accents to elevate your manicure.",
+    "price": "2000",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/ba/c7/13/bac713cd26e263bb3304f83b08c733d9.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-4",
+    "title": "French Nail Art",
+    "description": "Classic French tips with precise, elegant lines.",
+    "price": "2500",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/75/6b/5d/756b5d45954e544d534038a7e6c6af7d.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-5",
+    "title": "Glitter Nail Art",
+    "description": "Sparkling glitter finishes and ombre glitter effects.",
+    "price": "3000",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/f7/95/8f/f7958f0b9053ff458e172eed9eff16fc.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-6",
+    "title": "Acrylic Nails",
+    "description": "Durable acrylic sculpting for custom lengths and shapes.",
+    "price": "5000",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/ff/1c/89/ff1c89dbdd45c5bd3d51136db5526cb3.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-7",
+    "title": "Extension Nails",
+    "description": "Premium nail extensions for a dramatic, long-lasting look.",
+    "price": "6000",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/9b/83/68/9b83681f352f434d4e7151cf42cdaf574.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-nails-8",
+    "title": "Luxury Nail Art",
+    "description": "High-end, bespoke nail art with crystals and 3D elements.",
+    "price": "8000",
+    "category": "Nails",
+    "image_url": "https://i.pinimg.com/736x/35/a0/70/35a0708af3a2df55d13ffd773acef555.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-1",
+    "title": "Upper Lips",
+    "description": "Gentle threading to remove fine hair above the lip for a smooth finish.",
+    "price": "200",
+    "category": "Waxing",
+    "image_url": "https://i.pinimg.com/736x/a4/42/73/a44273bd520404bffe87317d0da80abf.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-2",
+    "title": "Eyebrows",
+    "description": "Shaping and threading for clean, defined brows.",
+    "price": "300",
+    "category": "Waxing",
+    "image_url": "https://i.pinimg.com/1200x/4a/48/d2/4a48d247b442449c2bb7326f11ff93c4.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-3",
+    "title": "Full Face Threading",
+    "description": "Complete facial threading for a flawless, hair-free complexion.",
+    "price": "800",
+    "category": "Waxing",
+    "image_url": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-4",
+    "title": "Manicure",
+    "description": "Nail shaping, cuticle care and polish for neat, healthy hands.",
+    "price": "2000",
+    "category": "Waxing",
+    "image_url": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-5",
+    "title": "Pedicure",
+    "description": "Foot soak, exfoliation and polish for soft, refreshed feet.",
+    "price": "2500",
+    "category": "Waxing",
+    "image_url": "https://i.pinimg.com/1200x/55/de/06/55de061932671b34b2e223fe8cf2e419.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-6",
+    "title": "Full Body Wax",
+    "description": "Complete body waxing for long-lasting smoothness.",
+    "price": "7000",
+    "category": "Waxing",
+    "image_url": "https://i.pinimg.com/736x/69/f1/54/69f154bc5b6378ee69796f6af7eb8b04.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-7",
+    "title": "Arms Wax",
+    "description": "Quick and gentle waxing for arms.",
+    "price": "1500",
+    "category": "Waxing",
+    "image_url": "https://i.pinimg.com/736x/4f/19/66/4f1966d3bfef8f939068ad2030505c43.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  },
+  {
+    "id": "svc-waxing-8",
+    "title": "Legs Wax",
+    "description": "Full leg waxing for smooth, touchable skin.",
+    "price": "2000",
+    "category": "Waxing",
+    "image_url": "https://i.pinimg.com/1200x/b3/6e/de/b36ede5de0d8b0a9f5691a5490287bf1.jpg?w=600&q=80",
+    "created_at": "2026-05-31T00:00:00.000Z"
+  }
+]
