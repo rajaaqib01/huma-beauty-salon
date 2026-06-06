@@ -45,14 +45,14 @@ export default function Book({ bookingServices = [] }) {
       const selectedService = service || offer
       const selectedPrice = price || servicePriceMap[selectedService] || ''
       const offerNote = offer
-        ? `Offer booking: ${offer}${discount ? ` (${discount} off)` : ''}`
+        ? `Offer: ${offer}${discount ? ` (${discount} off)` : ''} | Service: ${selectedService}`
         : ''
 
       setForm(f => ({
         ...f,
         service: selectedService,
         price: selectedPrice,
-        notes: offerNote && !f.notes ? offerNote : f.notes,
+        notes: offerNote,
       }))
       setServiceFromUrl(selectedService)
       setPriceFromUrl(selectedPrice)
@@ -136,6 +136,7 @@ export default function Book({ bookingServices = [] }) {
       const submissionData = {
         ...form,
         offer: offerFromUrl || undefined,
+        offerId: router.query.offerId ? decodeURIComponent(router.query.offerId) : undefined,
         discount: router.query.discount ? decodeURIComponent(router.query.discount) : undefined,
         time: convertTo24Hour(form.time),
       };
@@ -297,7 +298,9 @@ export default function Book({ bookingServices = [] }) {
                               <div style={{ flex: 1, background: form.service ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)', color: form.service ? 'white' : 'var(--text-mid)', padding: 16, borderRadius: 12 }}>
                                 <div style={{ fontSize: '1rem', fontWeight: 700 }}>{form.service}</div>
                                 {offerFromUrl ? (
-                                  <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.9)', marginTop: 6 }}>Special Offer Selected</div>
+                                  <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.9)', marginTop: 6 }}>
+                                    Offer: {offerFromUrl}
+                                  </div>
                                 ) : null}
                                 <div style={{ fontSize: '0.9rem', color: form.service ? 'rgba(255,255,255,0.9)' : 'var(--text-light)', marginTop: 6 }}>{form.price || priceFromUrl}</div>
                               </div>

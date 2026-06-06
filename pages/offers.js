@@ -1,58 +1,11 @@
-import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
+import OfferCard from '../components/OfferCard';
+import Link from 'next/link';
 
-function OfferCard({ offer }) {
-  const bookHref = {
-    pathname: '/book',
-    query: {
-      offer: offer.title,
-      service: offer.title,
-      price: offer.salePrice || offer.originalPrice,
-      discount: offer.discountValue ? `${offer.discountValue}%` : '',
-    },
-  }
-
-  return (
-    <article className="offer-card">
-      <div className="offer-card-img-wrap">
-        <img src={offer.img} alt={offer.title} className="offer-card-img" loading="lazy" />
-        <span className="offer-card-discount">{offer.discount}</span>
-      </div>
-      <div className="offer-card-body">
-        <h3 className="offer-card-title">{offer.title}</h3>
-        <p className="offer-card-desc">{offer.description}</p>
-        {(offer.originalPrice || offer.salePrice) ? (
-          <div className="offer-card-pricing">
-            {offer.originalPrice && offer.salePrice && offer.originalPrice !== offer.salePrice ? (
-              <>
-                <span className="offer-card-price-old">{offer.originalPrice}</span>
-                <span className="offer-card-price-new">{offer.salePrice}</span>
-              </>
-            ) : (
-              <span className="offer-card-price-new">{offer.salePrice || offer.originalPrice}</span>
-            )}
-          </div>
-        ) : offer.discountValue ? (
-          <div className="offer-card-pricing">
-            <span className="offer-card-price-new">{offer.discount}</span>
-          </div>
-        ) : null}
-        <p className="offer-card-dates">{offer.dates}</p>
-        <div className="offer-card-actions">
-          <Link href={bookHref} className="btn-rose btn-rose-small">
-            <span>Book Now</span>
-          </Link>
-          <Link href="/contact" className="offer-card-link">Contact Us →</Link>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-export default function OffersPage({ offers = [] }) {
+export default function OffersPage({ offers = [], bookingServices = [] }) {
   return (
     <>
       <SEO
@@ -69,7 +22,7 @@ export default function OffersPage({ offers = [] }) {
             <div className="section-label">✦ Exclusive Deals</div>
             <h1 className="offers-hero-title">Special <em>Offers</em></h1>
             <p className="offers-hero-text">
-              Grab our latest salon promotions on bridal makeup, hair care, facials, and more.
+              Select your service, click Book Now, fill the booking form, and your request will go straight to our admin bookings page.
             </p>
           </div>
         </section>
@@ -79,7 +32,11 @@ export default function OffersPage({ offers = [] }) {
             {offers.length > 0 ? (
               <div className="offers-grid">
                 {offers.map(offer => (
-                  <OfferCard key={offer.id} offer={offer} />
+                  <OfferCard
+                    key={offer.id}
+                    offer={offer}
+                    bookingServices={bookingServices}
+                  />
                 ))}
               </div>
             ) : (
@@ -119,10 +76,14 @@ export default function OffersPage({ offers = [] }) {
 export async function getServerSideProps() {
   try {
     const { getPublicOffers } = await import('../lib/offers');
-    const offers = await getPublicOffers();
-    return { props: { offers } };
+    const { getBookingServices } = await import('../lib/services');
+    const [offers, bookingServices] = await Promise.all([
+      getPublicOffers(),
+      getBookingServices(),
+    ]);
+    return { props: { offers, bookingServices } };
   } catch (e) {
     console.error('Offers page load error:', e);
-    return { props: { offers: [] } };
+    return { props: { offers: [], bookingServices: [] } };
   }
 }

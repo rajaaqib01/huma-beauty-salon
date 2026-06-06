@@ -746,7 +746,38 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--rose-gold);
-  margin-bottom: 18px;
+  margin-bottom: 14px;
+}
+.offer-card-service-select {
+  margin-bottom: 16px;
+}
+.offer-card-service-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+.offer-card-service-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--blush-mid);
+  border-radius: 10px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text-dark);
+  background: white;
+}
+.offer-card-service-input:focus {
+  outline: none;
+  border-color: var(--rose-gold);
+}
+.offer-card-error {
+  color: #c0392b;
+  font-size: 0.82rem;
+  margin-bottom: 12px;
 }
 .offer-card-actions {
   display: flex;

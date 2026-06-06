@@ -67,6 +67,7 @@ export default function Bookings() {
                       </span>
                     </div>
                     <p className="admin-booking-card-subtitle">{b.service_title || b.service}</p>
+                    {b.offer_title ? <p className="admin-booking-card-price"><strong>Offer:</strong> {b.offer_title}</p> : null}
                     {b.price ? <p className="admin-booking-card-price"><strong>Price:</strong> {b.price}</p> : null}
                   </div>
                   <div className="admin-booking-card-id">ID: {b.id}</div>
