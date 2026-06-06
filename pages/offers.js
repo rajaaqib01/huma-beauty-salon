@@ -24,7 +24,7 @@ function OfferCard({ offer }) {
       <div className="offer-card-body">
         <h3 className="offer-card-title">{offer.title}</h3>
         <p className="offer-card-desc">{offer.description}</p>
-        {(offer.originalPrice || offer.salePrice) && (
+        {(offer.originalPrice || offer.salePrice) ? (
           <div className="offer-card-pricing">
             {offer.originalPrice && offer.salePrice && offer.originalPrice !== offer.salePrice ? (
               <>
@@ -35,7 +35,11 @@ function OfferCard({ offer }) {
               <span className="offer-card-price-new">{offer.salePrice || offer.originalPrice}</span>
             )}
           </div>
-        )}
+        ) : offer.discountValue ? (
+          <div className="offer-card-pricing">
+            <span className="offer-card-price-new">{offer.discount}</span>
+          </div>
+        ) : null}
         <p className="offer-card-dates">{offer.dates}</p>
         <div className="offer-card-actions">
           <Link href={bookHref} className="btn-rose btn-rose-small">

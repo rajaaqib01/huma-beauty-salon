@@ -30,7 +30,8 @@ export default function OffersPage() {
                 <p className="text-slate-400 mt-3">{offer.description}</p>
               </div>
               <div className="text-slate-400 text-right" style={{ minWidth: '160px' }}>
-                <p className="text-sm">Discount: {offer.discount}%</p>
+                <p className="text-sm">Discount: {String(offer.discount || '').replace(/[^\d.]/g, '') || '0'}%</p>
+                {offer.original_price ? <p className="text-sm">Price: Rs. {Number(offer.original_price).toLocaleString('en-PK')}</p> : null}
                 <p className="text-sm">Valid: {offer.starts_at ? new Date(offer.starts_at).toLocaleDateString() : '-'} – {offer.ends_at ? new Date(offer.ends_at).toLocaleDateString() : '-'}</p>
               </div>
             </div>

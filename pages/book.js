@@ -384,6 +384,7 @@ export default function Book({ bookingServices = [] }) {
                           ['Name', form.name],
                           ['Phone', form.phone],
                           form.email ? ['Email', form.email] : null,
+                          offerFromUrl ? ['Offer', offerFromUrl] : null,
                           ['Service', form.service],
                           form.price ? ['Price', form.price] : null,
                           ['Date', form.date],

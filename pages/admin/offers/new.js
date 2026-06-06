@@ -3,7 +3,7 @@ import AdminShell from '../../../components/AdminShell'
 import { useRouter } from 'next/router'
 
 export default function NewOfferPage() {
-  const [form, setForm] = useState({ title: '', description: '', discount: '', original_price: '', image_url: '', starts_at: '', ends_at: '' })
+  const [form, setForm] = useState({ title: '', description: '', discount: '', original_price: '', service_title: '', image_url: '', starts_at: '', ends_at: '' })
   const router = useRouter()
 
   const handleSubmit = async (e) => {
@@ -20,6 +20,7 @@ export default function NewOfferPage() {
           { field: 'description', label: 'Description', type: 'text' },
           { field: 'original_price', label: 'Original Price (Rs.)', type: 'number' },
           { field: 'discount', label: 'Discount (%)', type: 'number' },
+          { field: 'service_title', label: 'Linked Service Name (optional)', type: 'text' },
           { field: 'image_url', label: 'Image URL', type: 'text' },
           { field: 'starts_at', label: 'Starts At', type: 'date' },
           { field: 'ends_at', label: 'Ends At', type: 'date' },
