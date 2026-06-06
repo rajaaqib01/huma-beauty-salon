@@ -5,7 +5,7 @@ import SEO from '../components/SEO';
 import OfferCard from '../components/OfferCard';
 import Link from 'next/link';
 
-export default function OffersPage({ offers = [], bookingServices = [] }) {
+export default function OffersPage({ offers = [] }) {
   return (
     <>
       <SEO
@@ -22,7 +22,7 @@ export default function OffersPage({ offers = [], bookingServices = [] }) {
             <div className="section-label">✦ Exclusive Deals</div>
             <h1 className="offers-hero-title">Special <em>Offers</em></h1>
             <p className="offers-hero-text">
-              Select your service, click Book Now, fill the booking form, and your request will go straight to our admin bookings page.
+              These offers apply only to the services selected in admin. Choose an offer and book your appointment.
             </p>
           </div>
         </section>
@@ -32,18 +32,14 @@ export default function OffersPage({ offers = [], bookingServices = [] }) {
             {offers.length > 0 ? (
               <div className="offers-grid">
                 {offers.map(offer => (
-                  <OfferCard
-                    key={offer.id}
-                    offer={offer}
-                    bookingServices={bookingServices}
-                  />
+                  <OfferCard key={offer.id} offer={offer} />
                 ))}
               </div>
             ) : (
               <div className="offers-empty">
                 <div className="offers-empty-icon">✦</div>
                 <h2>No Active Offers Right Now</h2>
-                <p>Check back soon for new promotions, or contact us for the latest salon deals.</p>
+                <p>Admin can add offers linked to a specific service. Only those offers appear here.</p>
                 <div className="offers-empty-actions">
                   <Link href="/contact" className="btn-rose"><span>Contact Us</span></Link>
                   <Link href="/book" className="btn-outline">Book Appointment</Link>
@@ -76,14 +72,10 @@ export default function OffersPage({ offers = [], bookingServices = [] }) {
 export async function getServerSideProps() {
   try {
     const { getPublicOffers } = await import('../lib/offers');
-    const { getBookingServices } = await import('../lib/services');
-    const [offers, bookingServices] = await Promise.all([
-      getPublicOffers(),
-      getBookingServices(),
-    ]);
-    return { props: { offers, bookingServices } };
+    const offers = await getPublicOffers();
+    return { props: { offers } };
   } catch (e) {
     console.error('Offers page load error:', e);
-    return { props: { offers: [], bookingServices: [] } };
+    return { props: { offers: [] } };
   }
 }

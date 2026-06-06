@@ -27,6 +27,7 @@ export default function OffersPage() {
             <div className="admin-card-row" style={{ justifyContent: 'space-between' }}>
               <div>
                 <h3 className="text-2xl font-semibold">{offer.title}</h3>
+                <p className="text-slate-400 mt-2"><strong>Service:</strong> {offer.service_title || 'Not linked — will not show on public page'}</p>
                 <p className="text-slate-400 mt-3">{offer.description}</p>
               </div>
               <div className="text-slate-400 text-right" style={{ minWidth: '160px' }}>

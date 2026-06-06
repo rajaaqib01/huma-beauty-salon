@@ -748,6 +748,20 @@ img { max-width: 100%; display: block; }
   color: var(--rose-gold);
   margin-bottom: 14px;
 }
+.offer-card-service-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--champagne-pale);
+  border: 1px solid rgba(15, 76, 69, 0.08);
+}
+.offer-card-service-badge strong {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
 .offer-card-service-select {
   margin-bottom: 16px;
 }

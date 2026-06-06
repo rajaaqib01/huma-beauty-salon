@@ -14,6 +14,21 @@ const timeSlots = [
 
 const steps = ['Your Details', 'Date & Time', 'Confirm'];
 
+function safeDecodeQuery(value) {
+  if (!value || typeof value !== 'string') return '';
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function formatDiscount(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  return raw.includes('%') ? raw : `${raw}%`;
+}
+
 export default function Book({ bookingServices = [] }) {
   const router = useRouter();
   const servicePriceMap = useMemo(
@@ -36,10 +51,10 @@ export default function Book({ bookingServices = [] }) {
   useEffect(() => {
     if (!router.isReady) return
 
-    const service = router.query.service ? decodeURIComponent(router.query.service) : ''
-    const offer = router.query.offer ? decodeURIComponent(router.query.offer) : ''
-    const price = router.query.price ? decodeURIComponent(router.query.price) : ''
-    const discount = router.query.discount ? decodeURIComponent(router.query.discount) : ''
+    const service = safeDecodeQuery(router.query.service)
+    const offer = safeDecodeQuery(router.query.offer)
+    const price = safeDecodeQuery(router.query.price)
+    const discount = formatDiscount(safeDecodeQuery(router.query.discount))
 
     if (service || offer) {
       const selectedService = service || offer
@@ -136,8 +151,8 @@ export default function Book({ bookingServices = [] }) {
       const submissionData = {
         ...form,
         offer: offerFromUrl || undefined,
-        offerId: router.query.offerId ? decodeURIComponent(router.query.offerId) : undefined,
-        discount: router.query.discount ? decodeURIComponent(router.query.discount) : undefined,
+        offerId: safeDecodeQuery(router.query.offerId) || undefined,
+        discount: formatDiscount(safeDecodeQuery(router.query.discount)) || undefined,
         time: convertTo24Hour(form.time),
       };
 
