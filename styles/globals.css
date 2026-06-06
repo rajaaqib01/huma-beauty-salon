@@ -724,6 +724,22 @@ img { max-width: 100%; display: block; }
   margin-bottom: 14px;
   flex: 1;
 }
+.offer-card-pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.offer-card-price-old {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  text-decoration: line-through;
+}
+.offer-card-price-new {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--rose-gold-dark);
+}
 .offer-card-dates {
   font-size: 0.78rem;
   font-weight: 600;

@@ -31,17 +31,35 @@ export default function Book({ bookingServices = [] }) {
   const [submitError, setSubmitError] = useState('');
   const [serviceFromUrl, setServiceFromUrl] = useState('');
   const [priceFromUrl, setPriceFromUrl] = useState('');
+  const [offerFromUrl, setOfferFromUrl] = useState('');
 
   useEffect(() => {
-    if (router.isReady && router.query.service) {
-      const service = decodeURIComponent(router.query.service);
-      const price = router.query.price ? decodeURIComponent(router.query.price) : servicePriceMap[service] || '';
-      setForm(f => ({ ...f, service, price }));
-      setServiceFromUrl(service);
-      setPriceFromUrl(price);
-      setStep(0);
+    if (!router.isReady) return
+
+    const service = router.query.service ? decodeURIComponent(router.query.service) : ''
+    const offer = router.query.offer ? decodeURIComponent(router.query.offer) : ''
+    const price = router.query.price ? decodeURIComponent(router.query.price) : ''
+    const discount = router.query.discount ? decodeURIComponent(router.query.discount) : ''
+
+    if (service || offer) {
+      const selectedService = service || offer
+      const selectedPrice = price || servicePriceMap[selectedService] || ''
+      const offerNote = offer
+        ? `Offer booking: ${offer}${discount ? ` (${discount} off)` : ''}`
+        : ''
+
+      setForm(f => ({
+        ...f,
+        service: selectedService,
+        price: selectedPrice,
+        notes: offerNote && !f.notes ? offerNote : f.notes,
+      }))
+      setServiceFromUrl(selectedService)
+      setPriceFromUrl(selectedPrice)
+      setOfferFromUrl(offer || '')
+      setStep(0)
     }
-  }, [router.isReady, router.query.service, router.query.price, servicePriceMap]);
+  }, [router.isReady, router.query.service, router.query.offer, router.query.price, router.query.discount, servicePriceMap]);
 
   const update = (field, val) => setForm(f => ({ ...f, [field]: val }));
   const selectService = (serviceName) => {
@@ -117,6 +135,8 @@ export default function Book({ bookingServices = [] }) {
     try {
       const submissionData = {
         ...form,
+        offer: offerFromUrl || undefined,
+        discount: router.query.discount ? decodeURIComponent(router.query.discount) : undefined,
         time: convertTo24Hour(form.time),
       };
 
@@ -276,9 +296,12 @@ export default function Book({ bookingServices = [] }) {
                             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                               <div style={{ flex: 1, background: form.service ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)', color: form.service ? 'white' : 'var(--text-mid)', padding: 16, borderRadius: 12 }}>
                                 <div style={{ fontSize: '1rem', fontWeight: 700 }}>{form.service}</div>
+                                {offerFromUrl ? (
+                                  <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.9)', marginTop: 6 }}>Special Offer Selected</div>
+                                ) : null}
                                 <div style={{ fontSize: '0.9rem', color: form.service ? 'rgba(255,255,255,0.9)' : 'var(--text-light)', marginTop: 6 }}>{form.price || priceFromUrl}</div>
                               </div>
-                              <button onClick={() => { setServiceFromUrl(''); setPriceFromUrl(''); setForm(f => ({ ...f, service: '', price: '' })); }} className="btn-outline" style={{ padding: '10px 16px' }}>Change</button>
+                              <button onClick={() => { setServiceFromUrl(''); setPriceFromUrl(''); setOfferFromUrl(''); setForm(f => ({ ...f, service: '', price: '', notes: '' })); }} className="btn-outline" style={{ padding: '10px 16px' }}>Change</button>
                             </div>
                           ) : (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>

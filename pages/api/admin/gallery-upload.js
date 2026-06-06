@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { requireAdmin } from '../../../lib/adminSession'
+import { isServerless } from '../../../lib/isServerless'
 
 const MAX_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
@@ -26,6 +27,14 @@ async function handler(req, res) {
 
     if (buffer.length > MAX_BYTES) {
       return res.status(400).json({ error: 'Image must be smaller than 5MB' })
+    }
+
+    const mime = mimeType || 'image/jpeg'
+
+    // On Vercel/Netlify the filesystem is ephemeral — store as data URL in gallery record
+    if (isServerless()) {
+      const dataUrl = `data:${mime};base64,${buffer.toString('base64')}`
+      return res.status(201).json({ url: dataUrl })
     }
 
     const ext = path.extname(filename).toLowerCase() || '.jpg'

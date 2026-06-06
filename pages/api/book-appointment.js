@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { escapeHtml, sanitizeObject } from '../../lib/apiUtils/security';
-import { validateBookingForm, validateEnv, validateRequestSize } from '../../lib/apiUtils/validation';
+import { validateBookingForm, validateRequestSize } from '../../lib/apiUtils/validation';
 import { rateLimit } from '../../lib/apiUtils/rateLimit';
 import { supabaseServer } from '../../lib/supabaseServer';
 import { insert as localInsert } from '../../lib/localDb';
@@ -10,15 +10,13 @@ async function bookAppointmentHandler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Validate request size
   if (!validateRequestSize(req)) {
     return res.status(413).json({ error: 'Request payload too large' });
   }
 
   const body = sanitizeObject(req.body);
-  const { name, phone, email, service, price, date, time, notes } = body;
+  const { name, phone, email, service, price, date, time, notes, offer, discount } = body;
 
-  // Validate form data
   const { valid, errors } = validateBookingForm({ name, phone, email, service, date, time, notes });
   if (!valid) {
     return res.status(400).json({ error: 'Validation failed', errors });
@@ -27,7 +25,6 @@ async function bookAppointmentHandler(req, res) {
   const canSendEmail = process.env.EMAIL_USER?.trim() && process.env.EMAIL_PASSWORD?.trim();
 
   try {
-    // Sanitize inputs
     const safeName = escapeHtml(name);
     const safePhone = escapeHtml(phone);
     const safeEmail = escapeHtml(email);
@@ -35,6 +32,8 @@ async function bookAppointmentHandler(req, res) {
     const safePrice = price ? escapeHtml(price) : '';
     const safeDate = escapeHtml(date);
     const safeTime = escapeHtml(time);
+    const safeOffer = offer ? escapeHtml(offer) : '';
+    const safeDiscount = discount ? escapeHtml(discount) : '';
     const safeNotes = notes ? escapeHtml(notes) : '';
 
     const salonMessage = `
@@ -45,6 +44,8 @@ async function bookAppointmentHandler(req, res) {
         <p><strong>Phone:</strong> ${safePhone}</p>
         <p><strong>Email:</strong> ${safeEmail}</p>
         <p><strong>Service:</strong> ${safeService}</p>
+        ${safePrice ? `<p><strong>Price:</strong> ${safePrice}</p>` : ''}
+        ${safeOffer ? `<p><strong>Offer:</strong> ${safeOffer}${safeDiscount ? ` (${safeDiscount} off)` : ''}</p>` : ''}
         <p><strong>Date:</strong> ${safeDate}</p>
         <p><strong>Time:</strong> ${safeTime}</p>
         ${safeNotes ? `<p><strong>Notes:</strong></p><p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #6e3b52;">${safeNotes}</p>` : ''}
@@ -102,6 +103,8 @@ async function bookAppointmentHandler(req, res) {
       service_title: safeService,
       service: safeService,
       price: safePrice,
+      offer_title: safeOffer || null,
+      discount: safeDiscount || null,
       date: safeDate,
       time: safeTime,
       notes: safeNotes,
@@ -111,15 +114,26 @@ async function bookAppointmentHandler(req, res) {
     };
 
     if (supabaseServer) {
-      const { error: bookingError } = await supabaseServer.from('bookings').insert([bookingPayload]);
+      const { error: bookingError } = await supabaseServer.from('bookings').insert([{
+        customer_name: bookingPayload.customer_name,
+        phone: bookingPayload.phone,
+        email: bookingPayload.email,
+        service_title: bookingPayload.service_title,
+        date: bookingPayload.date,
+        time: bookingPayload.time,
+        notes: [bookingPayload.notes, bookingPayload.price ? `Price: ${bookingPayload.price}` : '', bookingPayload.offer_title ? `Offer: ${bookingPayload.offer_title}` : ''].filter(Boolean).join('\n'),
+        status: bookingPayload.status,
+      }]);
       if (bookingError) {
         console.error('Booking DB insert error:', bookingError);
+        return res.status(500).json({ error: 'Failed to save booking. Please try again or contact us on WhatsApp.' });
       }
     } else {
       try {
-        await localInsert('bookings', bookingPayload)
+        await localInsert('bookings', bookingPayload);
       } catch (e) {
-        console.error('Local booking insert failed:', e)
+        console.error('Local booking insert failed:', e);
+        return res.status(500).json({ error: 'Failed to save booking. Please try again or contact us on WhatsApp.' });
       }
     }
 
@@ -130,5 +144,4 @@ async function bookAppointmentHandler(req, res) {
   }
 }
 
-// Export with rate limiting (5 requests per minute)
 export default rateLimit(bookAppointmentHandler, 5, 60000);

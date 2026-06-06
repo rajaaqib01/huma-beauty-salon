@@ -5,6 +5,16 @@ import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
 
 function OfferCard({ offer }) {
+  const bookHref = {
+    pathname: '/book',
+    query: {
+      offer: offer.title,
+      service: offer.title,
+      price: offer.salePrice || offer.originalPrice,
+      discount: offer.discountValue ? `${offer.discountValue}%` : '',
+    },
+  }
+
   return (
     <article className="offer-card">
       <div className="offer-card-img-wrap">
@@ -14,9 +24,21 @@ function OfferCard({ offer }) {
       <div className="offer-card-body">
         <h3 className="offer-card-title">{offer.title}</h3>
         <p className="offer-card-desc">{offer.description}</p>
+        {(offer.originalPrice || offer.salePrice) && (
+          <div className="offer-card-pricing">
+            {offer.originalPrice && offer.salePrice && offer.originalPrice !== offer.salePrice ? (
+              <>
+                <span className="offer-card-price-old">{offer.originalPrice}</span>
+                <span className="offer-card-price-new">{offer.salePrice}</span>
+              </>
+            ) : (
+              <span className="offer-card-price-new">{offer.salePrice || offer.originalPrice}</span>
+            )}
+          </div>
+        )}
         <p className="offer-card-dates">{offer.dates}</p>
         <div className="offer-card-actions">
-          <Link href="/book" className="btn-rose btn-rose-small">
+          <Link href={bookHref} className="btn-rose btn-rose-small">
             <span>Book Now</span>
           </Link>
           <Link href="/contact" className="offer-card-link">Contact Us →</Link>

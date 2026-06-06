@@ -45,7 +45,6 @@ async function sendEmailHandler(req, res) {
     subject: safeSubject,
     message: safeMessage,
     created_at: new Date().toISOString(),
-    status: 'new',
     read: false,
   }
 

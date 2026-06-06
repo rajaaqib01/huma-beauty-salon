@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS offers (
   title text,
   description text,
   discount numeric(5,2),
+  original_price numeric(10,2),
   image_url text,
   starts_at timestamptz,
   ends_at timestamptz,

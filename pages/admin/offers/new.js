@@ -3,7 +3,7 @@ import AdminShell from '../../../components/AdminShell'
 import { useRouter } from 'next/router'
 
 export default function NewOfferPage() {
-  const [form, setForm] = useState({ title: '', description: '', discount: '', image_url: '', starts_at: '', ends_at: '' })
+  const [form, setForm] = useState({ title: '', description: '', discount: '', original_price: '', image_url: '', starts_at: '', ends_at: '' })
   const router = useRouter()
 
   const handleSubmit = async (e) => {
@@ -15,10 +15,18 @@ export default function NewOfferPage() {
   return (
     <AdminShell title="Create Offer">
       <form onSubmit={handleSubmit} className="grid gap-4 max-w-3xl">
-        {['title', 'description', 'discount', 'image_url', 'starts_at', 'ends_at'].map((field) => (
+        {[
+          { field: 'title', label: 'Title', type: 'text' },
+          { field: 'description', label: 'Description', type: 'text' },
+          { field: 'original_price', label: 'Original Price (Rs.)', type: 'number' },
+          { field: 'discount', label: 'Discount (%)', type: 'number' },
+          { field: 'image_url', label: 'Image URL', type: 'text' },
+          { field: 'starts_at', label: 'Starts At', type: 'date' },
+          { field: 'ends_at', label: 'Ends At', type: 'date' },
+        ].map(({ field, label, type }) => (
           <div key={field}>
-            <label className="text-sm text-slate-300 block mb-2 capitalize">{field.replace('_', ' ')}</label>
-            <input className="w-full rounded-2xl bg-slate-800 border border-white/10 p-3 text-slate-100" value={form[field]} onChange={(e) => setForm({ ...form, [field]: e.target.value })} type={field.includes('at') ? 'date' : 'text'} />
+            <label className="text-sm text-slate-300 block mb-2">{label}</label>
+            <input className="w-full rounded-2xl bg-slate-800 border border-white/10 p-3 text-slate-100" value={form[field]} onChange={(e) => setForm({ ...form, [field]: e.target.value })} type={type} />
           </div>
         ))}
         <button className="w-fit px-5 py-3 rounded-2xl bg-rose-500 text-white hover:bg-rose-400 transition">Create Offer</button>
