@@ -117,8 +117,8 @@
     "date": "2026-06-12",
     "time": "14:30",
     "notes": "",
-    "status": "pending",
-    "read": false,
+    "status": "cancelled",
+    "read": true,
     "created_at": "2026-06-05T09:28:12.771Z"
   },
   {
