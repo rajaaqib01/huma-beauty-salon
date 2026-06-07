@@ -13,8 +13,8 @@
     "date": "2026-06-09",
     "time": "13:00",
     "notes": "Offer: grand offer (10% off) | Service: Full Body Wax",
-    "status": "pending",
-    "read": false,
+    "status": "confirmed",
+    "read": true,
     "created_at": "2026-06-07T15:45:32.920Z"
   },
   {
