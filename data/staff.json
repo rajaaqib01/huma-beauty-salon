@@ -1,0 +1,22 @@
+[
+  {
+    "id": "staff-1",
+    "name": "Huma",
+    "role": "Lead Stylist",
+    "specialty": "Bridal Makeup, Party Makeup",
+    "bio": "Specialist in bridal and party looks with 8+ years of experience.",
+    "image_url": "https://images.unsplash.com/photo-1594744803329-fbbd0651fe4c?w=400&q=80",
+    "active": true,
+    "created_at": "2026-06-01T00:00:00.000Z"
+  },
+  {
+    "id": "staff-2",
+    "name": "Ayesha",
+    "role": "Skin Expert",
+    "specialty": "Hydra Facial, Skincare",
+    "bio": "Expert in facials and advanced skincare treatments.",
+    "image_url": "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400&q=80",
+    "active": true,
+    "created_at": "2026-06-01T00:00:00.000Z"
+  }
+]

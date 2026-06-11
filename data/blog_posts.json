@@ -1,0 +1,22 @@
+[
+  {
+    "id": "blog-1",
+    "title": "Bridal Makeup Tips for Your Big Day",
+    "slug": "bridal-makeup-tips",
+    "excerpt": "Essential tips to look flawless on your wedding day.",
+    "content": "Book a trial at least 2 weeks before your wedding. Choose long-lasting products and hydrate your skin well before the appointment. At Huma Beauty Saloon we customize every bridal look to match your outfit and venue lighting.",
+    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80",
+    "published": true,
+    "created_at": "2026-06-01T00:00:00.000Z"
+  },
+  {
+    "id": "blog-2",
+    "title": "Summer Skincare at the Salon",
+    "slug": "summer-skincare",
+    "excerpt": "Keep your skin glowing during hot Jhelum summers.",
+    "content": "Hydra facial and regular cleansing help fight summer dryness and sun damage. Visit us monthly for best results. Drink water and use SPF daily between salon visits.",
+    "image_url": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&q=80",
+    "published": true,
+    "created_at": "2026-06-02T00:00:00.000Z"
+  }
+]

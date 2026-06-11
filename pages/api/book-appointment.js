@@ -1,9 +1,12 @@
-import nodemailer from 'nodemailer';
 import { escapeHtml, sanitizeObject } from '../../lib/apiUtils/security';
 import { validateBookingForm, validateRequestSize } from '../../lib/apiUtils/validation';
 import { rateLimit } from '../../lib/apiUtils/rateLimit';
 import { supabaseServer } from '../../lib/supabaseServer';
 import { insert as localInsert } from '../../lib/localDb';
+import { validateBookingSlot } from '../../lib/bookingSlots';
+import { notifyAdminNewBooking, notifyCustomerBookingReceived } from '../../lib/notifications';
+import { addLoyaltyPoints } from '../../lib/loyalty';
+import { getSettings } from '../../lib/settings';
 
 async function bookAppointmentHandler(req, res) {
   if (req.method !== 'POST') {
@@ -15,14 +18,27 @@ async function bookAppointmentHandler(req, res) {
   }
 
   const body = sanitizeObject(req.body);
-  const { name, phone, email, service, price, date, time, notes, offer, discount } = body;
+  const {
+    name, phone, email, service, price, date, time, notes,
+    offer, discount, staff_id, staff_name, referral_code,
+  } = body;
 
   const { valid, errors } = validateBookingForm({ name, phone, email, service, date, time, notes });
   if (!valid) {
     return res.status(400).json({ error: 'Validation failed', errors });
   }
 
-  const canSendEmail = process.env.EMAIL_USER?.trim() && process.env.EMAIL_PASSWORD?.trim();
+  const slotOk = await validateBookingSlot(date, time);
+  if (!slotOk) {
+    return res.status(400).json({ error: 'Selected time slot is no longer available. Please choose another time.' });
+  }
+
+  const settings = await getSettings();
+  let referralNote = '';
+  if (referral_code?.trim() && settings.referral_code &&
+      referral_code.trim().toUpperCase() === settings.referral_code.toUpperCase()) {
+    referralNote = `Referral code applied: ${settings.referral_code} (${settings.referral_discount || 10}% off)`;
+  }
 
   try {
     const safeName = escapeHtml(name);
@@ -34,66 +50,9 @@ async function bookAppointmentHandler(req, res) {
     const safeTime = escapeHtml(time);
     const safeOffer = offer ? escapeHtml(offer) : '';
     const safeDiscount = discount ? escapeHtml(discount) : '';
-    const safeNotes = notes ? escapeHtml(notes) : '';
-
-    const salonMessage = `
-      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
-        <h2 style="color: #6e3b52;">New Booking Request</h2>
-        <hr style="border: 1px solid #ddd;" />
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Phone:</strong> ${safePhone}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Service:</strong> ${safeService}</p>
-        ${safePrice ? `<p><strong>Price:</strong> ${safePrice}</p>` : ''}
-        ${safeOffer ? `<p><strong>Offer:</strong> ${safeOffer}${safeDiscount ? ` (${safeDiscount} off)` : ''}</p>` : ''}
-        <p><strong>Date:</strong> ${safeDate}</p>
-        <p><strong>Time:</strong> ${safeTime}</p>
-        ${safeNotes ? `<p><strong>Notes:</strong></p><p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #6e3b52;">${safeNotes}</p>` : ''}
-        <hr style="border: 1px solid #ddd;" />
-        <p style="font-size: 12px; color: #999;">This booking request was submitted through the Huma Beauty Saloon website.</p>
-      </div>
-    `;
-
-    if (canSendEmail) {
-      try {
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
-          },
-        });
-
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: process.env.EMAIL_RECIPIENT || 'humaaqi96@gmail.com',
-          subject: `New Booking Request: ${safeService}`,
-          html: salonMessage,
-        });
-
-        if (email) {
-          await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Booking Request Received - Huma Beauty Saloon',
-            html: `
-              <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px;">
-                <h2 style="color: #6e3b52;">Thank you for your booking request, ${safeName}!</h2>
-                <p>We have received your booking request for <strong>${safeService}</strong> on <strong>${safeDate}</strong> at <strong>${safeTime}</strong>.</p>
-                ${safeNotes ? `<p><strong>Your notes:</strong></p><p style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-left: 4px solid #d4a5a5;">${safeNotes}</p>` : ''}
-                <p>We will confirm your appointment via WhatsApp within 2 hours.</p>
-                <hr style="border: 1px solid #ddd;" />
-                <p>Best regards,<br/><strong>Huma Beauty Saloon Team</strong></p>
-              </div>
-            `,
-          });
-        }
-      } catch (emailError) {
-        console.error('Booking email send failed:', emailError);
-      }
-    } else {
-      console.warn('EMAIL_USER or EMAIL_PASSWORD not configured; skipping outbound booking emails.');
-    }
+    const safeStaff = staff_name ? escapeHtml(staff_name) : '';
+    const safeReferral = referral_code ? escapeHtml(referral_code) : '';
+    const safeNotes = [notes, referralNote].filter(Boolean).map(escapeHtml).join(' | ');
 
     const bookingPayload = {
       customer_name: safeName,
@@ -105,6 +64,9 @@ async function bookAppointmentHandler(req, res) {
       price: safePrice,
       offer_title: safeOffer || null,
       discount: safeDiscount || null,
+      staff_id: staff_id || null,
+      staff_name: safeStaff || null,
+      referral_code: safeReferral || null,
       date: safeDate,
       time: safeTime,
       notes: safeNotes,
@@ -121,7 +83,13 @@ async function bookAppointmentHandler(req, res) {
         service_title: bookingPayload.service_title,
         date: bookingPayload.date,
         time: bookingPayload.time,
-        notes: [bookingPayload.notes, bookingPayload.price ? `Price: ${bookingPayload.price}` : '', bookingPayload.offer_title ? `Offer: ${bookingPayload.offer_title}` : ''].filter(Boolean).join('\n'),
+        notes: [
+          bookingPayload.notes,
+          bookingPayload.price ? `Price: ${bookingPayload.price}` : '',
+          bookingPayload.offer_title ? `Offer: ${bookingPayload.offer_title}` : '',
+          bookingPayload.staff_name ? `Stylist: ${bookingPayload.staff_name}` : '',
+          bookingPayload.referral_code ? `Referral: ${bookingPayload.referral_code}` : '',
+        ].filter(Boolean).join('\n'),
         status: bookingPayload.status,
       }]);
       if (bookingError) {
@@ -137,7 +105,21 @@ async function bookAppointmentHandler(req, res) {
       }
     }
 
-    return res.status(200).json({ success: true, message: 'Booking request received successfully' });
+    setImmediate(async () => {
+      try {
+        await notifyAdminNewBooking(bookingPayload);
+        await notifyCustomerBookingReceived(bookingPayload);
+        const pts = parseInt(settings.loyalty_points_per_booking || '10', 10) || 10;
+        await addLoyaltyPoints(safePhone, pts);
+      } catch (e) {
+        console.error('Post-booking notifications failed:', e.message);
+      }
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Booking request received successfully. We will confirm within 2 hours.',
+    });
   } catch (error) {
     console.error('Booking request error:', error);
     return res.status(500).json({ error: 'Failed to send booking request. Please try again later.' });

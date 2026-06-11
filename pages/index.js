@@ -4,6 +4,9 @@ import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
 import ServiceSection from '../components/ServiceSection';
+import InstagramFeed from '../components/InstagramFeed';
+import HomeGalleryPreview from '../components/HomeGalleryPreview';
+import TikTokFeed from '../components/TikTokFeed';
 import { SERVICE_SECTIONS } from '../lib/serviceConfig';
 
 const FALLBACK_TESTIMONIALS = [
@@ -16,10 +19,7 @@ const FALLBACK_TESTIMONIALS = [
   { name: 'Amna Riaz', loc: 'Lahore', text: 'Friendly staff and immaculate service. My lashes look amazing and last for weeks!', stars: 5, img: 'https://images.unsplash.com/photo-1545996124-1f1f6d9f5a1f?w=100&q=80' },
   { name: 'Zainab Ali', loc: 'Islamabad', text: 'Lovely ambience and true professionals. My bridal mehndi was flawless and lasted beautifully.', stars: 5, img: 'https://images.unsplash.com/photo-1544005313-2f8b3b4b3a2d?w=100&q=80' },
 ];
-const tiktokProfileLink = 'https://www.tiktok.com/@humabeautysaloonjhe';
-const tiktokVideoEmbedUrl = 'https://www.tiktok.com/embed/v2/7631137952298454292';
-
-export default function Home({ groupedServices = {}, testimonials = FALLBACK_TESTIMONIALS, settings = {} }) {
+export default function Home({ groupedServices = {}, testimonials = FALLBACK_TESTIMONIALS, settings = {}, instagramPosts = [], galleryPreview = [], tiktokPosts = [] }) {
   return (
     <>
       <SEO
@@ -106,67 +106,67 @@ export default function Home({ groupedServices = {}, testimonials = FALLBACK_TES
         </section>
 
         {/* TESTIMONIALS */}
-        <section style={{ background: 'var(--champagne-pale)', padding: '96px 5%' }}>
-          <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 52 }}>
+        <section className="home-reviews-section">
+          <div className="home-reviews-inner">
+            <div className="home-reviews-header">
               <div className="section-label">✦ Client Love</div>
               <h2 className="section-title">What Our Clients <em>Say</em></h2>
-              <div className="section-divider" style={{ margin: '20px auto' }} />
+              <div className="section-divider home-reviews-divider" />
+              <Link href="/reviews" className="home-reviews-link">All Reviews →</Link>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24 }}>
+            <div className="reviews-public-grid">
               {testimonials.map((t, i) => (
-                <div key={i} className="testimonial-card">
-                  <div className="testimonial-quote">"</div>
-                  <p className="testimonial-text">{t.text}</p>
-                  <div className="testimonial-meta">
-                    <img src={t.img} alt={t.name} className="testimonial-avatar" loading="lazy" />
+                <article key={t.id || i} className="reviews-public-card">
+                  <div className="reviews-public-stars">{'★'.repeat(t.stars)}{'☆'.repeat(5 - t.stars)}</div>
+                  <p className="reviews-public-text">&ldquo;{t.text}&rdquo;</p>
+                  <div className="reviews-public-author">
+                    <img src={t.img} alt={t.name} className="reviews-public-avatar" loading="lazy" />
                     <div>
-                      <div className="testimonial-name">{t.name}</div>
-                      <div className="testimonial-loc">{t.loc}</div>
-                    </div>
-                    <div className="testimonial-stars" aria-label={`${t.stars} out of 5 stars`}>
-                      {Array(t.stars).fill(0).map((_, j) => <span key={j} aria-hidden="true">★</span>)}
+                      <strong>{t.name}</strong>
+                      <span>{t.loc}</span>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* SOCIAL / GALLERY CTA */}
-        <section style={{ background: 'var(--cream)', padding: '96px 5%' }}>
-          <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
-              <div>
-                <div className="section-label">✦ Our Work</div>
-                <h2 className="section-title">Watch & <em>Explore</em></h2>
-                <div className="section-divider" style={{ marginBottom: 0 }} />
-              </div>
-              <Link href="/gallery" style={{ fontSize: '0.85rem', color: 'var(--rose-gold)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}>View Full Gallery →</Link>
-            </div>
+        {/* GALLERY */}
+        <HomeGalleryPreview items={galleryPreview} />
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, alignItems: 'stretch' }}>
-              <div style={{ borderRadius: 24, overflow: 'hidden', background: 'white', boxShadow: 'var(--shadow-card)' }}>
-                <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', background: '#000' }}>
-                  <iframe
-                    src={tiktokVideoEmbedUrl}
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
-                    allow="autoplay; encrypted-media; fullscreen"
-                    allowFullScreen
-                    title="Huma Beauty TikTok Video"
-                  />
-                </div>
-              </div>
-              <div style={{ borderRadius: 24, padding: '28px', background: 'white', boxShadow: 'var(--shadow-card)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <div className="section-label">TikTok</div>
-                  <h3 style={{ margin: '16px 0 12px', fontSize: 'clamp(1.6rem, 2.2vw, 2rem)', lineHeight: 1.1 }}>Watch our latest TikTok beauty reel</h3>
-                  <p style={{ color: 'var(--text-mid)', lineHeight: 1.8, marginBottom: 24 }}>See the newest transformation videos, makeup tips and salon highlights from Huma Beauty Salon.</p>
-                </div>
-                <a href={tiktokProfileLink} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '14px 22px', borderRadius: 999, background: '#010101', color: 'white', textDecoration: 'none', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Visit TikTok Profile</a>
-              </div>
+        {/* INSTAGRAM */}
+        <section className="home-instagram-section">
+          <div className="home-section-inner">
+            <div className="home-section-header home-section-header--center">
+              <div className="section-label">✦ Social</div>
+              <h2 className="section-title">Follow on <em>Instagram</em></h2>
+              <div className="section-divider home-section-divider" />
+              <p className="home-section-text">Latest bridal looks, facials & salon highlights — updated daily.</p>
             </div>
+            <InstagramFeed
+              username={settings.instagram_username || 'huma_beauty.saloon'}
+              profileUrl={settings.instagram}
+              posts={instagramPosts}
+              embedded
+            />
+          </div>
+        </section>
+
+        {/* TIKTOK */}
+        <section className="home-tiktok-section">
+          <div className="home-section-inner">
+            <div className="home-section-header home-section-header--center">
+              <div className="section-label">✦ Social</div>
+              <h2 className="section-title">Watch on <em>TikTok</em></h2>
+              <div className="section-divider home-section-divider" />
+              <p className="home-section-text">Transformation videos, makeup tips & salon highlights on TikTok.</p>
+            </div>
+            <TikTokFeed
+              username="humabeautysaloonjhe"
+              profileUrl="https://www.tiktok.com/@humabeautysaloonjhe"
+              posts={tiktokPosts}
+            />
           </div>
         </section>
 
@@ -196,27 +196,41 @@ export async function getServerSideProps() {
   for (const section of SERVICE_SECTIONS) empty[section.id] = [];
 
   try {
-    const [{ getHomeGroupedServices }, { getApprovedReviews }, { getSettings }] = await Promise.all([
+    const [{ getHomeGroupedServices }, { getApprovedReviews }, { getSettings }, { getInstagramFeedPosts }, { getPublicGallery }] = await Promise.all([
       import('../lib/services'),
       import('../lib/reviews'),
       import('../lib/settings'),
+      import('../lib/instagram'),
+      import('../lib/gallery'),
     ]);
 
-    const [groupedServices, approvedReviews, settings] = await Promise.all([
+    const [groupedServices, approvedReviews, settings, instagramPosts, gallery] = await Promise.all([
       getHomeGroupedServices(),
       getApprovedReviews(8),
       getSettings(),
+      getInstagramFeedPosts(6),
+      getPublicGallery(),
     ]);
+
+    const tiktokProfile = 'https://www.tiktok.com/@humabeautysaloonjhe';
+    const tiktokPosts = gallery.slice(0, 6).map((item) => ({
+      image_url: item.img,
+      url: tiktokProfile,
+      title: item.title,
+    }));
 
     return {
       props: {
         groupedServices,
         testimonials: approvedReviews.length > 0 ? approvedReviews : FALLBACK_TESTIMONIALS,
         settings,
+        instagramPosts,
+        galleryPreview: gallery.slice(0, 6),
+        tiktokPosts,
       },
     };
   } catch (e) {
     console.error('Home page load error:', e);
-    return { props: { groupedServices: empty, testimonials: FALLBACK_TESTIMONIALS, settings: {} } };
+    return { props: { groupedServices: empty, testimonials: FALLBACK_TESTIMONIALS, settings: {}, instagramPosts: [], galleryPreview: [], tiktokPosts: [] } };
   }
 }

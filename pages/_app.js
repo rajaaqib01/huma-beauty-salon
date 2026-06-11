@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import LiveChat from '../components/LiveChat';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -65,6 +66,7 @@ export default function App({ Component, pageProps }) {
         </div>
       )}
       <Component {...pageProps} />
+      {!router.pathname.startsWith('/admin') ? <LiveChat /> : null}
     </>
   );
 }

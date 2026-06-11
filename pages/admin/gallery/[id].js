@@ -32,6 +32,17 @@ export default function EditGalleryPage() {
           <label className="text-sm text-slate-300 block mb-2">Image URL</label>
           <input className="w-full rounded-2xl bg-slate-800 border border-white/10 p-3 text-slate-100" value={item.image_url || ''} onChange={(e) => setItem({ ...item, image_url: e.target.value })} />
         </div>
+        <div>
+          <label className="text-sm text-slate-300 block mb-2">Category</label>
+          <select
+            className="w-full rounded-2xl bg-slate-800 border border-white/10 p-3 text-slate-100"
+            value={item.category || 'general'}
+            onChange={(e) => setItem({ ...item, category: e.target.value })}
+          >
+            <option value="general">General</option>
+            <option value="before_after">Before & After</option>
+          </select>
+        </div>
         <div className="flex gap-3 flex-wrap">
           <button onClick={save} className="px-5 py-3 rounded-2xl bg-rose-500 text-white hover:bg-rose-400 transition">Save</button>
           <button onClick={() => router.push('/admin/gallery')} className="px-5 py-3 rounded-2xl bg-slate-600 text-white hover:bg-slate-500 transition">Cancel</button>

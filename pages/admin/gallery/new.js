@@ -7,6 +7,7 @@ export default function NewGalleryPage() {
   const [imageUrl, setImageUrl] = useState('')
   const [preview, setPreview] = useState('')
   const [pendingFile, setPendingFile] = useState(null)
+  const [category, setCategory] = useState('general')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -68,7 +69,7 @@ export default function NewGalleryPage() {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, image_url: finalUrl }),
+        body: JSON.stringify({ title, image_url: finalUrl, category }),
       })
 
       const data = await res.json()
@@ -102,6 +103,19 @@ export default function NewGalleryPage() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Bridal Makeup Look"
           />
+        </div>
+
+        <div className="admin-form-row">
+          <label className="admin-field-label" htmlFor="gallery-category">Category</label>
+          <select
+            id="gallery-category"
+            className="admin-input"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="general">General</option>
+            <option value="before_after">Before & After</option>
+          </select>
         </div>
 
         <div className="admin-form-row">

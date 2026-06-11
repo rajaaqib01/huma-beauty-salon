@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 export default function OfferCard({ offer }) {
   const router = useRouter()
@@ -17,43 +16,35 @@ export default function OfferCard({ offer }) {
     })
   }
 
+  const hasDiscount = offer.originalPrice && offer.salePrice && offer.originalPrice !== offer.salePrice
+
   return (
-    <article className="offer-card">
-      <div className="offer-card-img-wrap">
-        <img src={offer.img} alt={offer.title} className="offer-card-img" loading="lazy" />
-        <span className="offer-card-discount">{offer.discount}</span>
+    <div className="service-card">
+      <div className="service-card-img-wrap">
+        <img src={offer.img} alt={offer.serviceTitle} className="service-card-img" loading="lazy" />
+        {offer.discount ? <span className="offer-discount-badge">{offer.discount}</span> : null}
       </div>
-      <div className="offer-card-body">
-        <h3 className="offer-card-title">{offer.title}</h3>
-        <p className="offer-card-desc">{offer.description}</p>
-
-        <div className="offer-card-service-badge">
-          <span className="offer-card-service-label">Service</span>
-          <strong>{offer.serviceTitle}</strong>
-        </div>
-
-        {(offer.originalPrice || offer.salePrice) && (
-          <div className="offer-card-pricing">
-            {offer.originalPrice && offer.salePrice && offer.originalPrice !== offer.salePrice ? (
+      <div className="service-card-body">
+        <div className="service-card-name">{offer.serviceTitle}</div>
+        <div className="service-card-desc">{offer.description}</div>
+        {(offer.originalPrice || offer.salePrice) ? (
+          <div className="service-card-price">
+            {hasDiscount ? (
               <>
-                <span className="offer-card-price-old">{offer.originalPrice}</span>
-                <span className="offer-card-price-new">{offer.salePrice}</span>
+                <span className="service-card-price-old">{offer.originalPrice}</span>
+                {offer.salePrice}
               </>
             ) : (
-              <span className="offer-card-price-new">{offer.salePrice || offer.originalPrice}</span>
+              offer.salePrice || offer.originalPrice
             )}
           </div>
-        )}
-
-        <p className="offer-card-dates">{offer.dates}</p>
-
-        <div className="offer-card-actions">
+        ) : null}
+        <div className="service-card-footer">
           <button type="button" onClick={handleBookNow} className="btn-rose btn-rose-small">
             <span>Book Now</span>
           </button>
-          <Link href="/contact" className="offer-card-link">Contact Us →</Link>
         </div>
       </div>
-    </article>
+    </div>
   )
 }

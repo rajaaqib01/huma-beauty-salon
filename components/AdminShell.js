@@ -11,6 +11,9 @@ const navItems = [
   { href: '/admin/gallery', label: 'Gallery' },
   { href: '/admin/offers', label: 'Offers' },
   { href: '/admin/reviews', label: 'Reviews' },
+  { href: '/admin/staff', label: 'Staff' },
+  { href: '/admin/blog', label: 'Blog' },
+  { href: '/admin/users', label: 'Users' },
   { href: '/admin/settings', label: 'Settings' },
 ]
 

@@ -1,8 +1,7 @@
 import { createAdminCookie, signAdminSession } from '../../../lib/adminSession'
 import { rateLimit } from '../../../lib/apiUtils/rateLimit'
+import { findAdminUser } from '../../../lib/adminUsers'
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@example.com'
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change-me'
 const USE_DEV_FALLBACK = process.env.NODE_ENV !== 'production'
 
 async function loginHandler(req, res) {
@@ -16,20 +15,19 @@ async function loginHandler(req, res) {
     return res.status(400).json({ error: 'Email and password are required' })
   }
 
-  if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
-    if (!USE_DEV_FALLBACK) {
-      return res.status(500).json({ error: 'Admin credentials are not configured' })
-    }
-    console.warn('Using development admin fallback credentials because ADMIN_EMAIL / ADMIN_PASSWORD are not set.')
+  let user = await findAdminUser(email, password)
+
+  if (!user && USE_DEV_FALLBACK && email === 'admin@example.com' && password === 'change-me') {
+    user = { email: 'admin@example.com', role: 'owner', name: 'Admin' }
   }
 
-  if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+  if (!user) {
     return res.status(401).json({ error: 'Invalid admin credentials' })
   }
 
-  const token = signAdminSession({ email, method: 'local' })
+  const token = signAdminSession({ email: user.email, role: user.role, method: 'local' })
   res.setHeader('Set-Cookie', createAdminCookie(token))
-  return res.status(200).json({ user: { email } })
+  return res.status(200).json({ user: { email: user.email, role: user.role, name: user.name } })
 }
 
 export default rateLimit(loginHandler, 5, 15 * 60 * 1000)

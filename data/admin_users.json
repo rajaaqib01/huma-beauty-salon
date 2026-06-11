@@ -1,0 +1,11 @@
+[
+  {
+    "id": "user-reception",
+    "name": "Reception",
+    "email": "reception@humabeauty.local",
+    "password": "reception123",
+    "role": "reception",
+    "active": true,
+    "created_at": "2026-06-01T00:00:00.000Z"
+  }
+]

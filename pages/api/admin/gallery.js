@@ -24,13 +24,14 @@ async function handler(req, res) {
 
     if (method === 'POST') {
       try {
-        const { title, image_url } = req.body || {}
+        const { title, image_url, category } = req.body || {}
         if (!image_url || !String(image_url).trim()) {
           return res.status(400).json({ error: 'Image URL or uploaded file is required' })
         }
         const obj = await localInsert('gallery', {
           title: title ? sanitizeObject({ title }).title : '',
           image_url: String(image_url).trim(),
+          category: category === 'before_after' ? 'before_after' : 'general',
           created_at: new Date().toISOString(),
         })
         return res.status(201).json(obj)
@@ -42,10 +43,11 @@ async function handler(req, res) {
 
     if (method === 'PUT') {
       try {
-        const { title, image_url } = req.body || {}
+        const { title, image_url, category } = req.body || {}
         const patch = { updated_at: new Date().toISOString() }
         if (title !== undefined) patch.title = sanitizeObject({ title }).title
         if (image_url !== undefined) patch.image_url = String(image_url).trim()
+        if (category !== undefined) patch.category = category === 'before_after' ? 'before_after' : 'general'
         const updated = await localUpdate('gallery', id, patch)
         if (!updated) return res.status(404).json({ error: 'Gallery item not found' })
         return res.json(updated)
@@ -80,13 +82,14 @@ async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { title, image_url } = req.body || {}
+    const { title, image_url, category } = req.body || {}
     if (!image_url || !String(image_url).trim()) {
       return res.status(400).json({ error: 'Image URL or uploaded file is required' })
     }
     const body = {
       title: title ? sanitizeObject({ title }).title : '',
       image_url: String(image_url).trim(),
+      category: category === 'before_after' ? 'before_after' : 'general',
       created_at: new Date().toISOString(),
     }
     const { data, error } = await supabaseServer.from('gallery').insert([body]).select()

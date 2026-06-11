@@ -2,6 +2,15 @@ import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
+import { notifyCustomerBookingStatus } from '../../../lib/notifications'
+
+async function handleStatusNotify(previous, updated) {
+  if (!updated || !previous) return
+  if (previous.status === updated.status) return
+  if (updated.status === 'confirmed' || updated.status === 'cancelled') {
+    setImmediate(() => notifyCustomerBookingStatus(updated, updated.status).catch(console.error))
+  }
+}
 
 async function adminBookingHandler(req, res) {
   if (!supabaseServer) {
@@ -20,8 +29,11 @@ async function adminBookingHandler(req, res) {
       if (!id) return res.status(400).json({ error: 'Missing booking id' })
       const body = sanitizeObject(req.body)
       try {
+        const all = await localList('bookings')
+        const previous = all.find(b => String(b.id) === String(id))
         const updated = await localUpdate('bookings', id, body)
         if (!updated) return res.status(404).json({ error: 'Booking not found' })
+        if (body.status) await handleStatusNotify(previous, updated)
         return res.json(updated)
       } catch (e) {
         console.error('Local booking update error:', e)
@@ -56,8 +68,11 @@ async function adminBookingHandler(req, res) {
     const { id } = req.query
     if (!id) return res.status(400).json({ error: 'Missing booking id' })
     const body = sanitizeObject(req.body)
+
+    const { data: prevData } = await supabaseServer.from('bookings').select('*').eq('id', id).single()
     const { data, error } = await supabaseServer.from('bookings').update({ ...body }).eq('id', id).select()
     if (error) return res.status(500).json({ error: 'Failed to update booking' })
+    if (body.status && prevData) await handleStatusNotify(prevData, data[0])
     return res.json(data[0])
   }
 

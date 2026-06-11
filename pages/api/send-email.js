@@ -18,14 +18,16 @@ async function sendEmailHandler(req, res) {
     return res.status(413).json({ error: 'Request payload too large' });
   }
 
-  const body = sanitizeObject(req.body);
-  const { name, phone, email, subject, message } = body;
+  const rawBody = req.body || {};
+  const { name, phone, email, subject, message } = rawBody;
 
-  // Validate form data
+  // Validate before sanitize (plain user input)
   const { valid, errors } = validateContactForm({ name, phone, email, message });
   if (!valid) {
     return res.status(400).json({ error: 'Validation failed', errors });
   }
+
+  const body = sanitizeObject(rawBody);
 
   const emailUser = process.env.EMAIL_USER?.trim();
   const emailPassword = process.env.EMAIL_PASSWORD?.trim();

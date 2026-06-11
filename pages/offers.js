@@ -30,7 +30,7 @@ export default function OffersPage({ offers = [] }) {
         <section className="offers-section">
           <div className="offers-container">
             {offers.length > 0 ? (
-              <div className="offers-grid">
+              <div className="services-grid">
                 {offers.map(offer => (
                   <OfferCard key={offer.id} offer={offer} />
                 ))}

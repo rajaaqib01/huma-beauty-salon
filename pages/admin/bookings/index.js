@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import useSWR from 'swr'
 import AdminShell from '../../../components/AdminShell'
+import BookingCalendar from '../../../components/BookingCalendar'
 
 const fetcher = async (url) => {
   const res = await fetch(url, { credentials: 'include' })
@@ -22,11 +24,18 @@ function statusLabel(status) {
 export default function Bookings() {
   const { data, error, mutate } = useSWR('/api/admin/bookings', fetcher)
   const bookings = Array.isArray(data) ? data : []
+  const [filterDate, setFilterDate] = useState('')
+  const [view, setView] = useState('list')
+
+  const filtered = filterDate
+    ? bookings.filter(b => b.date === filterDate)
+    : bookings
 
   const updateBooking = async (id, patch) => {
     const res = await fetch(`/api/admin/bookings?id=${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(patch),
     })
     if (!res.ok) return
@@ -39,18 +48,44 @@ export default function Bookings() {
 
   const deleteBooking = async (id) => {
     if (!confirm('Delete booking?')) return
-    const res = await fetch(`/api/admin/bookings?id=${id}`, { method: 'DELETE' })
+    const res = await fetch(`/api/admin/bookings?id=${id}`, { method: 'DELETE', credentials: 'include' })
     if (!res.ok) return
     mutate(bookings.filter(b => String(b.id) !== String(id)), false)
   }
 
+  const exportCsv = () => {
+    const month = filterDate ? filterDate.slice(0, 7) : ''
+    const url = month
+      ? `/api/admin/bookings/export?month=${month}`
+      : '/api/admin/bookings/export'
+    window.open(url, '_blank')
+  }
+
   return (
     <AdminShell title="Bookings">
+      <div className="admin-section-actions" style={{ marginBottom: 20 }}>
+        <button type="button" className={`admin-button ${view === 'list' ? 'admin-button-primary' : 'admin-button-secondary'}`} onClick={() => setView('list')}>List View</button>
+        <button type="button" className={`admin-button ${view === 'calendar' ? 'admin-button-primary' : 'admin-button-secondary'}`} onClick={() => setView('calendar')}>Calendar View</button>
+        <button type="button" className="admin-button admin-button-secondary" onClick={exportCsv}>Export CSV</button>
+        {filterDate ? (
+          <button type="button" className="admin-button admin-button-warning" onClick={() => setFilterDate('')}>Clear date filter ({filterDate})</button>
+        ) : null}
+      </div>
+
+      {view === 'calendar' ? (
+        <div className="admin-card" style={{ marginBottom: 24 }}>
+          <BookingCalendar
+            bookings={bookings}
+            onSelectDate={(date) => { setFilterDate(date); setView('list') }}
+          />
+        </div>
+      ) : null}
+
       <div className="admin-grid-2">
         {error ? (
           <div className="admin-empty-state">Unable to load bookings. Please refresh.</div>
-        ) : bookings.length > 0 ? (
-          bookings.map(b => {
+        ) : filtered.length > 0 ? (
+          filtered.map(b => {
             const isRead = Boolean(b.read)
             return (
               <div key={b.id} className={bookingCardClass(b.status, isRead)}>
@@ -62,12 +97,10 @@ export default function Bookings() {
                       <span className={`admin-booking-badge admin-booking-badge-${b.status === 'confirmed' ? 'confirmed' : b.status === 'cancelled' ? 'cancelled' : 'pending'}`}>
                         {statusLabel(b.status)}
                       </span>
-                      <span className={`admin-booking-badge admin-booking-badge-${isRead ? 'read' : 'unread'}`}>
-                        {isRead ? 'Read' : 'Unread'}
-                      </span>
                     </div>
                     <p className="admin-booking-card-subtitle">{b.service_title || b.service}</p>
                     {b.offer_title ? <p className="admin-booking-card-price"><strong>Offer:</strong> {b.offer_title}</p> : null}
+                    {b.staff_name ? <p className="admin-booking-card-price"><strong>Stylist:</strong> {b.staff_name}</p> : null}
                     {b.price ? <p className="admin-booking-card-price"><strong>Price:</strong> {b.price}</p> : null}
                   </div>
                   <div className="admin-booking-card-id">ID: {b.id}</div>
@@ -83,16 +116,16 @@ export default function Bookings() {
                 <p className="admin-booking-card-notes">{b.notes || 'No notes provided'}</p>
 
                 <div className="admin-section-actions">
-                  <button onClick={() => updateBooking(b.id, { status: 'confirmed', read: true })} className="admin-button admin-button-success">Confirm</button>
-                  <button onClick={() => updateBooking(b.id, { status: 'pending', read: true })} className="admin-button admin-button-warning">Pending</button>
-                  <button onClick={() => updateBooking(b.id, { status: 'cancelled', read: true })} className="admin-button admin-button-danger">Cancel</button>
-                  <button onClick={() => deleteBooking(b.id)} className="admin-button admin-button-secondary">Delete</button>
+                  <button type="button" onClick={() => updateBooking(b.id, { status: 'confirmed', read: true })} className="admin-button admin-button-success">Confirm</button>
+                  <button type="button" onClick={() => updateBooking(b.id, { status: 'pending', read: true })} className="admin-button admin-button-warning">Pending</button>
+                  <button type="button" onClick={() => updateBooking(b.id, { status: 'cancelled', read: true })} className="admin-button admin-button-danger">Cancel</button>
+                  <button type="button" onClick={() => deleteBooking(b.id)} className="admin-button admin-button-secondary">Delete</button>
                 </div>
               </div>
             )
           })
         ) : (
-          <div className="admin-empty-state">No bookings found.</div>
+          <div className="admin-empty-state">No bookings found{filterDate ? ` for ${filterDate}` : ''}.</div>
         )}
       </div>
     </AdminShell>

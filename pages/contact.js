@@ -16,10 +16,19 @@ export default function Contact() {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim()) e.name = 'Name is required';
-    if (!form.phone.trim()) e.phone = 'Phone is required';
-    if (!form.message.trim()) e.message = 'Message is required';
-    if (form.email && !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Invalid email';
+    const name = form.name.trim();
+    const phone = form.phone.trim();
+    const message = form.message.trim();
+    const email = form.email.trim();
+
+    if (name.length < 2) e.name = 'Name must be at least 2 characters';
+    if (!phone) e.phone = 'Phone is required';
+    else {
+      const digits = phone.replace(/\D/g, '');
+      if (digits.length < 10 || digits.length > 15) e.phone = 'Enter a valid phone (10-15 digits)';
+    }
+    if (message.length < 2) e.message = 'Message must be at least 2 characters';
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'Invalid email';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -43,8 +52,8 @@ export default function Contact() {
         setServerError('');
       } else {
         const data = await response.json();
-        const message = data.error || 'Unknown error';
-        setServerError('Error sending message: ' + message);
+        const detail = data.errors ? Object.values(data.errors).join(' ') : '';
+        setServerError(detail || data.error || 'Unknown error');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -97,7 +106,7 @@ export default function Contact() {
 
         <section style={{ background: 'var(--cream)', padding: '80px 5%' }}>
           <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 48 }}>
+            <div className="contact-page-grid">
 
               {/* Left — Info */}
               <div>
@@ -291,6 +300,11 @@ export default function Contact() {
                   width="100%" height="360" style={{ border: 0, display: 'block' }} allowFullScreen="" loading="lazy"
                   title="Huma Beauty Saloon Location"
                 />
+              </div>
+              <div style={{ textAlign: 'center', marginTop: 16 }}>
+                <a href="https://maps.google.com/?q=Main+Market+Jhelum+Punjab+Pakistan" target="_blank" rel="noreferrer" className="btn-rose">
+                  <span>Get Directions</span>
+                </a>
               </div>
             </div>
           </div>

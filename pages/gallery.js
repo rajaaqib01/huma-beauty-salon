@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -24,6 +25,11 @@ function GalleryCard({ item }) {
 }
 
 export default function GalleryPage({ gallery = [] }) {
+  const [filter, setFilter] = useState('all');
+  const filtered = filter === 'all'
+    ? gallery
+    : gallery.filter(item => item.category === filter);
+
   return (
     <>
       <SEO
@@ -56,11 +62,29 @@ export default function GalleryPage({ gallery = [] }) {
         <section className="gallery-page-section">
           <div className="gallery-page-container">
             {gallery.length > 0 ? (
-              <div className="gallery-page-grid">
-                {gallery.map(item => (
-                  <GalleryCard key={item.id} item={item} />
-                ))}
-              </div>
+              <>
+                <div className="gallery-filter-tabs">
+                  {[
+                    ['all', 'All'],
+                    ['general', 'All Work'],
+                    ['before_after', 'Before & After'],
+                  ].map(([key, label]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`gallery-filter-tab${filter === key ? ' gallery-filter-tab--active' : ''}`}
+                      onClick={() => setFilter(key)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <div className="gallery-page-grid">
+                  {filtered.map(item => (
+                    <GalleryCard key={item.id} item={item} />
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="gallery-page-empty">
                 <div className="gallery-page-empty-icon">✦</div>

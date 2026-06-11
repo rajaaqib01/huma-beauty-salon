@@ -29,7 +29,7 @@ function formatDiscount(value) {
   return raw.includes('%') ? raw : `${raw}%`;
 }
 
-export default function Book({ bookingServices = [] }) {
+export default function Book({ bookingServices = [], staffList = [], paymentInfo = {} }) {
   const router = useRouter();
   const servicePriceMap = useMemo(
     () => Object.fromEntries(bookingServices.map(s => [s.name, s.price])),
@@ -39,7 +39,10 @@ export default function Book({ bookingServices = [] }) {
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     service: '', price: '', date: '', time: '', notes: '',
+    staff_id: '', staff_name: '', referral_code: '',
   });
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +77,31 @@ export default function Book({ bookingServices = [] }) {
       setOfferFromUrl(offer || '')
       setStep(0)
     }
-  }, [router.isReady, router.query.service, router.query.offer, router.query.price, router.query.discount, servicePriceMap]);
+
+    const staffName = safeDecodeQuery(router.query.staff)
+    if (staffName && staffList.length > 0) {
+      const match = staffList.find(s =>
+        s.name.toLowerCase() === staffName.toLowerCase() ||
+        s.name.toLowerCase().startsWith(staffName.toLowerCase())
+      )
+      if (match) {
+        setForm(f => ({ ...f, staff_id: match.id, staff_name: match.name }))
+      }
+    }
+  }, [router.isReady, router.query.service, router.query.offer, router.query.price, router.query.discount, router.query.staff, servicePriceMap, staffList]);
+
+  useEffect(() => {
+    if (!form.date) {
+      setAvailableSlots([]);
+      return;
+    }
+    setSlotsLoading(true);
+    fetch(`/api/booking-slots?date=${encodeURIComponent(form.date)}`)
+      .then(res => res.json())
+      .then(data => setAvailableSlots(Array.isArray(data.slots) ? data.slots : []))
+      .catch(() => setAvailableSlots([]))
+      .finally(() => setSlotsLoading(false));
+  }, [form.date]);
 
   const update = (field, val) => setForm(f => ({ ...f, [field]: val }));
   const selectService = (serviceName) => {
@@ -83,16 +110,16 @@ export default function Book({ bookingServices = [] }) {
     setPriceFromUrl('');
   };
 
-  const validate = () => {
+  const validate = (allSteps = false) => {
     const e = {};
-    if (step === 0) {
+    if (allSteps || step === 0) {
       if (!form.name.trim()) e.name = 'Name is required';
       if (!form.phone.trim()) e.phone = 'Phone number is required';
       if (!form.email.trim()) e.email = 'Email is required';
       if (form.email && !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Invalid email';
       if (!form.service) e.service = 'Please select a service';
     }
-    if (step === 1) {
+    if (allSteps || step === 1) {
       if (!form.date) e.date = 'Please select a date';
       if (!form.time.trim()) e.time = 'Please select or enter a time';
       else if (!convertTo24Hour(form.time)) e.time = 'Enter a valid time (e.g. 3:30 PM or 15:30)';
@@ -145,6 +172,7 @@ export default function Book({ bookingServices = [] }) {
 
   const submit = async () => {
     if (isLoading) return;
+    if (!validate(true)) return;
     setSubmitError('');
     setIsLoading(true);
     try {
@@ -153,7 +181,10 @@ export default function Book({ bookingServices = [] }) {
         offer: offerFromUrl || undefined,
         offerId: safeDecodeQuery(router.query.offerId) || undefined,
         discount: formatDiscount(safeDecodeQuery(router.query.discount)) || undefined,
-        time: convertTo24Hour(form.time),
+        staff_id: form.staff_id || undefined,
+        staff_name: form.staff_name || undefined,
+        referral_code: form.referral_code || undefined,
+        time: convertTo24Hour(form.time) || form.time,
       };
 
       const response = await fetch('/api/book-appointment', {
@@ -164,7 +195,8 @@ export default function Book({ bookingServices = [] }) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to submit booking request');
+        const detail = data.errors ? Object.values(data.errors).join(' ') : '';
+        throw new Error(detail || data.error || 'Failed to submit booking request');
       }
 
       setSubmitted(true);
@@ -187,9 +219,14 @@ export default function Book({ bookingServices = [] }) {
   const labelStyle = { fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-mid)', marginBottom: 6, display: 'block' };
   const stepCardStyle = { background: 'var(--champagne-pale)', borderRadius: 20, padding: 20, border: '1px solid rgba(15,76,69,0.08)', boxShadow: 'var(--shadow-soft)' };
 
-  // Get tomorrow's date as min
-  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split('T')[0];
+  // Get today's date as min (local timezone — slots allow same-day booking)
+  const formatLocalDate = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+  const minDate = formatLocalDate(new Date());
 
   return (
     <>
@@ -226,26 +263,33 @@ export default function Book({ bookingServices = [] }) {
 
             {/* Progress Steps */}
             {!submitted && (
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 52 }}>
+              <div className="book-steps">
                 {steps.map((s, i) => (
-                  <div key={s} style={{ display: 'flex', alignItems: 'center', flex: i < steps.length - 1 ? 1 : 'none' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                      <div style={{
-                        width: 40, height: 40, borderRadius: '50%',
-                        background: i <= step ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'white',
-                        border: i <= step ? 'none' : '2px solid var(--blush-mid)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: i <= step ? 'white' : 'var(--text-light)',
-                        fontSize: '0.85rem', fontWeight: 600,
-                        boxShadow: i <= step ? '0 4px 12px rgba(183,110,121,0.3)' : 'none',
-                        transition: 'all 0.3s',
-                      }}>
+                  <div key={s} className="book-step-item" style={{ flex: i < steps.length - 1 ? 1 : 'none' }}>
+                    <div className="book-step-node">
+                      <div
+                        className="book-step-circle"
+                        style={{
+                          background: i <= step ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'white',
+                          border: i <= step ? 'none' : '2px solid var(--blush-mid)',
+                          color: i <= step ? 'white' : 'var(--text-light)',
+                          boxShadow: i <= step ? '0 4px 12px rgba(183,110,121,0.3)' : 'none',
+                        }}
+                      >
                         {i < step ? '✓' : i + 1}
                       </div>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: i <= step ? 'var(--rose-gold)' : 'var(--text-light)', whiteSpace: 'nowrap' }}>{s}</span>
+                      <span
+                        className="book-step-label"
+                        style={{ color: i <= step ? 'var(--rose-gold)' : 'var(--text-light)' }}
+                      >
+                        {s}
+                      </span>
                     </div>
                     {i < steps.length - 1 && (
-                      <div style={{ flex: 1, height: 2, background: i < step ? 'var(--rose-gold-light)' : 'var(--blush-mid)', margin: '0 8px', marginBottom: 20, transition: 'background 0.3s' }} />
+                      <div
+                        className="book-step-line"
+                        style={{ background: i < step ? 'var(--rose-gold-light)' : 'var(--blush-mid)' }}
+                      />
                     )}
                   </div>
                 ))}
@@ -309,17 +353,23 @@ export default function Book({ bookingServices = [] }) {
                         <div style={{ borderTop: '1px solid var(--blush-mid)', paddingTop: 20 }}>
                           <div style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--rose-gold)', marginBottom: 16 }}>💅 Choose Service</div>
                           {serviceFromUrl ? (
-                            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                              <div style={{ flex: 1, background: form.service ? 'linear-gradient(135deg, var(--rose-gold-light), var(--rose-gold-dark))' : 'var(--blush)', color: form.service ? 'white' : 'var(--text-mid)', padding: 16, borderRadius: 12 }}>
-                                <div style={{ fontSize: '1rem', fontWeight: 700 }}>{form.service}</div>
+                            <div className="book-selected-service">
+                              <div className="book-selected-service-card">
+                                <div className="book-selected-service-name">{form.service}</div>
                                 {offerFromUrl ? (
-                                  <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.9)', marginTop: 6 }}>
+                                  <div className="book-selected-service-offer">
                                     Offer: {offerFromUrl}
                                   </div>
                                 ) : null}
-                                <div style={{ fontSize: '0.9rem', color: form.service ? 'rgba(255,255,255,0.9)' : 'var(--text-light)', marginTop: 6 }}>{form.price || priceFromUrl}</div>
+                                <div className="book-selected-service-price">{form.price || priceFromUrl}</div>
                               </div>
-                              <button onClick={() => { setServiceFromUrl(''); setPriceFromUrl(''); setOfferFromUrl(''); setForm(f => ({ ...f, service: '', price: '', notes: '' })); }} className="btn-outline" style={{ padding: '10px 16px' }}>Change</button>
+                              <button
+                                type="button"
+                                onClick={() => { setServiceFromUrl(''); setPriceFromUrl(''); setOfferFromUrl(''); setForm(f => ({ ...f, service: '', price: '', notes: '' })); }}
+                                className="btn-outline book-selected-service-change"
+                              >
+                                Change
+                              </button>
                             </div>
                           ) : (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
@@ -342,6 +392,38 @@ export default function Book({ bookingServices = [] }) {
                           )}
                           {errors.service && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 8 }}>{errors.service}</p>}
                         </div>
+
+                        {staffList.length > 0 ? (
+                          <div>
+                            <label htmlFor="booking-stylist" style={labelStyle}>Preferred Stylist (Optional)</label>
+                            <select
+                              id="booking-stylist"
+                              style={inputStyle('staff_id')}
+                              value={form.staff_id}
+                              onChange={e => {
+                                const selected = staffList.find(s => s.id === e.target.value);
+                                setForm(f => ({ ...f, staff_id: e.target.value, staff_name: selected?.name || '' }));
+                              }}
+                            >
+                              <option value="">Any available stylist</option>
+                              {staffList.map(s => (
+                                <option key={s.id} value={s.id}>{s.name} — {s.specialty}</option>
+                              ))}
+                            </select>
+                          </div>
+                        ) : null}
+
+                        <div>
+                          <label htmlFor="booking-referral" style={labelStyle}>Referral Code (Optional)</label>
+                          <input
+                            id="booking-referral"
+                            style={inputStyle('referral_code')}
+                            value={form.referral_code}
+                            onChange={e => update('referral_code', e.target.value.toUpperCase())}
+                            placeholder="e.g. HUMAFRIEND"
+                          />
+                          <p style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 6 }}>Have a friend referral code? Enter it for a special discount.</p>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -350,36 +432,37 @@ export default function Book({ bookingServices = [] }) {
                   {step === 1 && (
                     <div style={stepCardStyle}>
                       <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: 'var(--text-dark)', marginBottom: 8 }}>Pick Date & Time</h2>
-                      <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Pick a suggested slot or type your own preferred time.</p>
+                      <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginBottom: 28 }}>Choose an available time slot for your selected date.</p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                         <div>
                           <label htmlFor="booking-date" style={labelStyle}>Preferred Date *</label>
-                          <input id="booking-date" type="date" min={minDate} style={inputStyle('date')} value={form.date} onChange={e => update('date', e.target.value)}
+                          <input id="booking-date" type="date" min={minDate} style={inputStyle('date')} value={form.date} onChange={e => { update('date', e.target.value); update('time', ''); }}
                             onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
                             onBlur={e => e.target.style.borderColor = errors.date ? '#e57373' : 'var(--blush-mid)'} />
                           {errors.date && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.date}</p>}
                         </div>
                         <div>
-                          <label htmlFor="booking-time" style={labelStyle}>Preferred Time *</label>
-                          <input
-                            id="booking-time"
-                            list="booking-time-options"
-                            type="text"
-                            style={inputStyle('time')}
-                            value={form.time}
-                            onChange={e => update('time', e.target.value)}
-                            placeholder="Select or type time (e.g. 3:30 PM)"
-                            onFocus={e => e.target.style.borderColor = 'var(--rose-gold)'}
-                            onBlur={e => e.target.style.borderColor = errors.time ? '#e57373' : 'var(--blush-mid)'}
-                          />
-                          <datalist id="booking-time-options">
-                            {timeSlots.map(t => (
-                              <option key={t} value={t} />
-                            ))}
-                          </datalist>
-                          <p style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 6 }}>
-                            Choose from suggestions or enter any time that suits you.
-                          </p>
+                          <label style={labelStyle}>Available Time Slots *</label>
+                          {!form.date ? (
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>Please select a date first.</p>
+                          ) : slotsLoading ? (
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>Loading available slots…</p>
+                          ) : availableSlots.length === 0 ? (
+                            <p style={{ fontSize: '0.85rem', color: '#c0392b' }}>No slots available for this date. Please choose another date.</p>
+                          ) : (
+                            <div className="book-slot-grid">
+                              {availableSlots.map(slot => (
+                                <button
+                                  key={slot}
+                                  type="button"
+                                  className={`book-slot-btn${form.time === slot ? ' book-slot-btn--active' : ''}`}
+                                  onClick={() => update('time', slot)}
+                                >
+                                  {slot}
+                                </button>
+                              ))}
+                            </div>
+                          )}
                           {errors.time && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.time}</p>}
                         </div>
                         <div>
@@ -403,6 +486,8 @@ export default function Book({ bookingServices = [] }) {
                           ['Phone', form.phone],
                           form.email ? ['Email', form.email] : null,
                           offerFromUrl ? ['Offer', offerFromUrl] : null,
+                          form.staff_name ? ['Stylist', form.staff_name] : null,
+                          form.referral_code ? ['Referral', form.referral_code] : null,
                           ['Service', form.service],
                           form.price ? ['Price', form.price] : null,
                           ['Date', form.date],
@@ -415,21 +500,30 @@ export default function Book({ bookingServices = [] }) {
                           </div>
                         ))}
                       </div>
-                      <div style={{ background: 'var(--blush)', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-mid)', lineHeight: 1.6 }}>
-                        ℹ️ Our team will confirm your booking via WhatsApp within 2 hours. For immediate assistance, WhatsApp us at <strong>+92 335 5462214</strong>.
+                      <div style={{ background: 'var(--blush)', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: 16 }}>
+                        ℹ️ Our team will confirm your booking via WhatsApp within 2 hours. You will also receive a confirmation email if provided.
                       </div>
+                      {(paymentInfo.jazzcash || paymentInfo.easypaisa) ? (
+                        <div style={{ background: 'white', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-mid)', lineHeight: 1.6, border: '1px solid var(--blush-mid)' }}>
+                          <strong>Advance payment (optional):</strong>
+                          {paymentInfo.jazzcash ? <p>JazzCash: {paymentInfo.jazzcash}</p> : null}
+                          {paymentInfo.easypaisa ? <p>EasyPaisa: {paymentInfo.easypaisa}</p> : null}
+                        </div>
+                      ) : null}
                     </div>
                   )}
 
                   {/* Navigation */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 36, gap: 12 }}>
+                  <div className="book-nav">
                     {step > 0 ? (
-                      <button onClick={prev} className="btn-outline" style={{ padding: '13px 28px' }}>← Back</button>
-                    ) : <div />}
+                      <button type="button" onClick={prev} className="btn-outline book-nav-back">← Back</button>
+                    ) : <div className="book-nav-spacer" aria-hidden="true" />}
                     {step < 2 ? (
-                      <button onClick={next} className="btn-rose" style={{ padding: '13px 28px' }} disabled={isLoading}><span>Continue →</span></button>
+                      <button type="button" onClick={next} className="btn-rose book-nav-primary" disabled={isLoading}>
+                        <span>Continue →</span>
+                      </button>
                     ) : (
-                      <button onClick={submit} className="btn-rose" style={{ padding: '13px 36px' }} disabled={isLoading}>
+                      <button type="button" onClick={submit} className="btn-rose book-nav-primary" disabled={isLoading}>
                         <span>{isLoading ? 'Submitting…' : '✦ Confirm Booking'}</span>
                       </button>
                     )}
@@ -469,10 +563,25 @@ export default function Book({ bookingServices = [] }) {
 export async function getServerSideProps() {
   try {
     const { getBookingServices } = await import('../lib/services');
-    const bookingServices = await getBookingServices();
-    return { props: { bookingServices } };
+    const { getPublicStaff } = await import('../lib/staff');
+    const { getSettings } = await import('../lib/settings');
+    const [bookingServices, staffList, settings] = await Promise.all([
+      getBookingServices(),
+      getPublicStaff(),
+      getSettings(),
+    ]);
+    return {
+      props: {
+        bookingServices,
+        staffList,
+        paymentInfo: {
+          jazzcash: settings.jazzcash_number || '',
+          easypaisa: settings.easypaisa_number || '',
+        },
+      },
+    };
   } catch (e) {
     console.error('Book page services load error:', e);
-    return { props: { bookingServices: [] } };
+    return { props: { bookingServices: [], staffList: [], paymentInfo: {} } };
   }
 }
