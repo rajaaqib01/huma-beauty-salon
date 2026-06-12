@@ -1,4 +1,5 @@
 import { requireAdmin } from '../../../lib/adminSession'
+import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
@@ -38,6 +39,7 @@ async function handler(req, res){
     }
 
     if(req.method === 'DELETE'){
+      if (rejectUnlessCanDelete(req, res)) return
       const { id } = req.query
       try{
         const ok = await localRemove('messages', id)
@@ -72,6 +74,7 @@ async function handler(req, res){
   }
 
   if(req.method === 'DELETE'){
+    if (rejectUnlessCanDelete(req, res)) return
     const { id } = req.query
     const { error } = await supabaseServer.from('messages').delete().eq('id', id)
     if(error) return res.status(500).json({ error: error.message })

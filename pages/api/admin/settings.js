@@ -1,4 +1,4 @@
-import { requireAdmin } from '../../../lib/adminSession'
+import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 import { getSettings, saveSettings } from '../../../lib/settings'
 
@@ -30,4 +30,4 @@ async function handler(req, res) {
   return res.status(405).end('Method Not Allowed')
 }
 
-export default requireAdmin(handler)
+export default requireOwnerAdmin(handler)

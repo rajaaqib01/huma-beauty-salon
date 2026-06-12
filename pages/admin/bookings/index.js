@@ -2,6 +2,8 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import AdminShell from '../../../components/AdminShell'
 import BookingCalendar from '../../../components/BookingCalendar'
+import useAdminAuth from '../../../lib/useAdminAuth'
+import { canAdminDelete } from '../../../lib/adminRoles'
 
 const fetcher = async (url) => {
   const res = await fetch(url, { credentials: 'include' })
@@ -22,6 +24,8 @@ function statusLabel(status) {
 }
 
 export default function Bookings() {
+  const { admin } = useAdminAuth()
+  const allowDelete = canAdminDelete(admin?.role)
   const { data, error, mutate } = useSWR('/api/admin/bookings', fetcher)
   const bookings = Array.isArray(data) ? data : []
   const [filterDate, setFilterDate] = useState('')
@@ -119,7 +123,9 @@ export default function Bookings() {
                   <button type="button" onClick={() => updateBooking(b.id, { status: 'confirmed', read: true })} className="admin-button admin-button-success">Confirm</button>
                   <button type="button" onClick={() => updateBooking(b.id, { status: 'pending', read: true })} className="admin-button admin-button-warning">Pending</button>
                   <button type="button" onClick={() => updateBooking(b.id, { status: 'cancelled', read: true })} className="admin-button admin-button-danger">Cancel</button>
-                  <button type="button" onClick={() => deleteBooking(b.id)} className="admin-button admin-button-secondary">Delete</button>
+                  {allowDelete ? (
+                    <button type="button" onClick={() => deleteBooking(b.id)} className="admin-button admin-button-secondary">Delete</button>
+                  ) : null}
                 </div>
               </div>
             )

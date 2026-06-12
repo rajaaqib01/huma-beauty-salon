@@ -1,6 +1,19 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import localDb from '../../../lib/localDb'
+import { isOwnerRole } from '../../../lib/adminRoles'
+import { buildMonthlyTotals } from '../../../lib/bookingSales'
+
+function currentMonthKey() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+function currentMonthSales(bookings) {
+  const month = currentMonthKey()
+  const summary = buildMonthlyTotals(bookings).find((m) => m.month === month)
+  return summary || { month, count: 0, total: 0, online: 0, manual: 0 }
+}
 
 function weekStart() {
   const d = new Date()
@@ -24,6 +37,8 @@ function bookingsThisWeek(bookings) {
 }
 
 async function handler(req, res) {
+  const showOwnerSales = isOwnerRole(req.admin?.role)
+
   try {
     if (supabaseServer) {
       const [{ count: total_bookings }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true })
@@ -32,9 +47,9 @@ async function handler(req, res) {
       const [{ count: cancelled }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'cancelled')
       const [{ count: total_services }] = await supabaseServer.from('services').select('*', { count: 'exact', head: true })
       const [{ count: total_messages }] = await supabaseServer.from('messages').select('*', { count: 'exact', head: true })
-      const { data: allBookings } = await supabaseServer.from('bookings').select('service_title, created_at')
+      const { data: allBookings } = await supabaseServer.from('bookings').select('*')
 
-      return res.json({
+      const payload = {
         total_bookings,
         pending,
         confirmed,
@@ -43,7 +58,9 @@ async function handler(req, res) {
         total_messages,
         bookings_this_week: bookingsThisWeek(allBookings || []),
         popular_service: popularService(allBookings || []),
-      })
+      }
+      if (showOwnerSales) payload.current_month_sales = currentMonthSales(allBookings || [])
+      return res.json(payload)
     }
 
     const bookings = await localDb.list('bookings')
@@ -51,7 +68,7 @@ async function handler(req, res) {
     const messages = await localDb.list('messages')
     const offers = await localDb.list('offers')
 
-    return res.json({
+    const payload = {
       total_bookings: bookings.length,
       pending: bookings.filter(b => String(b.status).toLowerCase() === 'pending').length,
       confirmed: bookings.filter(b => String(b.status).toLowerCase() === 'confirmed').length,
@@ -61,7 +78,9 @@ async function handler(req, res) {
       total_offers: offers.length,
       bookings_this_week: bookingsThisWeek(bookings),
       popular_service: popularService(bookings),
-    })
+    }
+    if (showOwnerSales) payload.current_month_sales = currentMonthSales(bookings)
+    return res.json(payload)
   } catch (err) {
     return res.status(500).json({ error: 'Failed to load stats' })
   }

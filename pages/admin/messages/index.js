@@ -1,5 +1,7 @@
 import useSWR from 'swr'
 import AdminShell from '../../../components/AdminShell'
+import useAdminAuth from '../../../lib/useAdminAuth'
+import { canAdminDelete } from '../../../lib/adminRoles'
 
 const fetcher = async (url) => {
   const res = await fetch(url, { credentials: 'include' })
@@ -13,6 +15,8 @@ function messageCardClass(read) {
 }
 
 export default function Messages() {
+  const { admin } = useAdminAuth()
+  const allowDelete = canAdminDelete(admin?.role)
   const { data, error, mutate } = useSWR('/api/admin/messages', fetcher)
   const messages = Array.isArray(data) ? data : []
 
@@ -64,7 +68,9 @@ export default function Messages() {
                 <div className="admin-section-actions">
                   <button onClick={() => updateMessage(m.id, { read: true })} className="admin-button admin-button-primary">Mark Read</button>
                   <button onClick={() => updateMessage(m.id, { read: false })} className="admin-button admin-button-warning">Mark Unread</button>
-                  <button onClick={() => deleteMessage(m.id)} className="admin-button admin-button-danger">Delete</button>
+                  {allowDelete ? (
+                    <button onClick={() => deleteMessage(m.id)} className="admin-button admin-button-danger">Delete</button>
+                  ) : null}
                 </div>
               </div>
             )

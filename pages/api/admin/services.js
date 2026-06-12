@@ -1,4 +1,5 @@
 import { requireAdmin } from '../../../lib/adminSession'
+import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
@@ -74,6 +75,7 @@ async function handler(req, res){
   }
 
   if(req.method === 'DELETE'){
+    if (rejectUnlessCanDelete(req, res)) return
     const { id } = req.query
     if (!supabaseServer) {
       try{

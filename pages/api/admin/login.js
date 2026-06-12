@@ -25,7 +25,12 @@ async function loginHandler(req, res) {
     return res.status(401).json({ error: 'Invalid admin credentials' })
   }
 
-  const token = signAdminSession({ email: user.email, role: user.role, method: 'local' })
+  const token = signAdminSession({
+    email: user.email,
+    role: user.role || 'owner',
+    name: user.name || user.email,
+    method: 'local',
+  })
   res.setHeader('Set-Cookie', createAdminCookie(token))
   return res.status(200).json({ user: { email: user.email, role: user.role, name: user.name } })
 }

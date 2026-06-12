@@ -1,8 +1,28 @@
 import { requireAdmin } from '../../../lib/adminSession'
+import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 import { notifyCustomerBookingStatus } from '../../../lib/notifications'
+import { parsePriceAmount, formatPrice } from '../../../lib/bookingSales'
+
+function enrichBookingPatch(body, previous) {
+  const patch = { ...body }
+  if (patch.status === 'confirmed' && previous?.status !== 'confirmed') {
+    patch.confirmed_at = new Date().toISOString()
+    if (!previous?.source) patch.source = 'online'
+    const priceLabel = patch.price ?? previous?.price
+    if (priceLabel) {
+      const amount = parsePriceAmount(priceLabel)
+      patch.sale_amount = amount
+      patch.price = formatPrice(amount)
+    }
+  }
+  if (patch.price !== undefined && patch.sale_amount === undefined) {
+    patch.sale_amount = parsePriceAmount(patch.price)
+  }
+  return patch
+}
 
 async function handleStatusNotify(previous, updated) {
   if (!updated || !previous) return
@@ -31,7 +51,8 @@ async function adminBookingHandler(req, res) {
       try {
         const all = await localList('bookings')
         const previous = all.find(b => String(b.id) === String(id))
-        const updated = await localUpdate('bookings', id, body)
+        const patch = enrichBookingPatch(body, previous)
+        const updated = await localUpdate('bookings', id, patch)
         if (!updated) return res.status(404).json({ error: 'Booking not found' })
         if (body.status) await handleStatusNotify(previous, updated)
         return res.json(updated)
@@ -42,6 +63,7 @@ async function adminBookingHandler(req, res) {
     }
 
     if (req.method === 'DELETE') {
+      if (rejectUnlessCanDelete(req, res)) return
       const { id } = req.query
       if (!id) return res.status(400).json({ error: 'Missing booking id' })
       try {
@@ -70,13 +92,15 @@ async function adminBookingHandler(req, res) {
     const body = sanitizeObject(req.body)
 
     const { data: prevData } = await supabaseServer.from('bookings').select('*').eq('id', id).single()
-    const { data, error } = await supabaseServer.from('bookings').update({ ...body }).eq('id', id).select()
+    const patch = enrichBookingPatch(body, prevData)
+    const { data, error } = await supabaseServer.from('bookings').update({ ...patch }).eq('id', id).select()
     if (error) return res.status(500).json({ error: 'Failed to update booking' })
     if (body.status && prevData) await handleStatusNotify(prevData, data[0])
     return res.json(data[0])
   }
 
   if (req.method === 'DELETE') {
+    if (rejectUnlessCanDelete(req, res)) return
     const { id } = req.query
     if (!id) return res.status(400).json({ error: 'Missing booking id' })
     const { error } = await supabaseServer.from('bookings').delete().eq('id', id)

@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { requireAdmin } from '../../../lib/adminSession'
+import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { isServerless } from '../../../lib/isServerless'
 
 const MAX_BYTES = 5 * 1024 * 1024
@@ -51,4 +51,4 @@ async function handler(req, res) {
   }
 }
 
-export default requireAdmin(handler)
+export default requireOwnerAdmin(handler)

@@ -71,6 +71,7 @@ async function bookAppointmentHandler(req, res) {
       time: safeTime,
       notes: safeNotes,
       status: 'pending',
+      source: 'online',
       read: false,
       created_at: new Date().toISOString(),
     };

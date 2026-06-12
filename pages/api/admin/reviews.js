@@ -1,4 +1,4 @@
-import { requireAdmin } from '../../../lib/adminSession'
+import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
@@ -94,4 +94,4 @@ async function handler(req, res) {
   res.status(405).end('Method Not Allowed')
 }
 
-export default requireAdmin(handler)
+export default requireOwnerAdmin(handler)
