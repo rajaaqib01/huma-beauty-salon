@@ -12,8 +12,9 @@ export default function ServicesPage({ groupedServices = {} }) {
   return (
     <>
       <SEO
-        title="Our Services — Huma Beauty Saloon"
-        description="Explore bridal makeup, hair styling, facials, nails, mehndi and waxing services at Huma Beauty Saloon, Jhelum."
+        title="Beauty Services Jhelum — Bridal Makeup & More | Huma Beauty Saloon"
+        description="Bridal makeup Jhelum, hair styling, hydra facial, nail art, mehndi & waxing at Huma Beauty Saloon. Premium salon services in Main Market Jhelum."
+        keywords="bridal makeup Jhelum, beauty services Jhelum, hair salon Jhelum, facial Jhelum"
         canonical="https://humabeautysaloon.site/services"
         ogImage="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80"
       />

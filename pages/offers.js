@@ -9,8 +9,9 @@ export default function OffersPage({ offers = [] }) {
   return (
     <>
       <SEO
-        title="Special Offers — Huma Beauty Saloon"
-        description="Exclusive beauty salon offers and discounts at Huma Beauty Saloon, Jhelum."
+        title="Salon Offers Jhelum — Huma Beauty Saloon Deals"
+        description="Active beauty salon offers in Jhelum — bridal packages, facials, keratin & more at Huma Beauty Saloon. Limited-time discounts."
+        keywords="beauty salon offers Jhelum, bridal package Jhelum, salon deals Jhelum"
         canonical="https://humabeautysaloon.site/offers"
         ogImage="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1200&q=80"
       />

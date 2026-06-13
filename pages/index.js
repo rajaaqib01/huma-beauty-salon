@@ -7,6 +7,7 @@ import ServiceSection from '../components/ServiceSection';
 import InstagramFeed from '../components/InstagramFeed';
 import HomeGalleryPreview from '../components/HomeGalleryPreview';
 import TikTokFeed from '../components/TikTokFeed';
+import HomeOffersBanner from '../components/HomeOffersBanner';
 import { SERVICE_SECTIONS } from '../lib/serviceConfig';
 
 const FALLBACK_TESTIMONIALS = [
@@ -19,12 +20,13 @@ const FALLBACK_TESTIMONIALS = [
   { name: 'Amna Riaz', loc: 'Lahore', text: 'Friendly staff and immaculate service. My lashes look amazing and last for weeks!', stars: 5, img: 'https://images.unsplash.com/photo-1545996124-1f1f6d9f5a1f?w=100&q=80' },
   { name: 'Zainab Ali', loc: 'Islamabad', text: 'Lovely ambience and true professionals. My bridal mehndi was flawless and lasted beautifully.', stars: 5, img: 'https://images.unsplash.com/photo-1544005313-2f8b3b4b3a2d?w=100&q=80' },
 ];
-export default function Home({ groupedServices = {}, testimonials = FALLBACK_TESTIMONIALS, settings = {}, instagramPosts = [], galleryPreview = [], tiktokPosts = [] }) {
+export default function Home({ groupedServices = {}, testimonials = FALLBACK_TESTIMONIALS, settings = {}, instagramPosts = [], galleryPreview = [], tiktokPosts = [], activeOffers = [] }) {
   return (
     <>
       <SEO
-        title="Huma Beauty Saloon — Premium Beauty in Jhelum"
-        description="Jhelum's most luxurious beauty salon. Expert bridal makeup, hair styling, facials, nail art and more."
+        title="Huma Beauty Saloon Jhelum — Bridal Makeup & Beauty Salon"
+        description="Best bridal makeup in Jhelum at Huma Beauty Saloon. Expert hair styling, facials, nail art, waxing & party makeup. Book your appointment in Main Market Jhelum."
+        keywords="bridal makeup Jhelum, beauty salon Jhelum, Huma Beauty Saloon, party makeup Jhelum, facial Jhelum, hair salon Jhelum"
         canonical="https://humabeautysaloon.site/"
         ogImage="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80"
       />
@@ -64,6 +66,8 @@ export default function Home({ groupedServices = {}, testimonials = FALLBACK_TES
           <div className="hero-scroll-tip">Scroll to explore</div>
         </section>
 
+        <HomeOffersBanner offers={activeOffers} />
+
         {/* SERVICES */}
         <div id="services">
           {SERVICE_SECTIONS.map(section => (
@@ -86,7 +90,7 @@ export default function Home({ groupedServices = {}, testimonials = FALLBACK_TES
           <div className="why-us-wrapper">
             <div className="section-label">✦ Our Promise</div>
             <h2 className="section-title" style={{ color: 'white' }}>Why Choose <em>Us</em></h2>
-            <div className="section-divider" style={{ margin: '20px auto 52px' }} />
+            <div className="section-divider" />
             <div className="why-us-cards">
               {[
                 { icon: '✦', title: 'Expert Stylists', desc: 'Professionally trained artists with years of experience in bridal and beauty transformations.' },
@@ -196,20 +200,22 @@ export async function getServerSideProps() {
   for (const section of SERVICE_SECTIONS) empty[section.id] = [];
 
   try {
-    const [{ getHomeGroupedServices }, { getApprovedReviews }, { getSettings }, { getInstagramFeedPosts }, { getPublicGallery }] = await Promise.all([
+    const [{ getHomeGroupedServices }, { getApprovedReviews }, { getSettings }, { getInstagramFeedPosts }, { getPublicGallery }, { getPublicOffers }] = await Promise.all([
       import('../lib/services'),
       import('../lib/reviews'),
       import('../lib/settings'),
       import('../lib/instagram'),
       import('../lib/gallery'),
+      import('../lib/offers'),
     ]);
 
-    const [groupedServices, approvedReviews, settings, instagramPosts, gallery] = await Promise.all([
+    const [groupedServices, approvedReviews, settings, instagramPosts, gallery, activeOffers] = await Promise.all([
       getHomeGroupedServices(),
       getApprovedReviews(8),
       getSettings(),
       getInstagramFeedPosts(6),
       getPublicGallery(),
+      getPublicOffers(),
     ]);
 
     const tiktokProfile = 'https://www.tiktok.com/@humabeautysaloonjhe';
@@ -227,10 +233,11 @@ export async function getServerSideProps() {
         instagramPosts,
         galleryPreview: gallery.slice(0, 6),
         tiktokPosts,
+        activeOffers,
       },
     };
   } catch (e) {
     console.error('Home page load error:', e);
-    return { props: { groupedServices: empty, testimonials: FALLBACK_TESTIMONIALS, settings: {}, instagramPosts: [], galleryPreview: [], tiktokPosts: [] } };
+    return { props: { groupedServices: empty, testimonials: FALLBACK_TESTIMONIALS, settings: {}, instagramPosts: [], galleryPreview: [], tiktokPosts: [], activeOffers: [] } };
   }
 }

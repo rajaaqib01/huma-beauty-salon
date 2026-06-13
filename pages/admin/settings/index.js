@@ -5,6 +5,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState({
     salon_name: '', logo_url: '', phone: '', email: '', address: '', instagram: '', facebook: '',
     hero_title: '', hero_subtitle: '', footer_text: '',
+    google_reviews_url: '',
     admin_whatsapp: '', maps_url: '', weekday_open: '09:00', weekday_close: '21:00',
     sunday_open: '10:00', sunday_close: '19:00', slot_minutes: '30',
     referral_code: 'HUMAFRIEND', referral_discount: '10',
@@ -34,6 +35,7 @@ export default function SettingsPage() {
           { key: 'address', label: 'Address' },
           { key: 'admin_whatsapp', label: 'Admin WhatsApp (923...)' },
           { key: 'maps_url', label: 'Google Maps URL' },
+          { key: 'google_reviews_url', label: 'Google Reviews Link (for /reviews page)' },
           { key: 'instagram', label: 'Instagram URL' },
           { key: 'instagram_username', label: 'Instagram Username (no @)' },
           { key: 'instagram_post_urls', label: 'Instagram Post URLs (one per line — auto thumbnails)', textarea: true },

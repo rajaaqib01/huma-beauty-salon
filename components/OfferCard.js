@@ -39,6 +39,12 @@ export default function OfferCard({ offer }) {
             )}
           </div>
         ) : null}
+        {offer.dates ? (
+          <div className="service-card-dates">
+            <span className="service-card-dates-label">Valid</span>
+            {offer.dates}
+          </div>
+        ) : null}
         <div className="service-card-footer">
           <button type="button" onClick={handleBookNow} className="btn-rose btn-rose-small">
             <span>Book Now</span>

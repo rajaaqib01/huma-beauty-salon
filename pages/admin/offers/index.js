@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import AdminShell from '../../../components/AdminShell'
+import { getOfferScheduleStatus } from '../../../lib/offerConfig'
 
 export default function OffersPage() {
   const [offers, setOffers] = useState([])
@@ -15,18 +16,25 @@ export default function OffersPage() {
       <div className="admin-grid-2">
         <div className="admin-card">
           <h2 className="text-xl font-semibold">Offers Management</h2>
-          <p className="text-slate-400 mt-3">Create, edit, and remove promotional offers shown on the site.</p>
+          <p className="text-slate-400 mt-3">Create offers with start/end dates — they auto show on home &amp; offers page when live.</p>
         </div>
         <div className="admin-card admin-card-cta">
           <button className="admin-button admin-button-primary" onClick={() => router.push('/admin/offers/new')}>Add New Offer</button>
         </div>
       </div>
       <div className="admin-grid-2">
-        {offers.map((offer) => (
+        {offers.length === 0 ? (
+          <div className="admin-empty-state">No offers available.</div>
+        ) : offers.map((offer) => {
+          const schedule = getOfferScheduleStatus(offer)
+          return (
           <div key={offer.id} className="admin-card">
             <div className="admin-card-row" style={{ justifyContent: 'space-between' }}>
               <div>
-                <h3 className="text-2xl font-semibold">{offer.title}</h3>
+                <div className="admin-offer-title-row">
+                  <h3 className="text-2xl font-semibold">{offer.title}</h3>
+                  <span className={`admin-offer-schedule admin-offer-schedule--${schedule.tone}`}>{schedule.label}</span>
+                </div>
                 <p className="text-slate-400 mt-2"><strong>Service:</strong> {offer.service_title || 'Not linked — will not show on public page'}</p>
                 <p className="text-slate-400 mt-3">{offer.description}</p>
               </div>
@@ -45,7 +53,8 @@ export default function OffersPage() {
               }}>Delete</button>
             </div>
           </div>
-        )) || <div className="admin-empty-state">No offers available.</div>}
+          )
+        })}
       </div>
     </AdminShell>
   )

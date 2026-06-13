@@ -5,6 +5,7 @@ import { sanitizeObject } from '../../../../lib/apiUtils/security'
 import {
   filterSales,
   buildMonthlyTotals,
+  buildDaySummary,
   getUniqueServices,
   parsePriceAmount,
   formatPrice,
@@ -26,21 +27,23 @@ async function handler(req, res) {
   if (method === 'GET') {
     try {
       const bookings = await loadBookings()
-      const { month = '', service = '', source = '' } = req.query
-      const sales = filterSales(bookings, { month, service, source })
+      const { month = '', date = '', service = '', source = '' } = req.query
+      const sales = filterSales(bookings, { month, date, service, source })
       const monthlyTotals = buildMonthlyTotals(bookings)
       const services = getUniqueServices(bookings)
-      const selectedMonth = month || ''
-      const monthSummary = selectedMonth
+      const selectedMonth = date ? String(date).slice(0, 7) : (month || '')
+      const monthSummary = selectedMonth && !date
         ? monthlyTotals.find((m) => m.month === selectedMonth) || { month: selectedMonth, count: 0, total: 0, online: 0, manual: 0 }
         : null
+      const daySummary = date ? buildDaySummary(sales, date) : null
 
       return res.status(200).json({
         sales,
         monthlyTotals,
         monthSummary,
+        daySummary,
         services,
-        filters: { month, service, source },
+        filters: { month, date, service, source },
       })
     } catch (e) {
       console.error('Sales load error:', e)

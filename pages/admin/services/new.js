@@ -11,9 +11,49 @@ export default function NewService() {
   const [price, setPrice] = useState('')
   const [category, setCategory] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [preview, setPreview] = useState('')
+  const [pendingFile, setPendingFile] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setError('Please choose an image file (JPG, PNG, WEBP, GIF).')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image must be smaller than 5MB.')
+      return
+    }
+    setError('')
+    setImageUrl('')
+    setPreview(URL.createObjectURL(file))
+    const reader = new FileReader()
+    reader.onload = () => {
+      setPendingFile({
+        data: reader.result,
+        filename: file.name,
+        mimeType: file.type,
+      })
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const uploadFileIfNeeded = async () => {
+    if (!pendingFile) return imageUrl.trim()
+    const res = await fetch('/api/admin/service-upload', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pendingFile),
+    })
+    const json = await res.json()
+    if (!res.ok) throw new Error(json.error || 'Failed to upload image')
+    return json.url
+  }
 
   const handleCreate = async (e) => {
     e.preventDefault()
@@ -34,12 +74,13 @@ export default function NewService() {
 
     setLoading(true)
     try {
+      const finalImageUrl = await uploadFileIfNeeded()
       const body = {
         title: title.trim(),
         description: description.trim(),
         price: price.trim(),
         category,
-        image_url: imageUrl.trim(),
+        image_url: finalImageUrl,
       }
       const res = await fetch('/api/admin/services', {
         method: 'POST',
@@ -59,11 +100,13 @@ export default function NewService() {
     }
   }
 
+  const displayPreview = preview || imageUrl.trim()
+
   return (
     <AdminShell title="Create Service">
       <form onSubmit={handleCreate} className="admin-form admin-card" style={{ maxWidth: '720px' }}>
         <p className="admin-page-subtitle" style={{ marginBottom: '8px' }}>
-          Add a new service — it will appear on the public services page and booking form.
+          Add a new service — upload a photo or paste a link. It will appear on the public services page and booking form.
         </p>
 
         <div className="admin-form-row">
@@ -109,33 +152,43 @@ export default function NewService() {
         </div>
 
         <div className="admin-form-row">
-          <label className="admin-field-label" htmlFor="service-image">Image URL</label>
+          <label className="admin-field-label" htmlFor="service-file">Upload Picture</label>
+          <input
+            id="service-file"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="admin-input admin-file-input"
+            onChange={handleFileChange}
+          />
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', margin: 0 }}>
+            Optional — JPG, PNG, WEBP or GIF (max 5MB).
+          </p>
+        </div>
+
+        <div className="admin-form-row">
+          <label className="admin-field-label" htmlFor="service-image">Or Image URL</label>
           <input
             id="service-image"
             className="admin-input"
             placeholder="https://example.com/photo.jpg"
             value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            onChange={(e) => {
+              setImageUrl(e.target.value)
+              if (e.target.value) {
+                setPreview('')
+                setPendingFile(null)
+              }
+            }}
           />
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', margin: 0 }}>
-            Paste a direct image link for the service card photo.
-          </p>
         </div>
 
-        {imageUrl.trim() ? (
+        {displayPreview ? (
           <div className="admin-form-row">
             <label className="admin-field-label">Preview</label>
             <img
-              src={imageUrl.trim()}
+              src={displayPreview}
               alt="Service preview"
-              style={{
-                width: '100%',
-                maxWidth: '280px',
-                height: '200px',
-                objectFit: 'cover',
-                borderRadius: '16px',
-                border: '1px solid rgba(15,76,69,0.12)',
-              }}
+              className="admin-service-image-preview"
               onError={(e) => { e.currentTarget.src = FALLBACK_IMG }}
             />
           </div>

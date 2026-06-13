@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import useSWR from 'swr'
 import AdminShell from '../../../components/AdminShell'
 import useAdminAuth from '../../../lib/useAdminAuth'
@@ -7,6 +8,16 @@ const fetcher = async (url) => {
   const res = await fetch(url, { credentials: 'include' })
   if (!res.ok) throw new Error('Failed to fetch')
   return res.json()
+}
+
+function messageDateKey(createdAt) {
+  if (!createdAt) return ''
+  const d = new Date(createdAt)
+  if (Number.isNaN(d.getTime())) return ''
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
 }
 
 function messageCardClass(read) {
@@ -19,6 +30,12 @@ export default function Messages() {
   const allowDelete = canAdminDelete(admin?.role)
   const { data, error, mutate } = useSWR('/api/admin/messages', fetcher)
   const messages = Array.isArray(data) ? data : []
+  const [filterDate, setFilterDate] = useState('')
+
+  const filtered = useMemo(() => {
+    if (!filterDate) return messages
+    return messages.filter((m) => messageDateKey(m.created_at) === filterDate)
+  }, [messages, filterDate])
 
   const updateMessage = async (id, patch) => {
     const res = await fetch(`/api/admin/messages?id=${id}`, {
@@ -43,11 +60,36 @@ export default function Messages() {
 
   return (
     <AdminShell title="Messages">
-      <div className="admin-grid-2">
+      <div className="admin-card admin-messages-filters">
+        <div className="admin-messages-filters-row">
+          <div className="admin-form-row">
+            <label className="admin-field-label" htmlFor="messages-date-filter">Filter by date</label>
+            <input
+              id="messages-date-filter"
+              type="date"
+              className="admin-input"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+            />
+          </div>
+          {filterDate ? (
+            <button type="button" className="admin-button admin-button-warning" onClick={() => setFilterDate('')}>
+              Clear filter ({filterDate})
+            </button>
+          ) : null}
+        </div>
+        {filterDate ? (
+          <p className="admin-page-subtitle" style={{ marginTop: 12, marginBottom: 0 }}>
+            Showing {filtered.length} message{filtered.length === 1 ? '' : 's'} from {filterDate}
+          </p>
+        ) : null}
+      </div>
+
+      <div className="admin-grid-2 admin-card-list-grid">
         {error ? (
           <div className="admin-empty-state">Unable to load messages. Please refresh.</div>
-        ) : messages.length > 0 ? (
-          messages.map(m => {
+        ) : filtered.length > 0 ? (
+          filtered.map(m => {
             const isRead = Boolean(m.read)
             return (
               <div key={m.id} className={messageCardClass(isRead)}>
@@ -76,7 +118,9 @@ export default function Messages() {
             )
           })
         ) : (
-          <div className="admin-empty-state">No messages found.</div>
+          <div className="admin-empty-state">
+            No messages found{filterDate ? ` for ${filterDate}` : ''}.
+          </div>
         )}
       </div>
     </AdminShell>

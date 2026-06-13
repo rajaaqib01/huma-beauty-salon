@@ -48,8 +48,10 @@ export default function AdminLogin() {
           <aside className="admin-login-brand" aria-label="Salon branding">
             <div className="admin-login-brand-inner">
               <div className="admin-login-monogram" aria-hidden="true">HB</div>
-              <p className="admin-login-script">Huma Beauty</p>
-              <h1 className="admin-login-brand-title">Salon Admin Portal</h1>
+              <div className="admin-login-brand-copy">
+                <p className="admin-login-script">Huma Beauty</p>
+                <h1 className="admin-login-brand-title">Salon Admin Portal</h1>
+              </div>
               <p className="admin-login-brand-tagline">
                 Manage bookings, services, sales & salon operations — securely and beautifully.
               </p>
@@ -66,13 +68,22 @@ export default function AdminLogin() {
 
           <main className="admin-login-main">
             <div className="admin-login-card">
-              <div className="admin-login-card-header">
-                <p className="admin-login-welcome">Welcome back</p>
-                <h2 className="admin-login-title">Sign in to continue</h2>
-                <p className="admin-login-subtitle">Enter your admin email and password.</p>
+              <div className="admin-login-card-mobile-brand" aria-hidden="true">
+                <div className="admin-login-card-mobile-logo">HB</div>
+                <div>
+                  <p className="admin-login-card-mobile-script">Huma Beauty</p>
+                  <p className="admin-login-card-mobile-title">Admin Portal</p>
+                </div>
               </div>
 
-              <form onSubmit={handleLogin} className="admin-login-form">
+              <div className="admin-login-card-body">
+                <div className="admin-login-card-header">
+                  <p className="admin-login-welcome">Welcome back</p>
+                  <h2 className="admin-login-title">Sign in to continue</h2>
+                  <p className="admin-login-subtitle">Enter your admin email and password.</p>
+                </div>
+
+                <form onSubmit={handleLogin} className="admin-login-form">
                 <div className="admin-login-field">
                   <label className="admin-login-label" htmlFor="admin-email">Email address</label>
                   <div className="admin-login-input-wrap">
@@ -133,11 +144,7 @@ export default function AdminLogin() {
 
               <div className="admin-login-card-footer">
                 <Link href="/" className="admin-login-back-link">← Back to website</Link>
-                {process.env.NODE_ENV !== 'production' ? (
-                  <p className="admin-login-note">
-                    Dev: <strong>admin@example.com</strong> / <strong>change-me</strong>
-                  </p>
-                ) : null}
+              </div>
               </div>
             </div>
           </main>

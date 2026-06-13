@@ -33,23 +33,17 @@ export default function AdminDashboard() {
 
   return (
     <AdminShell title="Dashboard">
-      {role === 'owner' && monthSales ? (
-        <div className="admin-card admin-month-sales-banner" style={{ marginBottom: 24 }}>
-          <div className="admin-month-sales-banner-inner">
-            <div>
-              <p className="admin-stat-label">{monthLabel(monthSales.month)} Sales</p>
-              <p className="admin-month-sales-value">{formatPrice(monthSales.total)}</p>
-              <p className="admin-page-subtitle" style={{ marginTop: 8 }}>
-                {monthSales.count} confirmed booking{monthSales.count === 1 ? '' : 's'} · Online {formatPrice(monthSales.online)} · Manual {formatPrice(monthSales.manual)}
-              </p>
-            </div>
-            <Link href="/admin/sales" className="admin-button admin-button-primary">
-              View Sales
-            </Link>
+      <div className="admin-dashboard-grid">
+        {role === 'owner' && monthSales ? (
+          <div className="admin-stat-card admin-stat-card--sales-month">
+            <p className="admin-stat-label">{monthLabel(monthSales.month)} Sales</p>
+            <p className="admin-stat-value admin-stat-value--price">{formatPrice(monthSales.total)}</p>
+            <p className="admin-stat-meta">
+              {monthSales.count} booking{monthSales.count === 1 ? '' : 's'}
+            </p>
+            <Link href="/admin/sales" className="admin-stat-link-btn">View Sales</Link>
           </div>
-        </div>
-      ) : null}
-      <div className="admin-grid-3">
+        ) : null}
         <div className="admin-stat-card admin-stat-card--bookings">
           <p className="admin-stat-label">Total Bookings</p>
           <p className="admin-stat-value">{stats?.total_bookings ?? '—'}</p>
@@ -62,8 +56,6 @@ export default function AdminDashboard() {
           <p className="admin-stat-label">Pending</p>
           <p className="admin-stat-value">{stats?.pending ?? '—'}</p>
         </div>
-      </div>
-      <div className="admin-grid-3">
         <div className="admin-stat-card admin-stat-card--cancelled">
           <p className="admin-stat-label">Cancelled</p>
           <p className="admin-stat-value">{stats?.cancelled ?? '—'}</p>
@@ -83,6 +75,33 @@ export default function AdminDashboard() {
           <p className="text-xl font-semibold">{stats.popular_service.name} ({stats.popular_service.count} bookings)</p>
         </div>
       ) : null}
+      <div className="admin-card admin-today-bookings">
+        <div className="admin-today-bookings-header">
+          <div>
+            <p className="admin-stat-label">Aaj ki Bookings</p>
+            <h2 className="admin-today-bookings-title">Today&apos;s Appointments</h2>
+          </div>
+          <Link href="/admin/bookings" className="admin-stat-link-btn">All Bookings</Link>
+        </div>
+        {stats?.today_bookings?.length ? (
+          <ul className="admin-today-bookings-list">
+            {stats.today_bookings.map((booking) => (
+              <li key={booking.id} className="admin-today-bookings-item">
+                <div className="admin-today-bookings-time">{booking.time || '—'}</div>
+                <div className="admin-today-bookings-main">
+                  <strong>{booking.customer_name}</strong>
+                  <span>{booking.service_title}</span>
+                </div>
+                <span className={`admin-today-bookings-status admin-today-bookings-status--${String(booking.status).toLowerCase()}`}>
+                  {booking.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="admin-today-bookings-empty">No bookings scheduled for today.</p>
+        )}
+      </div>
       <div className="admin-grid-2">
         {quickLinks.map((card) => (
           <Link key={card.href} href={card.href} className="admin-card admin-card-cta admin-button-secondary">

@@ -3,6 +3,7 @@ import Head from 'next/head';
 export default function SEO({
   title,
   description,
+  keywords,
   canonical,
   ogImage,
   ogType = 'website',
@@ -55,6 +56,7 @@ export default function SEO({
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
+      {keywords ? <meta name="keywords" content={keywords} /> : null}
       <meta name="robots" content="index, follow" />
       {canonical && <link rel="canonical" href={canonical} />}
 

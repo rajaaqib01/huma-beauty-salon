@@ -27,8 +27,16 @@ function monthLabel(ym) {
   return d.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' })
 }
 
+function dayLabel(ymd) {
+  if (!ymd) return '—'
+  const [y, m, d] = ymd.split('-')
+  const dt = new Date(Number(y), Number(m) - 1, Number(d))
+  return dt.toLocaleDateString('en-PK', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' })
+}
+
 export default function BookingSalesPage() {
   const [month, setMonth] = useState('')
+  const [date, setDate] = useState('')
   const [service, setService] = useState('')
   const [source, setSource] = useState('')
   const [showAdd, setShowAdd] = useState(false)
@@ -39,12 +47,13 @@ export default function BookingSalesPage() {
 
   const query = useMemo(() => {
     const params = new URLSearchParams()
-    if (month) params.set('month', month)
+    if (date) params.set('date', date)
+    else if (month) params.set('month', month)
     if (service) params.set('service', service)
     if (source) params.set('source', source)
     const qs = params.toString()
     return `/api/admin/bookings/sales${qs ? `?${qs}` : ''}`
-  }, [month, service, source])
+  }, [month, date, service, source])
 
   const { data, error: loadError, mutate } = useSWR(query, fetcher)
 
@@ -52,6 +61,19 @@ export default function BookingSalesPage() {
   const monthlyTotals = data?.monthlyTotals || []
   const services = data?.services || []
   const monthSummary = data?.monthSummary
+  const daySummary = data?.daySummary
+
+  const handleDateChange = (value) => {
+    setDate(value)
+    if (value) setMonth(value.slice(0, 7))
+  }
+
+  const clearFilters = () => {
+    setMonth('')
+    setDate('')
+    setService('')
+    setSource('')
+  }
 
   const resetManual = () => {
     setManualForm(emptyManual)
@@ -124,12 +146,29 @@ export default function BookingSalesPage() {
   return (
     <AdminShell title="Online Booking Sales">
       <p className="admin-page-subtitle" style={{ marginBottom: 20 }}>
-        Confirmed online & manual booking sales — filter by month, service, or source.
+        Confirmed online & manual booking sales — filter by date, month, service, or source.
       </p>
 
-      {/* Monthly totals */}
+      {/* Summary */}
       <div className="admin-grid-3" style={{ marginBottom: 24 }}>
-        {monthSummary ? (
+        {daySummary ? (
+          <>
+            <div className="admin-stat-card admin-stat-card--confirmed">
+              <p className="admin-stat-label">{dayLabel(daySummary.date)} Total</p>
+              <p className="admin-stat-value">{formatPrice(daySummary.total)}</p>
+            </div>
+            <div className="admin-stat-card admin-stat-card--bookings">
+              <p className="admin-stat-label">Day Sales</p>
+              <p className="admin-stat-value">{daySummary.count}</p>
+            </div>
+            <div className="admin-stat-card admin-stat-card--services">
+              <p className="admin-stat-label">Online / Manual</p>
+              <p className="admin-stat-value" style={{ fontSize: '1.1rem' }}>
+                {formatPrice(daySummary.online)} / {formatPrice(daySummary.manual)}
+              </p>
+            </div>
+          </>
+        ) : monthSummary ? (
           <>
             <div className="admin-stat-card admin-stat-card--confirmed">
               <p className="admin-stat-label">{monthLabel(monthSummary.month)} Total</p>
@@ -160,8 +199,24 @@ export default function BookingSalesPage() {
       <div className="admin-card admin-sales-filters">
         <div className="admin-sales-filters-grid">
           <div className="admin-form-row">
+            <label className="admin-field-label" htmlFor="sales-date">Date</label>
+            <input
+              id="sales-date"
+              type="date"
+              className="admin-input"
+              value={date}
+              onChange={(e) => handleDateChange(e.target.value)}
+            />
+          </div>
+          <div className="admin-form-row">
             <label className="admin-field-label" htmlFor="sales-month">Month</label>
-            <select id="sales-month" className="admin-input" value={month} onChange={(e) => setMonth(e.target.value)}>
+            <select
+              id="sales-month"
+              className="admin-input"
+              value={month}
+              onChange={(e) => { setMonth(e.target.value); setDate('') }}
+              disabled={Boolean(date)}
+            >
               <option value="">All months</option>
               {monthlyTotals.map((m) => (
                 <option key={m.month} value={m.month}>{monthLabel(m.month)} ({formatPrice(m.total)})</option>
@@ -190,12 +245,17 @@ export default function BookingSalesPage() {
           <button type="button" className="admin-button admin-button-primary" onClick={() => { setShowAdd(true); setEditing(null); setManualForm(emptyManual) }}>
             + Add Manual Sale
           </button>
-          {(month || service || source) ? (
-            <button type="button" className="admin-button admin-button-secondary" onClick={() => { setMonth(''); setService(''); setSource('') }}>
+          {(date || month || service || source) ? (
+            <button type="button" className="admin-button admin-button-secondary" onClick={clearFilters}>
               Clear filters
             </button>
           ) : null}
         </div>
+        {date ? (
+          <p className="admin-page-subtitle" style={{ marginTop: 12, marginBottom: 0 }}>
+            Showing {sales.length} sale{sales.length === 1 ? '' : 's'} for {dayLabel(date)}
+          </p>
+        ) : null}
       </div>
 
       {/* Monthly history */}
@@ -207,8 +267,8 @@ export default function BookingSalesPage() {
               <button
                 key={m.month}
                 type="button"
-                className={`admin-sales-month-chip${month === m.month ? ' admin-sales-month-chip--active' : ''}`}
-                onClick={() => setMonth(m.month)}
+                className={`admin-sales-month-chip${month === m.month && !date ? ' admin-sales-month-chip--active' : ''}`}
+                onClick={() => { setMonth(m.month); setDate('') }}
               >
                 <strong>{monthLabel(m.month)}</strong>
                 <span>{m.count} bookings</span>
@@ -264,7 +324,7 @@ export default function BookingSalesPage() {
         {loadError ? (
           <div className="admin-empty-state">Unable to load sales. Please refresh.</div>
         ) : sales.length === 0 ? (
-          <div className="admin-empty-state">No confirmed sales found for selected filters.</div>
+          <div className="admin-empty-state">No confirmed sales found{date ? ` for ${date}` : ''}.</div>
         ) : (
           <table className="admin-sales-table">
             <thead>

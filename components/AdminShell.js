@@ -53,21 +53,24 @@ export default function AdminShell({ title, children }) {
                 </p>
               </div>
               <div className="admin-header-actions">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`admin-nav-link ${
-                      item.href === '/admin'
-                        ? currentPath === '/admin' ? 'active' : ''
-                        : currentPath.startsWith(item.href) ? 'active' : ''
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                <button type="button" className="admin-button admin-button-secondary" onClick={() => router.push('/admin/logout')}>
-                  Logout
+                {navItems.map((item) => {
+                  const isActive = item.href === '/admin'
+                    ? currentPath === '/admin'
+                    : currentPath.startsWith(item.href)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`admin-nav-link${isActive ? ' active' : ''}`}
+                    >
+                      <span className="admin-nav-icon" aria-hidden="true">{item.icon}</span>
+                      <span className="admin-nav-text">{item.label}</span>
+                    </Link>
+                  )
+                })}
+                <button type="button" className="admin-nav-logout" onClick={() => router.push('/admin/logout')}>
+                  <span className="admin-nav-icon" aria-hidden="true">🚪</span>
+                  <span className="admin-nav-text">Logout</span>
                 </button>
               </div>
             </div>

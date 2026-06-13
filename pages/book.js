@@ -29,7 +29,7 @@ function formatDiscount(value) {
   return raw.includes('%') ? raw : `${raw}%`;
 }
 
-export default function Book({ bookingServices = [], staffList = [], paymentInfo = {} }) {
+export default function Book({ bookingServices = [], paymentInfo = {} }) {
   const router = useRouter();
   const servicePriceMap = useMemo(
     () => Object.fromEntries(bookingServices.map(s => [s.name, s.price])),
@@ -39,7 +39,6 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     service: '', price: '', date: '', time: '', notes: '',
-    staff_id: '', staff_name: '', referral_code: '',
   });
   const [availableSlots, setAvailableSlots] = useState([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
@@ -77,18 +76,7 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
       setOfferFromUrl(offer || '')
       setStep(0)
     }
-
-    const staffName = safeDecodeQuery(router.query.staff)
-    if (staffName && staffList.length > 0) {
-      const match = staffList.find(s =>
-        s.name.toLowerCase() === staffName.toLowerCase() ||
-        s.name.toLowerCase().startsWith(staffName.toLowerCase())
-      )
-      if (match) {
-        setForm(f => ({ ...f, staff_id: match.id, staff_name: match.name }))
-      }
-    }
-  }, [router.isReady, router.query.service, router.query.offer, router.query.price, router.query.discount, router.query.staff, servicePriceMap, staffList]);
+  }, [router.isReady, router.query.service, router.query.offer, router.query.price, router.query.discount, servicePriceMap]);
 
   useEffect(() => {
     if (!form.date) {
@@ -181,9 +169,6 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
         offer: offerFromUrl || undefined,
         offerId: safeDecodeQuery(router.query.offerId) || undefined,
         discount: formatDiscount(safeDecodeQuery(router.query.discount)) || undefined,
-        staff_id: form.staff_id || undefined,
-        staff_name: form.staff_name || undefined,
-        referral_code: form.referral_code || undefined,
         time: convertTo24Hour(form.time) || form.time,
       };
 
@@ -231,8 +216,9 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
   return (
     <>
       <SEO
-        title="Book Appointment — Huma Beauty Saloon"
-        description="Book your beauty appointment at Huma Beauty Saloon, Jhelum's premier salon."
+        title="Book Appointment — Bridal Makeup Jhelum | Huma Beauty Saloon"
+        description="Book bridal makeup, facials, hair styling & beauty services online at Huma Beauty Saloon, Main Market Jhelum. Fast WhatsApp confirmation."
+        keywords="book salon Jhelum, bridal makeup booking Jhelum, Huma Beauty Saloon appointment"
         canonical="https://humabeautysaloon.site/book"
         ogImage="https://images.unsplash.com/photo-1560066984-138daaa56d8c?w=1200&q=80"
       />
@@ -392,38 +378,6 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
                           )}
                           {errors.service && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 8 }}>{errors.service}</p>}
                         </div>
-
-                        {staffList.length > 0 ? (
-                          <div>
-                            <label htmlFor="booking-stylist" style={labelStyle}>Preferred Stylist (Optional)</label>
-                            <select
-                              id="booking-stylist"
-                              style={inputStyle('staff_id')}
-                              value={form.staff_id}
-                              onChange={e => {
-                                const selected = staffList.find(s => s.id === e.target.value);
-                                setForm(f => ({ ...f, staff_id: e.target.value, staff_name: selected?.name || '' }));
-                              }}
-                            >
-                              <option value="">Any available stylist</option>
-                              {staffList.map(s => (
-                                <option key={s.id} value={s.id}>{s.name} — {s.specialty}</option>
-                              ))}
-                            </select>
-                          </div>
-                        ) : null}
-
-                        <div>
-                          <label htmlFor="booking-referral" style={labelStyle}>Referral Code (Optional)</label>
-                          <input
-                            id="booking-referral"
-                            style={inputStyle('referral_code')}
-                            value={form.referral_code}
-                            onChange={e => update('referral_code', e.target.value.toUpperCase())}
-                            placeholder="e.g. HUMAFRIEND"
-                          />
-                          <p style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: 6 }}>Have a friend referral code? Enter it for a special discount.</p>
-                        </div>
                       </div>
                     </div>
                   )}
@@ -486,8 +440,6 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
                           ['Phone', form.phone],
                           form.email ? ['Email', form.email] : null,
                           offerFromUrl ? ['Offer', offerFromUrl] : null,
-                          form.staff_name ? ['Stylist', form.staff_name] : null,
-                          form.referral_code ? ['Referral', form.referral_code] : null,
                           ['Service', form.service],
                           form.price ? ['Price', form.price] : null,
                           ['Date', form.date],
@@ -563,17 +515,14 @@ export default function Book({ bookingServices = [], staffList = [], paymentInfo
 export async function getServerSideProps() {
   try {
     const { getBookingServices } = await import('../lib/services');
-    const { getPublicStaff } = await import('../lib/staff');
     const { getSettings } = await import('../lib/settings');
-    const [bookingServices, staffList, settings] = await Promise.all([
+    const [bookingServices, settings] = await Promise.all([
       getBookingServices(),
-      getPublicStaff(),
       getSettings(),
     ]);
     return {
       props: {
         bookingServices,
-        staffList,
         paymentInfo: {
           jazzcash: settings.jazzcash_number || '',
           easypaisa: settings.easypaisa_number || '',
@@ -582,6 +531,6 @@ export async function getServerSideProps() {
     };
   } catch (e) {
     console.error('Book page services load error:', e);
-    return { props: { bookingServices: [], staffList: [], paymentInfo: {} } };
+    return { props: { bookingServices: [], paymentInfo: {} } };
   }
 }

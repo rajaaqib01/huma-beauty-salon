@@ -85,7 +85,7 @@ export default function Bookings() {
         </div>
       ) : null}
 
-      <div className="admin-grid-2">
+      <div className="admin-grid-2 admin-card-list-grid admin-bookings-grid">
         {error ? (
           <div className="admin-empty-state">Unable to load bookings. Please refresh.</div>
         ) : filtered.length > 0 ? (

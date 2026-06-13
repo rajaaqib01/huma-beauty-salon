@@ -3,6 +3,7 @@ import { supabaseServer } from '../../../lib/supabaseServer'
 import localDb from '../../../lib/localDb'
 import { isOwnerRole } from '../../../lib/adminRoles'
 import { buildMonthlyTotals } from '../../../lib/bookingSales'
+import { getTodayBookings, processBookingReminders } from '../../../lib/bookingReminders'
 
 function currentMonthKey() {
   const d = new Date()
@@ -39,6 +40,12 @@ function bookingsThisWeek(bookings) {
 async function handler(req, res) {
   const showOwnerSales = isOwnerRole(req.admin?.role)
 
+  setImmediate(() => {
+    processBookingReminders().catch((err) => {
+      console.error('Background booking reminders failed:', err.message)
+    })
+  })
+
   try {
     if (supabaseServer) {
       const [{ count: total_bookings }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true })
@@ -58,6 +65,7 @@ async function handler(req, res) {
         total_messages,
         bookings_this_week: bookingsThisWeek(allBookings || []),
         popular_service: popularService(allBookings || []),
+        today_bookings: await getTodayBookings(),
       }
       if (showOwnerSales) payload.current_month_sales = currentMonthSales(allBookings || [])
       return res.json(payload)
@@ -78,6 +86,7 @@ async function handler(req, res) {
       total_offers: offers.length,
       bookings_this_week: bookingsThisWeek(bookings),
       popular_service: popularService(bookings),
+      today_bookings: await getTodayBookings(),
     }
     if (showOwnerSales) payload.current_month_sales = currentMonthSales(bookings)
     return res.json(payload)

@@ -4,25 +4,41 @@ import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
 import Link from 'next/link';
 
-export default function ReviewsPage({ reviews = [] }) {
+export default function ReviewsPage({ reviews = [], googleReviewsUrl = '' }) {
   return (
     <>
-      <SEO title="Client Reviews — Huma Beauty Saloon" description="Read what our clients say about Huma Beauty Saloon in Jhelum." canonical="https://humabeautysaloon.site/reviews" />
+      <SEO
+        title="Client Reviews — Bridal Makeup Jhelum | Huma Beauty Saloon"
+        description="Read real client reviews for Huma Beauty Saloon in Jhelum. Bridal makeup, facials, hair styling & beauty services trusted by local clients."
+        keywords="Huma Beauty Saloon reviews, bridal makeup Jhelum reviews, beauty salon Jhelum, salon reviews Jhelum"
+        canonical="https://humabeautysaloon.site/reviews"
+      />
       <Navbar />
       <main className="page-main">
         <section className="services-page-hero">
           <div className="services-page-hero-inner">
             <div className="section-label">✦ Testimonials</div>
             <h1 className="services-page-hero-title">Client <em>Reviews</em></h1>
-            <p className="services-page-hero-text">Real feedback from our valued salon clients.</p>
+            <p className="services-page-hero-text">Admin-approved reviews from our valued salon clients in Jhelum.</p>
           </div>
         </section>
         <section className="offers-section">
           <div className="offers-container">
+            {googleReviewsUrl ? (
+              <div className="reviews-google-cta">
+                <div>
+                  <h2>Review us on Google</h2>
+                  <p>Had a great experience? Share your feedback on Google — it helps other brides and clients in Jhelum find us.</p>
+                </div>
+                <a href={googleReviewsUrl} target="_blank" rel="noreferrer" className="btn-rose">
+                  <span>Leave a Google Review</span>
+                </a>
+              </div>
+            ) : null}
             {reviews.length > 0 ? (
               <div className="reviews-public-grid">
-                {reviews.map((r, i) => (
-                  <article key={i} className="reviews-public-card">
+                {reviews.map((r) => (
+                  <article key={r.id || r.name} className="reviews-public-card">
                     <div className="reviews-public-stars">{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</div>
                     <p className="reviews-public-text">&ldquo;{r.text}&rdquo;</p>
                     <div className="reviews-public-author">
@@ -53,10 +69,21 @@ export default function ReviewsPage({ reviews = [] }) {
 
 export async function getServerSideProps() {
   try {
-    const { getApprovedReviews } = await import('../lib/reviews');
-    const reviews = await getApprovedReviews(50);
-    return { props: { reviews } };
+    const [{ getApprovedReviews }, { getSettings }] = await Promise.all([
+      import('../lib/reviews'),
+      import('../lib/settings'),
+    ]);
+    const [reviews, settings] = await Promise.all([
+      getApprovedReviews(50),
+      getSettings(),
+    ]);
+    return {
+      props: {
+        reviews,
+        googleReviewsUrl: settings.google_reviews_url || '',
+      },
+    };
   } catch {
-    return { props: { reviews: [] } };
+    return { props: { reviews: [], googleReviewsUrl: '' } };
   }
 }
