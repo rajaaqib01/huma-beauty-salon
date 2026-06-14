@@ -44,15 +44,17 @@ export default function AdminShell({ title, children }) {
         <div className="admin-shell-inner">
           <header className="admin-header">
             <div className="admin-topbar">
-              <div>
+              <div className="admin-topbar-head">
                 <p className="admin-panel-label">Admin Panel</p>
-                <h1 className="admin-page-title">{title || 'Dashboard'}</h1>
-                <p className="admin-page-subtitle">
-                  Signed in as {admin?.name || admin?.email || 'Admin'}
-                  {role === 'reception' ? ' (Reception)' : ''}
-                </p>
+                <p className="admin-brand-name">Huma Beauty Saloon</p>
               </div>
-              <div className="admin-header-actions">
+              <h1 className="admin-page-title">{title || 'Dashboard'}</h1>
+              <p className="admin-page-subtitle">
+                Signed in as {admin?.name || admin?.email || 'Admin'}
+                {role === 'reception' ? ' (Reception)' : ''}
+              </p>
+            </div>
+            <div className="admin-header-actions">
                 {navItems.map((item) => {
                   const isActive = item.href === '/admin'
                     ? currentPath === '/admin'
@@ -72,7 +74,6 @@ export default function AdminShell({ title, children }) {
                   <span className="admin-nav-icon" aria-hidden="true">🚪</span>
                   <span className="admin-nav-text">Logout</span>
                 </button>
-              </div>
             </div>
           </header>
           <main className="admin-main">{children}</main>

@@ -15,7 +15,7 @@ export default function Navbar() {
 
   const links = [
     { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
+    { href: '/services', label: 'Service Menu' },
     { href: '/offers', label: 'Offers' },
     { href: '/gallery', label: 'Gallery' },
     { href: '/team', label: 'Team' },
@@ -24,10 +24,12 @@ export default function Navbar() {
     { href: '/contact', label: 'Contact' },
   ];
 
+  const solidNav = scrolled || router.pathname === '/services';
+
   return (
-    <nav className={`nav-fixed ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`nav-fixed ${solidNav ? 'scrolled' : ''}`}>
       <div className="nav-inner">
-        <Link href="/" className="nav-logo-text">Huma Beauty</Link>
+        <Link href="/" className="nav-logo-text">Huma Beauty Saloon</Link>
 
         <ul className={`nav-links ${open ? 'open' : ''}`}>
           {links.map(l => (
