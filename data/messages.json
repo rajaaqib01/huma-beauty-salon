@@ -8,16 +8,5 @@
     "message": "kwhio uweiofhwo",
     "created_at": "2026-06-13T15:23:18.618Z",
     "read": true
-  },
-  {
-    "id": "mq0qid27-lq757t8",
-    "name": "QA Contact",
-    "phone": "03001234567",
-    "email": "qa@test.com",
-    "subject": "Test",
-    "message": "This is a QA automated test message for audit.",
-    "created_at": "2026-06-05T09:41:17.597Z",
-    "status": "new",
-    "read": true
   }
 ]
