@@ -26,7 +26,7 @@ export default function AdminLogin() {
     setLoading(false)
 
     if (!res.ok) {
-      setErrorMessage(data.error || 'Login failed')
+      setErrorMessage(data.hint ? `${data.error}. ${data.hint}` : (data.error || 'Login failed'))
       return
     }
 
