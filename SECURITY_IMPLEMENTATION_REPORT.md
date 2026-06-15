@@ -183,8 +183,8 @@ try {
 
 **Before:** `.env.local` contained real credentials, at risk of being committed
 ```
-EMAIL_USER=humaaqi96@gmail.com
-EMAIL_PASSWORD=gioxwqneufljnfrp  # EXPOSED
+EMAIL_USER=your@gmail.com
+EMAIL_PASSWORD=<redacted-use-env-var-only>  # EXPOSED — rotate if ever committed
 ```
 
 **After:** 
@@ -241,13 +241,13 @@ export default function handler(req, res) {
 **Before:** Recipient email was hardcoded in code
 ```javascript
 // Not ideal - requires code changes to update
-to: 'humaaqi96@gmail.com'
+to: 'your@gmail.com'
 ```
 
 **After:** Uses environment variable with fallback
 ```javascript
 // Configurable via environment
-to: process.env.EMAIL_RECIPIENT || 'humaaqi96@gmail.com'
+to: process.env.EMAIL_RECIPIENT || 'your@gmail.com'
 ```
 
 **Environment Variable:**
@@ -454,9 +454,9 @@ curl -X POST http://localhost:3000/api/send-email \
 
 - [ ] **Step 2:** Update `.env.local` (local file only)
   ```
-  EMAIL_USER=humaaqi96@gmail.com
+  EMAIL_USER=your@gmail.com
   EMAIL_PASSWORD=<new-16-char-password>
-  EMAIL_RECIPIENT=humaaqi96@gmail.com
+  EMAIL_RECIPIENT=your@gmail.com
   ```
 
 - [ ] **Step 3:** Deploy to production

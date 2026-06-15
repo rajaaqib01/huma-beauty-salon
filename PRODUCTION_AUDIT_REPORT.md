@@ -26,8 +26,8 @@
 
 **Location:** `.env.local`
 ```
-EMAIL_USER=humaaqi96@gmail.com
-EMAIL_PASSWORD=gioxwqneufljnfrp
+EMAIL_USER=your@gmail.com
+EMAIL_PASSWORD=<redacted-use-env-var-only>
 ```
 
 **Problem:**
@@ -371,20 +371,20 @@ export default async function handler(req, res) {
 **Problem:**
 ```javascript
 // ❌ Hardcoded
-to: 'humaaqi96@gmail.com',
+to: 'your@gmail.com',
 ```
 
 **Fix:**
 ```javascript
 // ✅ Environment variable
-to: process.env.EMAIL_RECIPIENT || 'humaaqi96@gmail.com',
+to: process.env.EMAIL_RECIPIENT || 'your@gmail.com',
 ```
 
 **Update .env.example:**
 ```
 EMAIL_USER=your-gmail@gmail.com
 EMAIL_PASSWORD=your-16-char-app-password
-EMAIL_RECIPIENT=humaaqi96@gmail.com
+EMAIL_RECIPIENT=your@gmail.com
 ```
 
 ---

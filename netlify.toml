@@ -1,5 +1,11 @@
 [build]
   command = "npm run build"
 
+# Netlify secrets scanner: public salon contact info is not a credential.
+# Set real secrets only in Netlify UI → Site settings → Environment variables.
+# Use ADMIN_EMAIL / ADMIN_PASSWORD (not VITE_ADMIN_* — this is Next.js, not Vite).
+[build.environment]
+  SECRETS_SCAN_OMIT_PATHS = "components/Footer.js,pages/contact.js,data/settings.json,lib/settings.js,lib/emailTransport.js,pages/api/send-email.js,data/bookings.json,data/messages.json,data/admin_users.json"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"

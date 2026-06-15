@@ -169,7 +169,7 @@ const convertTo24Hour = (time12) => {
 **Contact Information Section**:
 - ✅ Location displays: "Main Market, Jhelum, Punjab, Pakistan"
 - ✅ Phone: "+92 335 5462214"
-- ✅ Email: "humaaqi96@gmail.com"
+- ✅ Email: "your@gmail.com" (public contact)
 - ✅ Working Hours: 
   - Mon–Sat: 9:00 AM – 9:00 PM ✓
   - Sunday: 10:00 AM – 7:00 PM ✓
@@ -211,11 +211,11 @@ const convertTo24Hour = (time12) => {
 
 **Authentication**:
 - ✅ Valid credentials accepted
-  - Email: `humaaqi96@gmail.com` ✓
-  - Password: `humaaqib@@8217@@` ✓
+  - Email: `your@gmail.com` ✓
+  - Password: `***` (set via admin panel / env — not in repo)
 - ✅ Redirects to `/admin` after successful login
 - ✅ Session persists
-- ✅ User information displays: "Signed in as humaaqi96@gmail.com"
+- ✅ User information displays: "Signed in as admin@example.com"
 
 ---
 
