@@ -10,7 +10,7 @@ export default function BlogIndex({ posts = [] }) {
       <SEO title="Beauty Tips & Blog — Huma Beauty Saloon" description="Beauty tips, bridal advice and skincare guides from Huma Beauty Saloon." canonical="https://humabeautysaloon.site/blog" />
       <Navbar />
       <main className="page-main">
-        <section className="services-page-hero">
+        <section className="services-page-hero page-hero-theme">
           <div className="services-page-hero-inner">
             <div className="section-label">✦ Beauty Tips</div>
             <h1 className="services-page-hero-title">Salon <em>Blog</em></h1>

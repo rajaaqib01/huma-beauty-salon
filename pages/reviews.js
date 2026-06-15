@@ -15,7 +15,7 @@ export default function ReviewsPage({ reviews = [], googleReviewsUrl = '' }) {
       />
       <Navbar />
       <main className="page-main">
-        <section className="services-page-hero">
+        <section className="services-page-hero page-hero-theme">
           <div className="services-page-hero-inner">
             <div className="section-label">✦ Testimonials</div>
             <h1 className="services-page-hero-title">Client <em>Reviews</em></h1>

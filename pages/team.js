@@ -10,7 +10,7 @@ export default function TeamPage({ staff = [] }) {
       <SEO title="Our Team — Huma Beauty Saloon" description="Meet our stylists and beauty experts at Huma Beauty Saloon, Jhelum." canonical="https://humabeautysaloon.site/team" />
       <Navbar />
       <main className="page-main">
-        <section className="services-page-hero">
+        <section className="services-page-hero page-hero-theme">
           <div className="services-page-hero-inner">
             <div className="section-label">✦ Our Experts</div>
             <h1 className="services-page-hero-title">Meet Our <em>Team</em></h1>
@@ -19,7 +19,7 @@ export default function TeamPage({ staff = [] }) {
         </section>
         <section className="offers-section">
           <div className="offers-container">
-            <div className="services-grid">
+            <div className="services-grid team-page-grid">
               {staff.map(member => (
                 <article key={member.id} className="service-card">
                   <div className="service-card-img-wrap">

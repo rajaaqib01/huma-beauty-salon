@@ -716,6 +716,21 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
 }
+
+/* Theme hero (Team, Reviews, Blog — no image slider) */
+.services-page-hero.page-hero-theme {
+  --hero-min-h: auto;
+  min-height: unset;
+  padding: 100px 5% 48px;
+  background: linear-gradient(135deg, var(--rose-gold-dark) 0%, var(--rose-gold-light) 100%);
+}
+.services-page-hero.page-hero-theme .section-label {
+  color: var(--champagne-light);
+}
+.services-page-hero.page-hero-theme .services-page-hero-title em {
+  color: var(--blush-deep);
+}
+
 .services-page-hero-btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -932,6 +947,14 @@ img { max-width: 100%; display: block; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 28px;
+}
+.offers-section .offers-grid .service-card-desc {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+.team-page-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
 }
 .offer-card {
   background: var(--white);
@@ -3400,6 +3423,16 @@ img { max-width: 100%; display: block; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
+  .team-page-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .team-page-grid .service-card-img-wrap {
+    height: 260px;
+  }
+  .services-page-hero.page-hero-theme {
+    padding: 100px 5% 56px;
+  }
   .services-filter-bar {
     top: 72px;
   }
@@ -3453,6 +3486,11 @@ img { max-width: 100%; display: block; }
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  .offers-section .offers-grid .service-card-desc {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
   }
   .service-card-price {
     font-size: 0.88rem;
@@ -3615,6 +3653,11 @@ img { max-width: 100%; display: block; }
     margin-bottom: 8px;
     -webkit-line-clamp: 2;
   }
+  .offers-section .offers-grid .service-card-desc {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
   .service-card-price {
     font-size: 0.82rem;
     margin-bottom: 8px;
@@ -3631,6 +3674,9 @@ img { max-width: 100%; display: block; }
     width: 100%;
   }
   .offers-hero {
+    padding: 88px 5% 40px;
+  }
+  .services-page-hero.page-hero-theme {
     padding: 88px 5% 40px;
   }
   .book-step-circle {
