@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "mqfktg58-ulyimnz",
+    "name": "Aqi",
+    "email": "aqiraja78@gmail.com",
+    "password": "humaaqib@@8217@@",
+    "role": "reception",
+    "active": true,
+    "created_at": "2026-06-15T18:58:29.756Z"
+  }
+]
