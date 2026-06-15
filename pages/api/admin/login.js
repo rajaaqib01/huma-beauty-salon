@@ -22,7 +22,12 @@ async function loginHandler(req, res) {
   }
 
   if (!user) {
-    return res.status(401).json({ error: 'Invalid admin credentials' })
+    return res.status(401).json({
+      error: 'Invalid admin credentials',
+      hint: process.env.NODE_ENV === 'production'
+        ? 'Check ADMIN_EMAIL and ADMIN_PASSWORD in Netlify env vars, then redeploy.'
+        : 'Set ADMIN_EMAIL and ADMIN_PASSWORD in .env.local, or use a user from data/admin_users.json.',
+    })
   }
 
   const token = signAdminSession({
