@@ -16,10 +16,12 @@
     "date": "2026-06-17",
     "time": "10:30",
     "notes": "Offer: Hydra Facial Special (15% off) | Service: Hydra Facial",
-    "status": "pending",
+    "status": "confirmed",
     "source": "online",
-    "read": false,
-    "created_at": "2026-06-15T19:45:56.550Z"
+    "read": true,
+    "created_at": "2026-06-15T19:45:56.550Z",
+    "confirmed_at": "2026-06-15T19:46:26.183Z",
+    "sale_amount": 6800
   },
   {
     "id": "mqcjs2xd-enhzqv3",
