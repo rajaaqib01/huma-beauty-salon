@@ -28,7 +28,7 @@ async function loginHandler(req, res) {
       error: 'Invalid admin credentials',
       hint: envMissing
         ? 'Server par ADMIN_EMAIL / ADMIN_PASSWORD set nahi. Netlify → Environment variables add karo, phir Redeploy.'
-        : 'Email ya password galat hai. Netlify par password mein extra quotes mat lagao — sirf humaaqib@@8217@@ likho.',
+        : 'Email ya password galat hai. Netlify par password bina extra quotes ke likho, phir Redeploy karein.',
       status: process.env.NODE_ENV === 'production' ? status : undefined,
     })
   }
