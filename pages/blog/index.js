@@ -7,7 +7,13 @@ import Link from 'next/link';
 export default function BlogIndex({ posts = [] }) {
   return (
     <>
-      <SEO title="Beauty Tips & Blog — Huma Beauty Saloon" description="Beauty tips, bridal advice and skincare guides from Huma Beauty Saloon." canonical="https://humabeautysaloon.site/blog" />
+      <SEO
+        title="Beauty Tips & Blog — Bridal Makeup Jhelum | Huma Beauty Saloon"
+        description="Expert beauty tips, bridal makeup advice and skincare guides from Huma Beauty Saloon in Jhelum. Read salon blogs for weddings and self-care."
+        keywords="beauty tips Jhelum, bridal makeup advice, skincare tips salon, wedding beauty blog Pakistan"
+        canonical="https://humabeautysaloon.site/blog"
+        ogImage="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1200&q=80"
+      />
       <Navbar />
       <main className="page-main">
         <section className="services-page-hero page-hero-theme">

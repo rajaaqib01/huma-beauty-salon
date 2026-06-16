@@ -1,0 +1,9 @@
+[
+  { "id": "wc-fullbody", "name": "Full Body Waxing", "sort_order": 1 },
+  { "id": "wc-face", "name": "Face Waxing", "sort_order": 2 },
+  { "id": "wc-bodypart", "name": "Body Part Waxing", "sort_order": 3 },
+  { "id": "wc-premium", "name": "Premium Waxing Services", "sort_order": 4 },
+  { "id": "wc-sensitive", "name": "Sensitive Skin Waxing", "sort_order": 5 },
+  { "id": "wc-bridal", "name": "Bridal Waxing Services", "sort_order": 6 },
+  { "id": "wc-aftercare", "name": "After-Wax Care", "sort_order": 7 }
+]

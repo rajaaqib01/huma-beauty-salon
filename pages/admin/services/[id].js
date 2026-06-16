@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import AdminShell from '../../../components/AdminShell'
+import { GROUPED_CATEGORIES, getCategoryApiUrl, getPresetsForGroup } from '../../../lib/groupedCategoryConfig'
 
 const CATEGORIES = ['Makeup', 'Hair', 'Facial', 'Nails', 'Mehndi', 'Waxing']
 const FALLBACK_IMG = 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80'
@@ -9,6 +10,7 @@ export default function EditService() {
   const router = useRouter()
   const { id } = router.query
   const [service, setService] = useState(null)
+  const [subcategoryGroups, setSubcategoryGroups] = useState([])
   const [preview, setPreview] = useState('')
   const [pendingFile, setPendingFile] = useState(null)
   const [error, setError] = useState('')
@@ -21,6 +23,23 @@ export default function EditService() {
       .then(setService)
       .catch(() => setError('Failed to load service'))
   }, [id])
+
+  useEffect(() => {
+    const cat = service?.category
+    if (!cat || !GROUPED_CATEGORIES.includes(cat)) {
+      setSubcategoryGroups([])
+      return
+    }
+    const api = getCategoryApiUrl(cat)
+    if (!api) {
+      setSubcategoryGroups([])
+      return
+    }
+    fetch(api)
+      .then((r) => r.json())
+      .then((data) => setSubcategoryGroups(Array.isArray(data) ? data : []))
+      .catch(() => setSubcategoryGroups([]))
+  }, [service?.category])
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0]
@@ -62,10 +81,32 @@ export default function EditService() {
   const handleSave = async (e) => {
     e.preventDefault()
     setError('')
+
+    if (!service.title?.trim()) {
+      setError('Please enter a service title.')
+      return
+    }
+    if (!service.category) {
+      setError('Please select a category.')
+      return
+    }
+    if (GROUPED_CATEGORIES.includes(service.category) && !service.subcategory) {
+      setError(`Please select a ${service.category.toLowerCase()} category group.`)
+      return
+    }
+    if (!String(service.price || '').trim()) {
+      setError('Please enter a price.')
+      return
+    }
+
     setLoading(true)
     try {
       const finalImageUrl = await uploadFileIfNeeded()
-      const payload = { ...service, image_url: finalImageUrl }
+      const payload = {
+        ...service,
+        image_url: finalImageUrl,
+        subcategory: GROUPED_CATEGORIES.includes(service.category) ? (service.subcategory || '') : '',
+      }
       const res = await fetch(`/api/admin/services?id=${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -84,6 +125,11 @@ export default function EditService() {
     }
   }
 
+  const titlePresets = useMemo(
+    () => getPresetsForGroup(service?.category, service?.subcategory),
+    [service?.category, service?.subcategory]
+  )
+
   if (!service) {
     return (
       <AdminShell title="Edit Service">
@@ -98,14 +144,22 @@ export default function EditService() {
     <AdminShell title="Edit Service">
       <form onSubmit={handleSave} className="admin-form admin-card" style={{ maxWidth: '720px' }}>
         <div className="admin-form-row">
-          <label className="admin-field-label" htmlFor="edit-title">Title *</label>
+          <label className="admin-field-label" htmlFor="edit-title">Service Name *</label>
           <input
             id="edit-title"
             className="admin-input"
+            list={titlePresets.length ? 'edit-makeup-title-presets' : undefined}
             value={service.title || ''}
             onChange={(e) => setService({ ...service, title: e.target.value })}
             required
           />
+          {titlePresets.length > 0 ? (
+            <datalist id="edit-makeup-title-presets">
+              {titlePresets.map((name) => (
+                <option key={name} value={name} />
+              ))}
+            </datalist>
+          ) : null}
         </div>
 
         <div className="admin-form-row">
@@ -114,7 +168,14 @@ export default function EditService() {
             id="edit-category"
             className="admin-input"
             value={service.category || ''}
-            onChange={(e) => setService({ ...service, category: e.target.value })}
+            onChange={(e) => {
+              const nextCategory = e.target.value
+              setService({
+                ...service,
+                category: nextCategory,
+                subcategory: GROUPED_CATEGORIES.includes(nextCategory) ? (service.subcategory || '') : '',
+              })
+            }}
             required
           >
             <option value="">Select Category</option>
@@ -123,6 +184,27 @@ export default function EditService() {
             ))}
           </select>
         </div>
+
+        {GROUPED_CATEGORIES.includes(service.category) ? (
+          <div className="admin-form-row">
+            <label className="admin-field-label" htmlFor="edit-subcategory">{service.category} Category Group *</label>
+            <select
+              id="edit-subcategory"
+              className="admin-input"
+              value={service.subcategory || ''}
+              onChange={(e) => setService({ ...service, subcategory: e.target.value })}
+              required
+            >
+              <option value="">Select {service.category} Group</option>
+              {subcategoryGroups.map((c) => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', margin: 0 }}>
+              <a href={`/admin/services/categories?type=${String(service.category).toLowerCase()}`} style={{ color: 'inherit' }}>Manage {String(service.category).toLowerCase()} categories →</a>
+            </p>
+          </div>
+        ) : null}
 
         <div className="admin-form-row">
           <label className="admin-field-label" htmlFor="edit-price">Price (Rs.) *</label>

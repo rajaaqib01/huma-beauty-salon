@@ -1,5 +1,9 @@
 import Head from 'next/head';
 
+const SITE_NAME = 'Huma Beauty Saloon';
+const DEFAULT_OG_IMAGE = 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80';
+const GEO_COORDS = { lat: 32.934, lng: 73.727 };
+
 export default function SEO({
   title,
   description,
@@ -11,23 +15,31 @@ export default function SEO({
   twitterCard = 'summary_large_image',
   children,
 }) {
-  const siteName = 'Huma Beauty Saloon';
   const url = ogUrl || canonical;
-  const image = ogImage || 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80';
+  const image = ogImage || DEFAULT_OG_IMAGE;
+  const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BeautySalon',
-    name: siteName,
+    name: SITE_NAME,
     description,
-    url,
+    url: url || 'https://humabeautysaloon.site/',
     telephone: '+92 335 5462214',
+    email: 'humaaqi96@gmail.com',
+    priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Main Market',
       addressLocality: 'Jhelum',
       addressRegion: 'Punjab',
+      postalCode: '49600',
       addressCountry: 'PK',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: GEO_COORDS.lat,
+      longitude: GEO_COORDS.lng,
     },
     openingHoursSpecification: [
       {
@@ -48,8 +60,13 @@ export default function SEO({
     sameAs: [
       'https://www.instagram.com/huma_beauty.saloon/',
       'https://www.tiktok.com/@humabeautysaloonjhe',
+      'https://humabeautysaloon.site/',
     ],
     image,
+    areaServed: {
+      '@type': 'City',
+      name: 'Jhelum',
+    },
   };
 
   return (
@@ -57,15 +74,27 @@ export default function SEO({
       <title>{title}</title>
       <meta name="description" content={description} />
       {keywords ? <meta name="keywords" content={keywords} /> : null}
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta name="author" content={SITE_NAME} />
+      <meta name="geo.region" content="PK-PB" />
+      <meta name="geo.placename" content="Jhelum, Pakistan" />
+      <meta name="geo.position" content={`${GEO_COORDS.lat};${GEO_COORDS.lng}`} />
+      <meta name="ICBM" content={`${GEO_COORDS.lat}, ${GEO_COORDS.lng}`} />
       {canonical && <link rel="canonical" href={canonical} />}
+      {canonical && <link rel="alternate" hrefLang="en-PK" href={canonical} />}
+
+      {googleVerification ? (
+        <meta name="google-site-verification" content={googleVerification} />
+      ) : null}
 
       <meta property="og:type" content={ogType} />
+      <meta property="og:locale" content="en_PK" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       {url && <meta property="og:url" content={url} />}
       <meta property="og:image" content={image} />
-      <meta property="og:site_name" content={siteName} />
+      <meta property="og:image:alt" content={`${SITE_NAME} — ${title}`} />
+      <meta property="og:site_name" content={SITE_NAME} />
 
       <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:title" content={title} />

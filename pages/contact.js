@@ -81,8 +81,9 @@ export default function Contact() {
   return (
     <>
       <SEO
-        title="Contact Us — Huma Beauty Saloon"
-        description="Get in touch with Huma Beauty Saloon in Jhelum. Call, WhatsApp or visit us."
+        title="Contact Huma Beauty Saloon — Main Market Jhelum"
+        description="Contact Huma Beauty Saloon in Main Market Jhelum. Call +92 335 5462214, WhatsApp us or visit for bridal makeup, facials and hair services."
+        keywords="Huma Beauty Saloon contact, beauty salon Jhelum address, salon phone Jhelum, WhatsApp salon Jhelum"
         canonical="https://humabeautysaloon.site/contact"
         ogImage="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1200&q=80"
       />

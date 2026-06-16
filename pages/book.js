@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
+import { isValidPhone } from '../lib/apiUtils/validation';
 
 const timeSlots = [
   '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -103,6 +104,7 @@ export default function Book({ bookingServices = [] }) {
     if (allSteps || step === 0) {
       if (!form.name.trim()) e.name = 'Name is required';
       if (!form.phone.trim()) e.phone = 'Phone number is required';
+      else if (!isValidPhone(form.phone.trim())) e.phone = 'Enter a valid phone number (10-15 digits)';
       if (!form.email.trim()) e.email = 'Email is required';
       if (form.email && !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Invalid email';
       if (!form.service) e.service = 'Please select a service';
@@ -370,7 +372,7 @@ export default function Book({ bookingServices = [] }) {
                                 }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
                                     <span>{name}</span>
-                                    <span style={{ fontSize: '0.8rem', color: form.service === name ? 'rgba(255,255,255,0.85)' : 'var(--text-light)', fontWeight: 500 }}>{servicePriceMap[name]}</span>
+                                    <span style={{ fontSize: '0.8rem', color: form.service === name ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.78)', fontWeight: 500 }}>{servicePriceMap[name]}</span>
                                   </div>
                                 </button>
                               ))}
@@ -396,7 +398,7 @@ export default function Book({ bookingServices = [] }) {
                           {errors.date && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.date}</p>}
                         </div>
                         <div>
-                          <label style={labelStyle}>Available Time Slots *</label>
+                          <label htmlFor="booking-time" style={labelStyle}>Available Time Slots *</label>
                           {!form.date ? (
                             <p style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>Please select a date first.</p>
                           ) : slotsLoading ? (
@@ -404,18 +406,19 @@ export default function Book({ bookingServices = [] }) {
                           ) : availableSlots.length === 0 ? (
                             <p style={{ fontSize: '0.85rem', color: '#c0392b' }}>No slots available for this date. Please choose another date.</p>
                           ) : (
-                            <div className="book-slot-grid">
-                              {availableSlots.map(slot => (
-                                <button
-                                  key={slot}
-                                  type="button"
-                                  className={`book-slot-btn${form.time === slot ? ' book-slot-btn--active' : ''}`}
-                                  onClick={() => update('time', slot)}
-                                >
-                                  {slot}
-                                </button>
+                            <select
+                              id="booking-time"
+                              style={inputStyle('time')}
+                              value={form.time}
+                              onChange={(e) => update('time', e.target.value)}
+                              onFocus={(e) => { e.target.style.borderColor = 'var(--rose-gold)'; }}
+                              onBlur={(e) => { e.target.style.borderColor = errors.time ? '#e57373' : 'var(--blush-mid)'; }}
+                            >
+                              <option value="">Select a time</option>
+                              {availableSlots.map((slot) => (
+                                <option key={slot} value={slot}>{slot}</option>
                               ))}
-                            </div>
+                            </select>
                           )}
                           {errors.time && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.time}</p>}
                         </div>
@@ -452,7 +455,7 @@ export default function Book({ bookingServices = [] }) {
                           </div>
                         ))}
                       </div>
-                      <div style={{ background: 'var(--blush)', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: 16 }}>
+                      <div style={{ background: 'var(--champagne-pale)', border: '1px solid rgba(15,76,69,0.14)', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-dark)', lineHeight: 1.6, marginBottom: 16 }}>
                         ℹ️ Our team will confirm your booking via WhatsApp within 2 hours. You will also receive a confirmation email if provided.
                       </div>
                     </div>

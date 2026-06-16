@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import AdminShell from '../../../components/AdminShell'
+import { GROUPED_CATEGORIES, getCategoryApiUrl, getPresetsForGroup } from '../../../lib/groupedCategoryConfig'
 
 const CATEGORIES = ['Makeup', 'Hair', 'Facial', 'Nails', 'Mehndi', 'Waxing']
 const FALLBACK_IMG = 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80'
@@ -10,12 +11,30 @@ export default function NewService() {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
   const [category, setCategory] = useState('')
+  const [subcategory, setSubcategory] = useState('')
+  const [subcategoryGroups, setSubcategoryGroups] = useState([])
   const [imageUrl, setImageUrl] = useState('')
   const [preview, setPreview] = useState('')
   const [pendingFile, setPendingFile] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    if (!GROUPED_CATEGORIES.includes(category)) {
+      setSubcategoryGroups([])
+      return
+    }
+    const api = getCategoryApiUrl(category)
+    if (!api) {
+      setSubcategoryGroups([])
+      return
+    }
+    fetch(api)
+      .then((r) => r.json())
+      .then((data) => setSubcategoryGroups(Array.isArray(data) ? data : []))
+      .catch(() => setSubcategoryGroups([]))
+  }, [category])
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0]
@@ -55,6 +74,11 @@ export default function NewService() {
     return json.url
   }
 
+  const titlePresets = useMemo(
+    () => getPresetsForGroup(category, subcategory),
+    [category, subcategory]
+  )
+
   const handleCreate = async (e) => {
     e.preventDefault()
     setError('')
@@ -65,6 +89,10 @@ export default function NewService() {
     }
     if (!category) {
       setError('Please select a category.')
+      return
+    }
+    if (GROUPED_CATEGORIES.includes(category) && !subcategory) {
+      setError(`Please select a ${category.toLowerCase()} category group.`)
       return
     }
     if (!price.trim()) {
@@ -80,6 +108,7 @@ export default function NewService() {
         description: description.trim(),
         price: price.trim(),
         category,
+        subcategory: GROUPED_CATEGORIES.includes(category) ? subcategory : '',
         image_url: finalImageUrl,
       }
       const res = await fetch('/api/admin/services', {
@@ -110,15 +139,23 @@ export default function NewService() {
         </p>
 
         <div className="admin-form-row">
-          <label className="admin-field-label" htmlFor="service-title">Title *</label>
+          <label className="admin-field-label" htmlFor="service-title">Service Name *</label>
           <input
             id="service-title"
             className="admin-input"
-            placeholder="e.g. Bridal Makeup"
+            list={titlePresets.length ? 'makeup-title-presets' : undefined}
+            placeholder="e.g. Bridal Makeup Barat"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
           />
+          {titlePresets.length > 0 ? (
+            <datalist id="makeup-title-presets">
+              {titlePresets.map((name) => (
+                <option key={name} value={name} />
+              ))}
+            </datalist>
+          ) : null}
         </div>
 
         <div className="admin-form-row">
@@ -127,7 +164,10 @@ export default function NewService() {
             id="service-category"
             className="admin-input"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value)
+              if (!GROUPED_CATEGORIES.includes(e.target.value)) setSubcategory('')
+            }}
             required
           >
             <option value="">Select Category</option>
@@ -136,6 +176,27 @@ export default function NewService() {
             ))}
           </select>
         </div>
+
+        {GROUPED_CATEGORIES.includes(category) ? (
+          <div className="admin-form-row">
+            <label className="admin-field-label" htmlFor="service-subcategory">{category} Category Group *</label>
+            <select
+              id="service-subcategory"
+              className="admin-input"
+              value={subcategory}
+              onChange={(e) => setSubcategory(e.target.value)}
+              required
+            >
+              <option value="">Select {category} Group</option>
+              {subcategoryGroups.map((c) => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', margin: 0 }}>
+              <a href={`/admin/services/categories?type=${category.toLowerCase()}`} style={{ color: 'inherit' }}>Manage {category.toLowerCase()} categories →</a>
+            </p>
+          </div>
+        ) : null}
 
         <div className="admin-form-row">
           <label className="admin-field-label" htmlFor="service-price">Price (Rs.) *</label>

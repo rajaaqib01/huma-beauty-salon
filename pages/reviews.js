@@ -12,6 +12,7 @@ export default function ReviewsPage({ reviews = [], googleReviewsUrl = '' }) {
         description="Read real client reviews for Huma Beauty Saloon in Jhelum. Bridal makeup, facials, hair styling & beauty services trusted by local clients."
         keywords="Huma Beauty Saloon reviews, bridal makeup Jhelum reviews, beauty salon Jhelum, salon reviews Jhelum"
         canonical="https://humabeautysaloon.site/reviews"
+        ogImage="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80"
       />
       <Navbar />
       <main className="page-main">

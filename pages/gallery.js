@@ -33,8 +33,9 @@ export default function GalleryPage({ gallery = [] }) {
   return (
     <>
       <SEO
-        title="Gallery — Huma Beauty Saloon"
-        description="Browse our bridal makeup, hair styling, facials and salon transformations at Huma Beauty Saloon, Jhelum."
+        title="Salon Gallery — Bridal Makeup & Hair Jhelum | Huma Beauty Saloon"
+        description="View bridal makeup, party looks, hair styling and facial results at Huma Beauty Saloon, Main Market Jhelum. Real salon transformations."
+        keywords="bridal makeup gallery Jhelum, salon work photos, beauty salon Jhelum, hair styling gallery Pakistan"
         canonical="https://humabeautysaloon.site/gallery"
         ogImage="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=1200&q=80"
       />

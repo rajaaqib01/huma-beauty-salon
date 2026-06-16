@@ -37,6 +37,16 @@ function bookingsThisWeek(bookings) {
   return bookings.filter(b => b.created_at && b.created_at >= since).length
 }
 
+function admissionStats(admissions) {
+  const list = Array.isArray(admissions) ? admissions : []
+  return {
+    admissions_total: list.length,
+    admissions_pending: list.filter((a) => String(a.status).toLowerCase() === 'pending').length,
+    admissions_approved: list.filter((a) => String(a.status).toLowerCase() === 'approved').length,
+    admissions_rejected: list.filter((a) => String(a.status).toLowerCase() === 'rejected').length,
+  }
+}
+
 async function handler(req, res) {
   const showOwnerSales = isOwnerRole(req.admin?.role)
 
@@ -47,6 +57,14 @@ async function handler(req, res) {
   })
 
   try {
+    let admissions = []
+    try {
+      admissions = await localDb.list('admissions')
+    } catch {
+      admissions = []
+    }
+    const admissionCounts = admissionStats(admissions)
+
     if (supabaseServer) {
       const [{ count: total_bookings }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true })
       const [{ count: pending }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'pending')
@@ -66,6 +84,7 @@ async function handler(req, res) {
         bookings_this_week: bookingsThisWeek(allBookings || []),
         popular_service: popularService(allBookings || []),
         today_bookings: await getTodayBookings(),
+        ...admissionCounts,
       }
       if (showOwnerSales) payload.current_month_sales = currentMonthSales(allBookings || [])
       return res.json(payload)
@@ -87,6 +106,7 @@ async function handler(req, res) {
       bookings_this_week: bookingsThisWeek(bookings),
       popular_service: popularService(bookings),
       today_bookings: await getTodayBookings(),
+      ...admissionCounts,
     }
     if (showOwnerSales) payload.current_month_sales = currentMonthSales(bookings)
     return res.json(payload)

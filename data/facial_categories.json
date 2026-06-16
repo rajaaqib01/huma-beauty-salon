@@ -1,0 +1,9 @@
+[
+  { "id": "fc-basic", "name": "Basic Facial Services", "sort_order": 1 },
+  { "id": "fc-whitening", "name": "Whitening / Brightening Facials", "sort_order": 2 },
+  { "id": "fc-advanced", "name": "Advanced Facials", "sort_order": 3 },
+  { "id": "fc-skin", "name": "Skin Problem Facials", "sort_order": 4 },
+  { "id": "fc-herbal", "name": "Herbal / Organic Facials", "sort_order": 5 },
+  { "id": "fc-bridal", "name": "Bridal Facials", "sort_order": 6 },
+  { "id": "fc-premium", "name": "Premium / Salon Special Facials", "sort_order": 7 }
+]

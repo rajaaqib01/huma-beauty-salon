@@ -6,16 +6,42 @@ import Footer from '../components/Footer';
 import WhatsAppFloat from '../components/WhatsAppFloat';
 import SEO from '../components/SEO';
 import ServiceSection from '../components/ServiceSection';
+import MakeupServiceSection from '../components/MakeupServiceSection';
 import ServicesPageHero from '../components/ServicesPageHero';
 import { SERVICE_SECTIONS } from '../lib/serviceConfig';
 
-export default function ServicesPage({ groupedServices = {}, heroImages = [] }) {
+const GROUPED_SECTION_IDS = ['makeup', 'hair', 'facials', 'nails', 'mehndi', 'waxing'];
+
+export default function ServicesPage({
+  groupedServices = {},
+  makeupGroups = [],
+  hairGroups = [],
+  facialGroups = [],
+  nailsGroups = [],
+  mehndiGroups = [],
+  waxingGroups = [],
+  heroImages = [],
+}) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('all');
 
+  const groupedBySectionId = useMemo(() => ({
+    makeup: makeupGroups,
+    hair: hairGroups,
+    facials: facialGroups,
+    nails: nailsGroups,
+    mehndi: mehndiGroups,
+    waxing: waxingGroups,
+  }), [makeupGroups, hairGroups, facialGroups, nailsGroups, mehndiGroups, waxingGroups]);
+
   const sectionsWithServices = useMemo(
-    () => SERVICE_SECTIONS.filter((section) => groupedServices[section.id]?.length > 0),
-    [groupedServices]
+    () => SERVICE_SECTIONS.filter((section) => {
+      if (GROUPED_SECTION_IDS.includes(section.id)) {
+        return groupedBySectionId[section.id]?.some((g) => g.services?.length > 0);
+      }
+      return groupedServices[section.id]?.length > 0;
+    }),
+    [groupedServices, groupedBySectionId]
   );
 
   const tabs = useMemo(
@@ -85,17 +111,32 @@ export default function ServicesPage({ groupedServices = {}, heroImages = [] }) 
             </nav>
 
             <div id="services">
-              {visibleSections.map((section) => (
-                <ServiceSection
-                  key={section.id}
-                  id={section.id}
-                  label={section.label}
-                  title={section.title}
-                  italic={section.italic}
-                  services={groupedServices[section.id] || []}
-                  bg={section.bg}
-                />
-              ))}
+              {visibleSections.map((section) => {
+                if (GROUPED_SECTION_IDS.includes(section.id)) {
+                  return (
+                    <MakeupServiceSection
+                      key={section.id}
+                      id={section.id}
+                      label={section.label}
+                      title={section.title}
+                      italic={section.italic}
+                      groupedServices={groupedBySectionId[section.id] || []}
+                      bg={section.bg}
+                    />
+                  );
+                }
+                return (
+                  <ServiceSection
+                    key={section.id}
+                    id={section.id}
+                    label={section.label}
+                    title={section.title}
+                    italic={section.italic}
+                    services={groupedServices[section.id] || []}
+                    bg={section.bg}
+                  />
+                );
+              })}
             </div>
           </>
         ) : (
@@ -121,19 +162,69 @@ export default function ServicesPage({ groupedServices = {}, heroImages = [] }) 
 
 export async function getServerSideProps() {
   try {
-    const { getGroupedServices } = await import('../lib/services');
-    const groupedServices = await getGroupedServices();
+    const {
+      getGroupedServices,
+      getMakeupGroupedBySubcategory,
+      getHairGroupedBySubcategory,
+      getFacialGroupedBySubcategory,
+      getNailsGroupedBySubcategory,
+      getMehndiGroupedBySubcategory,
+      getWaxingGroupedBySubcategory,
+    } = await import('../lib/services');
+    const [
+      groupedServices,
+      makeupGroups,
+      hairGroups,
+      facialGroups,
+      nailsGroups,
+      mehndiGroups,
+      waxingGroups,
+    ] = await Promise.all([
+      getGroupedServices(),
+      getMakeupGroupedBySubcategory(),
+      getHairGroupedBySubcategory(),
+      getFacialGroupedBySubcategory(),
+      getNailsGroupedBySubcategory(),
+      getMehndiGroupedBySubcategory(),
+      getWaxingGroupedBySubcategory(),
+    ]);
+    const allGroupedServices = [
+      makeupGroups, hairGroups, facialGroups, nailsGroups, mehndiGroups, waxingGroups,
+    ].flatMap((groups) => groups.flatMap((g) => g.services));
     const heroImages = [...new Set(
       Object.values(groupedServices)
         .flat()
+        .concat(allGroupedServices)
         .map((service) => service.img)
         .filter(Boolean)
     )].slice(0, 12);
-    return { props: { groupedServices, heroImages } };
+    return {
+      props: {
+        groupedServices,
+        makeupGroups,
+        hairGroups,
+        facialGroups,
+        nailsGroups,
+        mehndiGroups,
+        waxingGroups,
+        heroImages,
+      },
+    };
   } catch (e) {
     console.error('Services page load error:', e);
     const empty = {};
     for (const section of SERVICE_SECTIONS) empty[section.id] = [];
-    return { props: { groupedServices: empty, heroImages: [] } };
+    return {
+      props: {
+        groupedServices: empty,
+        makeupGroups: [],
+        hairGroups: [],
+        facialGroups: [],
+        nailsGroups: [],
+        mehndiGroups: [],
+        waxingGroups: [],
+        heroImages: [],
+      },
+    };
   }
 }

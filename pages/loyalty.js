@@ -23,7 +23,13 @@ export default function LoyaltyPage() {
 
   return (
     <>
-      <SEO title="Loyalty Points — Huma Beauty Saloon" description="Check your salon loyalty points." />
+      <SEO
+        title="Loyalty Points — Huma Beauty Saloon Jhelum"
+        description="Check your Huma Beauty Saloon loyalty points in Jhelum. Earn rewards on bridal makeup, facials and salon bookings."
+        keywords="salon loyalty points Jhelum, Huma Beauty Saloon rewards, beauty salon membership Jhelum"
+        canonical="https://humabeautysaloon.site/loyalty"
+        ogImage="https://images.unsplash.com/photo-1560066984-138daaa56d8c?w=1200&q=80"
+      />
       <Navbar />
       <main className="page-main" style={{ padding: '100px 5% 80px', maxWidth: 520, margin: '0 auto' }}>
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '2.2rem', marginBottom: 12 }}>Loyalty Points</h1>

@@ -99,7 +99,7 @@ export default function Footer() {
           <div className="site-footer-brand">
             <div className="site-footer-logo">Huma Beauty Saloon</div>
             <p className="site-footer-tagline">
-              Jhelum&apos;s premier beauty destination — where every woman deserves to feel extraordinary.
+              Experience professional beauty services in Jhelum at Huma Beauty Saloon. From bridal makeup and hair styling to facials, waxing, nails, mehndi, and spa treatments, we provide complete beauty solutions for every occasion.
             </p>
             <div className="site-footer-social">
               {[...socialLinks, ...actionLinks].map(({ name, url, brand, icon }) => (
@@ -153,7 +153,7 @@ export default function Footer() {
 
         <div className="site-footer-bottom">
           <p className="site-footer-copy">
-            © 2025 Huma Beauty Saloon. All rights reserved. Jhelum, Pakistan.
+            © 2026 Huma Beauty Saloon. All rights reserved. Jhelum, Pakistan.
           </p>
           <p className="site-footer-credit">Crafted with ♥ for beauty</p>
         </div>

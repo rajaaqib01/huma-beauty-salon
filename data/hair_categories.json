@@ -1,0 +1,9 @@
+[
+  { "id": "hc-cut", "name": "Hair Cut Services", "sort_order": 1 },
+  { "id": "hc-color", "name": "Hair Coloring Services", "sort_order": 2 },
+  { "id": "hc-treatment", "name": "Hair Treatment Services", "sort_order": 3 },
+  { "id": "hc-styling", "name": "Hair Styling Services", "sort_order": 4 },
+  { "id": "hc-bridal", "name": "Bridal Hair Services", "sort_order": 5 },
+  { "id": "hc-care", "name": "Hair Care Services", "sort_order": 6 },
+  { "id": "hc-premium", "name": "Advanced / Premium Services", "sort_order": 7 }
+]

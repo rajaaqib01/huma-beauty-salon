@@ -15,13 +15,15 @@ function monthLabel(ym) {
 const fetcher = (url) => fetch(url, { credentials: 'include' }).then((res) => res.json())
 
 const ALL_QUICK_LINKS = [
-  { label: 'View Bookings', href: '/admin/bookings', emoji: '📅', roles: ['owner', 'reception', 'staff'] },
-  { label: 'Booking Sales', href: '/admin/sales', emoji: '💰', roles: ['owner'] },
-  { label: 'Manage Services', href: '/admin/services', emoji: '💅', roles: ['owner', 'reception', 'staff'] },
-  { label: 'Read Messages', href: '/admin/messages', emoji: '✉️', roles: ['owner', 'reception', 'staff'] },
-  { label: 'Manage Staff', href: '/admin/staff', emoji: '👩‍🎨', roles: ['owner', 'staff'] },
-  { label: 'Blog Posts', href: '/admin/blog', emoji: '📝', roles: ['owner', 'staff'] },
-  { label: 'Manage Settings', href: '/admin/settings', emoji: '⚙️', roles: ['owner'] },
+  { label: 'View Bookings', href: '/admin/bookings', emoji: '📅', tone: 'bookings', roles: ['owner', 'reception', 'staff'] },
+  { label: 'Course Admissions', href: '/admin/admissions', emoji: '🎓', tone: 'admissions', roles: ['owner', 'reception'] },
+  { label: 'Academy Courses', href: '/admin/courses', emoji: '📚', tone: 'courses', roles: ['owner'] },
+  { label: 'Booking Sales', href: '/admin/sales', emoji: '💰', tone: 'sales', roles: ['owner'] },
+  { label: 'Manage Services', href: '/admin/services', emoji: '💅', tone: 'services', roles: ['owner', 'reception', 'staff'] },
+  { label: 'Read Messages', href: '/admin/messages', emoji: '✉️', tone: 'messages', roles: ['owner', 'reception', 'staff'] },
+  { label: 'Manage Staff', href: '/admin/staff', emoji: '👩‍🎨', tone: 'staff', roles: ['owner', 'staff'] },
+  { label: 'Blog Posts', href: '/admin/blog', emoji: '📝', tone: 'blog', roles: ['owner', 'staff'] },
+  { label: 'Manage Settings', href: '/admin/settings', emoji: '⚙️', tone: 'settings', roles: ['owner'] },
 ]
 
 export default function AdminDashboard() {
@@ -68,6 +70,18 @@ export default function AdminDashboard() {
           <p className="admin-stat-label">Messages</p>
           <p className="admin-stat-value">{stats?.total_messages ?? '—'}</p>
         </div>
+        {(role === 'owner' || role === 'reception') ? (
+          <>
+            <div className="admin-stat-card admin-stat-card--admissions-approved">
+              <p className="admin-stat-label">Admissions Approved</p>
+              <p className="admin-stat-value">{stats?.admissions_approved ?? '—'}</p>
+            </div>
+            <div className="admin-stat-card admin-stat-card--admissions-rejected">
+              <p className="admin-stat-label">Admissions Rejected</p>
+              <p className="admin-stat-value">{stats?.admissions_rejected ?? '—'}</p>
+            </div>
+          </>
+        ) : null}
       </div>
       {stats?.popular_service ? (
         <div className="admin-card" style={{ marginBottom: 20 }}>
@@ -104,7 +118,7 @@ export default function AdminDashboard() {
       </div>
       <div className="admin-grid-2">
         {quickLinks.map((card) => (
-          <Link key={card.href} href={card.href} className="admin-card admin-card-cta admin-button-secondary">
+          <Link key={card.href} href={card.href} className={`admin-card admin-card-cta admin-card-cta--${card.tone}`}>
             <div className="text-3xl">{card.emoji}</div>
             <p className="text-xl font-semibold">{card.label}</p>
           </Link>

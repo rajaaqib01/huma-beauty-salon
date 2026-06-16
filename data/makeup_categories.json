@@ -1,0 +1,27 @@
+[
+  {
+    "id": "mc-bridal",
+    "name": "Bridal Makeup",
+    "sort_order": 1
+  },
+  {
+    "id": "mc-event",
+    "name": "Event & Party Makeup",
+    "sort_order": 2
+  },
+  {
+    "id": "mc-everyday",
+    "name": "Everyday & Special Occasion Makeup",
+    "sort_order": 3
+  },
+  {
+    "id": "mc-correction",
+    "name": "Correction & Touch-Up Services",
+    "sort_order": 4
+  },
+  {
+    "id": "mc-specialized",
+    "name": "Specialized Makeup Services",
+    "sort_order": 5
+  }
+]

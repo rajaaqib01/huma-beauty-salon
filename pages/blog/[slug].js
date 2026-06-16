@@ -20,7 +20,38 @@ export default function BlogPost({ post }) {
 
   return (
     <>
-      <SEO title={`${post.title} — Huma Beauty Saloon`} description={post.excerpt} canonical={`https://humabeautysaloon.site/blog/${post.slug}`} ogImage={post.image} />
+      <SEO
+        title={`${post.title} — Huma Beauty Saloon Jhelum`}
+        description={post.excerpt || `Read ${post.title} — beauty tips from Huma Beauty Saloon, Jhelum.`}
+        keywords="beauty tips Jhelum, bridal makeup advice, Huma Beauty Saloon blog"
+        canonical={`https://humabeautysaloon.site/blog/${post.slug}`}
+        ogImage={post.image}
+        ogType="article"
+      >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BlogPosting',
+              headline: post.title,
+              description: post.excerpt || post.title,
+              image: post.image,
+              datePublished: post.created_at || undefined,
+              author: { '@type': 'Organization', name: 'Huma Beauty Saloon' },
+              publisher: {
+                '@type': 'Organization',
+                name: 'Huma Beauty Saloon',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=200&q=80',
+                },
+              },
+              mainEntityOfPage: `https://humabeautysaloon.site/blog/${post.slug}`,
+            }),
+          }}
+        />
+      </SEO>
       <Navbar />
       <main className="page-main">
         <article className="blog-post-wrap">
