@@ -35,8 +35,10 @@
     "description": "High-definition makeup designed for photos, videos, and close-ups.",
     "price": "10000",
     "category": "Makeup",
-    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "HD &amp; Airbrush",
+    "updated_at": "2026-06-16T22:40:57.687Z"
   },
   {
     "id": "svc-makeup-6",
