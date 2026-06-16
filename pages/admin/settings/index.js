@@ -50,8 +50,6 @@ export default function SettingsPage() {
           { key: 'slot_minutes', label: 'Slot Duration (minutes)' },
           { key: 'referral_code', label: 'Referral Code' },
           { key: 'referral_discount', label: 'Referral Discount %' },
-          { key: 'jazzcash_number', label: 'JazzCash Number' },
-          { key: 'easypaisa_number', label: 'EasyPaisa Number' },
           { key: 'loyalty_points_per_booking', label: 'Loyalty Points per Booking' },
         ].map((field) => (
           <div key={field.key} className="admin-form-row">

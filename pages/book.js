@@ -29,7 +29,7 @@ function formatDiscount(value) {
   return raw.includes('%') ? raw : `${raw}%`;
 }
 
-export default function Book({ bookingServices = [], paymentInfo = {} }) {
+export default function Book({ bookingServices = [] }) {
   const router = useRouter();
   const servicePriceMap = useMemo(
     () => Object.fromEntries(bookingServices.map(s => [s.name, s.price])),
@@ -455,13 +455,6 @@ export default function Book({ bookingServices = [], paymentInfo = {} }) {
                       <div style={{ background: 'var(--blush)', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-mid)', lineHeight: 1.6, marginBottom: 16 }}>
                         ℹ️ Our team will confirm your booking via WhatsApp within 2 hours. You will also receive a confirmation email if provided.
                       </div>
-                      {(paymentInfo.jazzcash || paymentInfo.easypaisa) ? (
-                        <div style={{ background: 'white', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-mid)', lineHeight: 1.6, border: '1px solid var(--blush-mid)' }}>
-                          <strong>Advance payment (optional):</strong>
-                          {paymentInfo.jazzcash ? <p>JazzCash: {paymentInfo.jazzcash}</p> : null}
-                          {paymentInfo.easypaisa ? <p>EasyPaisa: {paymentInfo.easypaisa}</p> : null}
-                        </div>
-                      ) : null}
                     </div>
                   )}
 
@@ -515,22 +508,10 @@ export default function Book({ bookingServices = [], paymentInfo = {} }) {
 export async function getServerSideProps() {
   try {
     const { getBookingServices } = await import('../lib/services');
-    const { getSettings } = await import('../lib/settings');
-    const [bookingServices, settings] = await Promise.all([
-      getBookingServices(),
-      getSettings(),
-    ]);
-    return {
-      props: {
-        bookingServices,
-        paymentInfo: {
-          jazzcash: settings.jazzcash_number || '',
-          easypaisa: settings.easypaisa_number || '',
-        },
-      },
-    };
+    const bookingServices = await getBookingServices();
+    return { props: { bookingServices } };
   } catch (e) {
     console.error('Book page services load error:', e);
-    return { props: { bookingServices: [], paymentInfo: {} } };
+    return { props: { bookingServices: [] } };
   }
 }
