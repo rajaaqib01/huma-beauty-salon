@@ -53,8 +53,10 @@
     "description": "Premium, high-end bridal makeup with premium products and services.",
     "price": "25000",
     "category": "Makeup",
-    "image_url": "https://i.pinimg.com/736x/c8/2a/24/c82a24c245509066b76b3dc347924b15.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/c8/2a/24/c82a24c245509066b76b3dc347924b15.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Bridal Makeup",
+    "updated_at": "2026-06-16T22:40:27.897Z"
   },
   {
     "id": "svc-hair-1",
