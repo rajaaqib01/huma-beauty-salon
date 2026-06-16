@@ -1,7 +1,11 @@
 [build]
   command = "npm run build"
-  # Skip rebuild when a push only updates data/*.json on main (runtime storage).
-  ignore = "bash scripts/netlify-skip-data-only.sh"
+  # Skip rebuild when only data/*.json changed on main (legacy GitHub commits).
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)data/'"
+
+[context.branch-deploy]
+  # Never build branch deploys for live-data / other branches.
+  ignore = "exit 0"
 
 # Netlify secrets scanner: public salon contact info is not a credential.
 # Set real secrets only in Netlify UI → Site settings → Environment variables.

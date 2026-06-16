@@ -9,6 +9,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@netlify/blobs": "^10.7.9",
     "@supabase/supabase-js": "^2.106.2",
     "jsonwebtoken": "^9.0.3",
     "next": "16.2.6",
