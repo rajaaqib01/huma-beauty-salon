@@ -1,0 +1,32 @@
+[
+  {
+    "id": "mqh7o6vo-6raf6xv",
+    "name": "biral",
+    "sort_order": 6
+  },
+  {
+    "id": "makeup-bridal-makeup",
+    "name": "Bridal Makeup",
+    "sort_order": 1
+  },
+  {
+    "id": "makeup-party-makeup",
+    "name": "Party Makeup",
+    "sort_order": 2
+  },
+  {
+    "id": "makeup-fashion-model-makeup",
+    "name": "Fashion / Model Makeup",
+    "sort_order": 3
+  },
+  {
+    "id": "makeup-hd-airbrush",
+    "name": "HD & Airbrush",
+    "sort_order": 4
+  },
+  {
+    "id": "makeup-casual-makeup",
+    "name": "Casual Makeup",
+    "sort_order": 5
+  }
+]
