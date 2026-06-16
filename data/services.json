@@ -14,9 +14,10 @@
     "description": "Elegant and subtle makeup for evening parties and casual gatherings.",
     "price": "6500",
     "category": "Makeup",
-    "image_url": "https://i.pinimg.com/736x/e6/af/b9/e6afb9c6a80772b09996759f53c95442.jpg?w=600&amp;q=80",
+    "image_url": "https://i.pinimg.com/736x/e6/af/b9/e6afb9c6a80772b09996759f53c95442.jpg?w=600&amp;amp;q=80",
     "created_at": "2026-05-31T00:00:00.000Z",
-    "updated_at": "2026-06-05T08:22:57.003Z"
+    "updated_at": "2026-06-16T22:41:15.948Z",
+    "subcategory": "Party Makeup"
   },
   {
     "id": "svc-makeup-4",
