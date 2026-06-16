@@ -1,9 +1,17 @@
 [
-  { "id": "mdc-bridal", "name": "Bridal Mehndi", "sort_order": 1 },
-  { "id": "mdc-engagement", "name": "Engagement & Nikkah Mehndi", "sort_order": 2 },
-  { "id": "mdc-arabic", "name": "Arabic Mehndi Designs", "sort_order": 3 },
-  { "id": "mdc-party", "name": "Party & Event Mehndi", "sort_order": 4 },
-  { "id": "mdc-traditional", "name": "Traditional Mehndi Designs", "sort_order": 5 },
-  { "id": "mdc-kids", "name": "Kids & Simple Mehndi", "sort_order": 6 },
-  { "id": "mdc-premium", "name": "Premium Mehndi Services", "sort_order": 7 }
+  {
+    "id": "mehndi-bridal-mehndi",
+    "name": "Bridal Mehndi",
+    "sort_order": 1
+  },
+  {
+    "id": "mehndi-casual-mehndi",
+    "name": "Casual Mehndi",
+    "sort_order": 2
+  },
+  {
+    "id": "mehndi-event-mehndi",
+    "name": "Event Mehndi",
+    "sort_order": 3
+  }
 ]

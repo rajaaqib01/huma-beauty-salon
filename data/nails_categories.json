@@ -1,9 +1,27 @@
 [
-  { "id": "nc-manicure", "name": "Manicure Services", "sort_order": 1 },
-  { "id": "nc-pedicure", "name": "Pedicure Services", "sort_order": 2 },
-  { "id": "nc-extensions", "name": "Nail Extensions", "sort_order": 3 },
-  { "id": "nc-art", "name": "Nail Art", "sort_order": 4 },
-  { "id": "nc-gel", "name": "Gel & Acrylic Nails", "sort_order": 5 },
-  { "id": "nc-bridal", "name": "Bridal Nail Packages", "sort_order": 6 },
-  { "id": "nc-care", "name": "Nail Care Treatments", "sort_order": 7 }
+  {
+    "id": "nails-manicure",
+    "name": "Manicure",
+    "sort_order": 1
+  },
+  {
+    "id": "nails-pedicure",
+    "name": "Pedicure",
+    "sort_order": 2
+  },
+  {
+    "id": "nails-nail-extensions",
+    "name": "Nail Extensions",
+    "sort_order": 3
+  },
+  {
+    "id": "nails-nail-art",
+    "name": "Nail Art",
+    "sort_order": 4
+  },
+  {
+    "id": "nails-nail-care",
+    "name": "Nail Care",
+    "sort_order": 5
+  }
 ]

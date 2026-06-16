@@ -1,27 +1,27 @@
 [
   {
-    "id": "mc-bridal",
+    "id": "makeup-bridal-makeup",
     "name": "Bridal Makeup",
     "sort_order": 1
   },
   {
-    "id": "mc-event",
-    "name": "Event & Party Makeup",
+    "id": "makeup-party-makeup",
+    "name": "Party Makeup",
     "sort_order": 2
   },
   {
-    "id": "mc-everyday",
-    "name": "Everyday & Special Occasion Makeup",
+    "id": "makeup-fashion-model-makeup",
+    "name": "Fashion / Model Makeup",
     "sort_order": 3
   },
   {
-    "id": "mc-correction",
-    "name": "Correction & Touch-Up Services",
+    "id": "makeup-hd-airbrush",
+    "name": "HD & Airbrush",
     "sort_order": 4
   },
   {
-    "id": "mc-specialized",
-    "name": "Specialized Makeup Services",
+    "id": "makeup-casual-makeup",
+    "name": "Casual Makeup",
     "sort_order": 5
   }
 ]
