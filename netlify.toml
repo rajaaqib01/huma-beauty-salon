@@ -1,5 +1,7 @@
 [build]
   command = "npm run build"
+  # Skip rebuild when a push only updates data/*.json on main (runtime storage).
+  ignore = "bash scripts/netlify-skip-data-only.sh"
 
 # Netlify secrets scanner: public salon contact info is not a credential.
 # Set real secrets only in Netlify UI → Site settings → Environment variables.
