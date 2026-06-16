@@ -1,15 +1,5 @@
 [
   {
-    "id": "svc-makeup-1",
-    "title": "Everyday Makeup",
-    "description": "Fresh, natural makeup perfect for daily wear and casual occasions.",
-    "price": "3500",
-    "category": "Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&amp;q=80",
-    "created_at": "2026-05-31T00:00:00.000Z",
-    "updated_at": "2026-06-05T08:13:58.246Z"
-  },
-  {
     "id": "svc-makeup-2",
     "title": "Simple Party Makeup",
     "description": "Elegant and subtle makeup for evening parties and casual gatherings.",
