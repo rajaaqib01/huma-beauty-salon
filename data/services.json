@@ -47,8 +47,10 @@
     "description": "Beautiful, coordinated makeup for mehndi ceremonies and celebrations.",
     "price": "10000",
     "category": "Makeup",
-    "image_url": "https://i.pinimg.com/736x/93/cc/ed/93ccedb118f1336dc9f09c0a56873e86.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/93/cc/ed/93ccedb118f1336dc9f09c0a56873e86.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Bridal Makeup",
+    "updated_at": "2026-06-16T22:41:53.289Z"
   },
   {
     "id": "svc-makeup-8",
