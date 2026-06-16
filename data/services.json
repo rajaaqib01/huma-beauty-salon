@@ -10,15 +10,6 @@
     "updated_at": "2026-06-05T08:22:57.003Z"
   },
   {
-    "id": "svc-makeup-3",
-    "title": "Glam Party Makeup",
-    "description": "Bold, glamorous looks for special celebrations and events.",
-    "price": "8000",
-    "category": "Makeup",
-    "image_url": "https://i.pinimg.com/736x/26/b4/3d/26b43dcf9d2c50d9ffdd4394608ca43a.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
-  },
-  {
     "id": "svc-makeup-4",
     "title": "Engagement Makeup",
     "description": "Radiant, camera-ready looks for your special engagement day.",
