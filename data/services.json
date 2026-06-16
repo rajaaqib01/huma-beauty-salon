@@ -46,15 +46,6 @@
     "created_at": "2026-05-31T00:00:00.000Z"
   },
   {
-    "id": "svc-makeup-7",
-    "title": "Bridal Makeup",
-    "description": "Flawless, long-lasting bridal looks tailored to your style and dress.",
-    "price": "18000",
-    "category": "Makeup",
-    "image_url": "https://i.pinimg.com/1200x/22/8a/fd/228afd7f46f794cf0e8c2f11f19863ea.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
-  },
-  {
     "id": "svc-makeup-8",
     "title": "Luxury Bridal",
     "description": "Premium, high-end bridal makeup with premium products and services.",
