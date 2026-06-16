@@ -4,6 +4,14 @@ const SITE_NAME = 'Huma Beauty Saloon';
 const DEFAULT_OG_IMAGE = 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80';
 const GEO_COORDS = { lat: 32.934, lng: 73.727 };
 
+function publicSalonEmail() {
+  const fromPublic = process.env.NEXT_PUBLIC_SALON_EMAIL?.trim();
+  if (fromPublic) return fromPublic;
+  const fromRecipient = process.env.EMAIL_RECIPIENT?.trim();
+  if (fromRecipient) return fromRecipient;
+  return '';
+}
+
 export default function SEO({
   title,
   description,
@@ -18,6 +26,7 @@ export default function SEO({
   const url = ogUrl || canonical;
   const image = ogImage || DEFAULT_OG_IMAGE;
   const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+  const salonEmail = publicSalonEmail();
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -26,7 +35,7 @@ export default function SEO({
     description,
     url: url || 'https://humabeautysaloon.site/',
     telephone: '+92 335 5462214',
-    email: 'humaaqi96@gmail.com',
+    ...(salonEmail ? { email: salonEmail } : {}),
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
