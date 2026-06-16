@@ -32,14 +32,14 @@
   },
   {
     "id": "svc-makeup-5",
-    "title": "HD Makeup",
+    "title": "HD Bridal Makeup",
     "description": "High-definition makeup designed for photos, videos, and close-ups.",
-    "price": "10000",
+    "price": "14000",
     "category": "Makeup",
-    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&amp;q=80",
+    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&amp;amp;q=80",
     "created_at": "2026-05-31T00:00:00.000Z",
-    "subcategory": "HD &amp; Airbrush",
-    "updated_at": "2026-06-16T22:40:57.687Z"
+    "subcategory": "Bridal Makeup",
+    "updated_at": "2026-06-16T22:43:20.519Z"
   },
   {
     "id": "svc-makeup-6",
