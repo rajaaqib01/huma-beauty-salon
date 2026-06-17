@@ -1,15 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-const TEAM_PATHS = ['/team', '/gallery', '/reviews', '/blog'];
+import { MAIN_NAV_LINKS, TEAM_SECTION_PATHS } from '../lib/siteNav';
+import BrandLogo from './BrandLogo';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [teamOpen, setTeamOpen] = useState(false);
-  const teamRef = useRef(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [isMobileNav, setIsMobileNav] = useState(false);
+  const dropdownRefs = useRef({});
   const router = useRouter();
+
+  useEffect(() => {
+    if (!open) setOpenDropdown(null);
+  }, [open]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -18,117 +23,138 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobileNav(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
     setOpen(false);
-    setTeamOpen(false);
-  }, [router.pathname]);
+    setOpenDropdown(null);
+  }, [router.pathname, router.asPath]);
 
   useEffect(() => {
     const onClickOutside = (e) => {
-      if (teamRef.current && !teamRef.current.contains(e.target)) {
-        setTeamOpen(false);
-      }
+      const insideDropdown = Object.values(dropdownRefs.current).some(
+        (ref) => ref?.contains(e.target)
+      );
+      if (!insideDropdown) setOpenDropdown(null);
     };
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
-  const links = [
-    { href: '/', label: 'Home' },
-    { href: '/services', label: 'Service Menu' },
-    { href: '/courses', label: 'Courses' },
-    { href: '/offers', label: 'Offers' },
-    {
-      href: '/team',
-      label: 'Team',
-      dropdown: [
-        { href: '/gallery', label: 'Gallery' },
-        { href: '/reviews', label: 'Reviews' },
-        { href: '/blog', label: 'Blog' },
-      ],
-    },
-    { href: '/contact', label: 'Contact' },
-  ];
-
   const solidNav = scrolled || router.pathname === '/services' || router.pathname.startsWith('/courses');
-  const isTeamActive = TEAM_PATHS.some((path) => router.pathname === path || router.pathname.startsWith(`${path}/`));
+  const isTeamSectionActive = TEAM_SECTION_PATHS.some(
+    (path) => router.pathname === path || router.pathname.startsWith(`${path}/`)
+  );
+  const activeServiceHash = String(router.asPath.split('#')[1] || 'all').trim() || 'all';
 
-  const linkColor = (href) => {
-    if (href === '/team' && isTeamActive) return 'var(--rose-gold)';
-    return router.pathname === href ? 'var(--rose-gold)' : '';
+  const closeMenus = () => {
+    setOpen(false);
+    setOpenDropdown(null);
   };
+
+  const isActiveHref = (href) => {
+    if (href === '/') return router.pathname === '/';
+    if (href === '/services') {
+      return router.pathname === '/services' && (activeServiceHash === 'all' || !router.asPath.includes('#'));
+    }
+    if (href.startsWith('/services#')) {
+      if (router.pathname !== '/services') return false;
+      return href.split('#')[1] === activeServiceHash;
+    }
+    if (href === '/courses') {
+      return router.pathname === '/courses' || router.pathname.startsWith('/courses/');
+    }
+    if (href === '/team') return router.pathname === '/team';
+    if (href === '/blog') {
+      return router.pathname === '/blog' || router.pathname.startsWith('/blog/');
+    }
+    return router.pathname === href;
+  };
+
+  const triggerColor = (href) => {
+    if (href === '/services') return router.pathname === '/services' ? 'var(--rose-gold)' : '';
+    if (href === '/team') return isTeamSectionActive ? 'var(--rose-gold)' : '';
+    return isActiveHref(href) ? 'var(--rose-gold)' : '';
+  };
+
+  const linkColor = (href) => (isActiveHref(href) ? 'var(--rose-gold)' : '');
+
+  const renderDropdownItems = (link, onNavigate) => (
+    <>
+      {link.dropdownIncludesParent !== false && (
+        <li>
+          <Link href={link.href} onClick={onNavigate} style={{ color: linkColor(link.href) }}>
+            {link.label}
+          </Link>
+        </li>
+      )}
+      {link.dropdown.map((item) => (
+        <li key={`${item.href}-${item.label}`}>
+          <Link href={item.href} onClick={onNavigate} style={{ color: linkColor(item.href) }}>
+            {item.label}
+          </Link>
+        </li>
+      ))}
+    </>
+  );
 
   return (
     <nav className={`nav-fixed ${solidNav ? 'scrolled' : ''}`}>
       <div className="nav-inner">
-        <Link href="/" className="nav-logo-text">Huma Beauty Saloon</Link>
+        <BrandLogo href="/" priority className="nav-brand-logo" />
 
         <ul className={`nav-links ${open ? 'open' : ''}`}>
-          {links.map((l) => (
-            l.dropdown ? (
+          {MAIN_NAV_LINKS.map((link) => (
+            link.dropdown ? (
               <li
-                key={l.href}
-                ref={teamRef}
-                className={`nav-dropdown${teamOpen ? ' open' : ''}`}
-                onMouseEnter={() => setTeamOpen(true)}
-                onMouseLeave={() => setTeamOpen(false)}
+                key={link.href}
+                ref={(el) => {
+                  if (el) dropdownRefs.current[link.href] = el;
+                  else delete dropdownRefs.current[link.href];
+                }}
+                className={`nav-dropdown${openDropdown === link.href ? ' open' : ''}`}
+                onMouseEnter={() => { if (!isMobileNav) setOpenDropdown(link.href); }}
+                onMouseLeave={() => { if (!isMobileNav) setOpenDropdown(null); }}
               >
                 <button
                   type="button"
                   className="nav-dropdown-trigger"
-                  style={{ color: linkColor(l.href) }}
-                  aria-expanded={teamOpen}
+                  style={{ color: triggerColor(link.href) }}
+                  aria-expanded={openDropdown === link.href}
                   aria-haspopup="true"
-                  onClick={() => setTeamOpen((prev) => !prev)}
+                  onClick={() => setOpenDropdown((prev) => (prev === link.href ? null : link.href))}
                 >
-                  {l.label}
+                  {link.label}
                   <span className="nav-dropdown-chevron" aria-hidden="true">▾</span>
                 </button>
                 <ul className="nav-dropdown-menu">
-                  <li>
-                    <Link href={l.href} onClick={() => { setOpen(false); setTeamOpen(false); }} style={{ color: linkColor(l.href) }}>
-                      {l.label}
-                    </Link>
-                  </li>
-                  {l.dropdown.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={() => { setOpen(false); setTeamOpen(false); }}
-                        style={{ color: linkColor(item.href) }}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
+                  {renderDropdownItems(link, closeMenus)}
                 </ul>
                 <ul className="nav-dropdown-mobile">
-                  <li>
-                    <Link href={l.href} onClick={() => setOpen(false)} style={{ color: linkColor(l.href) }}>
-                      {l.label}
-                    </Link>
-                  </li>
-                  {l.dropdown.map((item) => (
-                    <li key={item.href}>
-                      <Link href={item.href} onClick={() => setOpen(false)} style={{ color: linkColor(item.href) }}>
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
+                  {renderDropdownItems(link, () => setOpen(false))}
                 </ul>
               </li>
             ) : (
-              <li key={l.href}>
-                <Link href={l.href} onClick={() => setOpen(false)} style={{ color: linkColor(l.href) }}>
-                  {l.label}
+              <li key={link.href}>
+                <Link href={link.href} onClick={() => setOpen(false)} style={{ color: linkColor(link.href) }}>
+                  {link.label}
                 </Link>
               </li>
             )
           ))}
           <li>
-            <Link href="/book" onClick={() => setOpen(false)}>
-              <button className="btn-rose" style={{ padding: '10px 22px', fontSize: '0.75rem' }}>
-                <span>Book Now</span>
-              </button>
+            <Link
+              href="/book"
+              className="btn-rose"
+              style={{ padding: '10px 22px', fontSize: '0.75rem' }}
+              onClick={() => setOpen(false)}
+            >
+              <span>Book Now</span>
             </Link>
           </li>
         </ul>

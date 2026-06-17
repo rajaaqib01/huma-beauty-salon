@@ -20,16 +20,6 @@
     "created_at": "2026-06-16T22:22:22.805Z"
   },
   {
-    "id": "svc-makeup-21",
-    "title": "Airbrush Makeup",
-    "description": "Flawless airbrush finish for weddings, events and high-definition coverage.",
-    "price": "12000",
-    "category": "Makeup",
-    "subcategory": "Bridal Makeup",
-    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
-  },
-  {
     "id": "svc-makeup-walima-makeup",
     "title": "Walima Makeup",
     "description": "Professional walima makeup service at Huma Beauty Saloon, Jhelum.",
@@ -150,7 +140,7 @@
     "created_at": "2026-05-31T00:00:00.000Z"
   },
   {
-    "id": "svc-makeup-21",
+    "id": "svc-makeup-hd-airbrush-makeup",
     "title": "Airbrush Makeup",
     "description": "Flawless airbrush finish for weddings, events and high-definition coverage.",
     "price": "12000",

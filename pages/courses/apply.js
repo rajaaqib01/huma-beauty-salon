@@ -76,7 +76,7 @@ function compressImageFile(file) {
   });
 }
 
-export default function CourseApplyPage({ courses = [], jazzcashNumber = '03355462214' }) {
+export default function CourseApplyPage({ courses = [], upaisaNumber = '03378418500' }) {
   const router = useRouter();
   const courseMap = useMemo(
     () => Object.fromEntries(courses.map((c) => [c.slug, c])),
@@ -127,7 +127,7 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
       if (!form.course_id) e.course_id = 'Please select a course';
       if (!form.batch) e.batch = 'Please select a batch';
       if (!form.transaction_id.trim()) e.transaction_id = 'Transaction ID is required';
-      if (!pendingFile && !form.payment_screenshot) e.payment_screenshot = 'Upload JazzCash payment screenshot';
+      if (!pendingFile && !form.payment_screenshot) e.payment_screenshot = 'Upload Upaisa payment screenshot';
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -200,7 +200,7 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
     <>
       <SEO
         title="Course Admission — Huma Beauty Academy Jhelum"
-        description="Apply online for professional beauty courses at Huma Beauty Saloon Academy. Pay course fee via JazzCash."
+        description="Apply online for professional beauty courses at Huma Beauty Saloon Academy. Pay course fee via Upaisa."
         canonical="https://humabeautysaloon.site/courses/apply"
       />
       <Navbar />
@@ -210,7 +210,7 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
           <div className="book-page-header">
             <div className="section-label">✦ Academy Admission</div>
             <h1 className="book-page-title">Course <em>Application</em></h1>
-            <p className="book-page-subtitle">Fill the form and pay via JazzCash. We verify payment within 24–48 hours.</p>
+            <p className="book-page-subtitle">Fill the form and pay via Upaisa. We verify payment within 24–48 hours.</p>
           </div>
 
           {!submitted && (
@@ -231,7 +231,7 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
                 <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '2rem', color: 'var(--text-dark)', marginBottom: 12 }}>Application Submitted!</h2>
                 <p style={{ color: 'var(--text-mid)', lineHeight: 1.7, marginBottom: 24 }}>
                   Thank you, <strong>{form.name}</strong>. We received your application for <strong>{selectedCourse?.title}</strong>.
-                  Our team will verify your JazzCash payment and confirm via WhatsApp within 24–48 hours.
+                  Our team will verify your Upaisa payment and confirm via WhatsApp within 24–48 hours.
                 </p>
                 <Link href="/courses" className="btn-outline">Back to Courses</Link>
               </div>
@@ -301,21 +301,30 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
                     {selectedCourse ? (
                       <div style={{ background: 'var(--champagne-pale)', border: '1px solid rgba(15,76,69,0.12)', borderRadius: 12, padding: '16px 18px' }}>
                         <p style={{ fontSize: '0.85rem', color: 'var(--text-dark)', margin: 0, lineHeight: 1.6 }}>
-                          <strong>Course fee:</strong> {selectedCourse.fee} &nbsp;|&nbsp; <strong>Duration:</strong> {selectedCourse.duration}
+                          <strong>Course fee:</strong>{' '}
+                          {selectedCourse.hasDiscount ? (
+                            <>
+                              <span style={{ textDecoration: 'line-through', color: 'var(--text-light)', marginRight: 8 }}>{selectedCourse.originalFee}</span>
+                              {selectedCourse.fee}
+                            </>
+                          ) : (
+                            selectedCourse.fee
+                          )}
+                          {' '}&nbsp;|&nbsp; <strong>Duration:</strong> {selectedCourse.duration}
                         </p>
                       </div>
                     ) : null}
 
                     <div style={{ background: 'var(--champagne-pale)', border: '1px solid rgba(15,76,69,0.14)', borderRadius: 12, padding: '16px 18px' }}>
-                      <p style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--blush)', marginBottom: 8 }}>JazzCash Payment</p>
+                      <p style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--blush)', marginBottom: 8 }}>Upaisa Payment</p>
                       <p style={{ fontSize: '0.9rem', color: 'var(--text-dark)', margin: '0 0 8px', lineHeight: 1.6 }}>
-                        Send full course fee to JazzCash: <strong>{jazzcashNumber}</strong>
+                        Send full course fee to Upaisa: <strong>{upaisaNumber}</strong>
                       </p>
                       <p style={{ fontSize: '0.82rem', color: 'var(--text-mid)', margin: 0 }}>After payment, enter transaction ID and upload screenshot below.</p>
                     </div>
 
                     <div>
-                      <label htmlFor="adm-txn" style={labelStyle}>JazzCash Transaction ID *</label>
+                      <label htmlFor="adm-txn" style={labelStyle}>Upaisa Transaction ID *</label>
                       <input id="adm-txn" style={inputStyle('transaction_id')} value={form.transaction_id} onChange={(e) => update('transaction_id', e.target.value)} placeholder="e.g. 1234567890" />
                       {errors.transaction_id && <p style={{ color: '#c0392b', fontSize: '0.78rem', marginTop: 4 }}>{errors.transaction_id}</p>}
                     </div>
@@ -347,7 +356,7 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
                         form.age ? ['Age', form.age] : null,
                         form.city ? ['City', form.city] : null,
                         ['Course', selectedCourse?.title],
-                        ['Fee', selectedCourse?.fee],
+                        ['Fee', selectedCourse?.hasDiscount ? `${selectedCourse.fee} (was ${selectedCourse.originalFee})` : selectedCourse?.fee],
                         ['Batch', form.batch],
                         ['Experience', form.experience],
                         ['Transaction ID', form.transaction_id],
@@ -359,7 +368,7 @@ export default function CourseApplyPage({ courses = [], jazzcashNumber = '033554
                       ))}
                     </div>
                     <div style={{ background: 'var(--champagne-pale)', border: '1px solid rgba(15,76,69,0.14)', borderRadius: 10, padding: '14px 18px', fontSize: '0.82rem', color: 'var(--text-dark)', lineHeight: 1.6 }}>
-                      By submitting, you confirm that the JazzCash payment details are correct. We will verify and contact you on WhatsApp.
+                      By submitting, you confirm that the Upaisa payment details are correct. We will verify and contact you on WhatsApp.
                     </div>
                   </div>
                 )}
@@ -401,11 +410,11 @@ export async function getServerSideProps() {
     return {
       props: {
         courses,
-        jazzcashNumber: settings.jazzcash_number || '03355462214',
+        upaisaNumber: settings.upaisa_number || settings.jazzcash_number || '03378418500',
       },
     };
   } catch (e) {
     console.error('Course apply page load error:', e);
-    return { props: { courses: [], jazzcashNumber: '03355462214' } };
+    return { props: { courses: [], upaisaNumber: '03378418500' } };
   }
 }

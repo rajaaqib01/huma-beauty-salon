@@ -1,14 +1,23 @@
 [build]
   command = "npm run build"
+  # Skip production rebuild when a push only updates runtime JSON in data/ (bookings, etc.).
+  ignore = "bash scripts/netlify-skip-data-only.sh"
+
+[context.production]
+  ignore = "bash scripts/netlify-skip-data-only.sh"
 
 [context.branch-deploy]
-  # Never build branch deploys for live-data / other branches.
+  # Never build preview deploys for live-data or other branches.
   ignore = "exit 0"
+
+[context.deploy-preview]
+  ignore = "bash scripts/netlify-skip-data-only.sh"
 
 # Netlify secrets scanner: public salon contact info is not a credential.
 # Set real secrets only in Netlify UI → Site settings → Environment variables.
 # Use ADMIN_EMAIL / ADMIN_PASSWORD (server-side). Remove any VITE_ADMIN_* vars from Netlify.
 [build.environment]
+  NODE_VERSION = "20"
   SECRETS_SCAN_OMIT_PATHS = "components/Footer.js,components/SEO.js,pages/contact.js,data/settings.json,lib/settings.js,lib/emailTransport.js,pages/api/send-email.js,data/bookings.json,data/messages.json,data/admin_users.json"
 
 [[plugins]]

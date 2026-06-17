@@ -81,11 +81,16 @@ const DEFAULT_IMAGES = {
 }
 
 let existingByTitle = {}
+let existingByGroupTitle = {}
 try {
   const existing = JSON.parse(readFileSync(resolve(dataDir, 'services.json'), 'utf8'))
   existingByTitle = Object.fromEntries(existing.map((s) => [s.title, s]))
+  existingByGroupTitle = Object.fromEntries(
+    existing.map((s) => [`${s.category}::${s.subcategory}::${s.title}`, s])
+  )
 } catch {
   existingByTitle = {}
+  existingByGroupTitle = {}
 }
 
 function slugify(text) {
@@ -176,7 +181,10 @@ for (const [category, config] of Object.entries(CATALOG)) {
 
   for (const group of config.groups) {
     for (const title of group.services) {
-      const id = existingByTitle[title]?.id || `svc-${config.slug}-${slugify(title)}`
+      const groupKey = `${category}::${group.name}::${title}`
+      const id =
+        existingByGroupTitle[groupKey]?.id
+        || `svc-${config.slug}-${slugify(group.name)}-${slugify(title)}`
       allServices.push({
         id,
         title,

@@ -82,7 +82,7 @@ async function courseAdmissionHandler(req, res) {
       notes: notes ? escapeHtml(notes) : '',
       transaction_id: escapeHtml(transaction_id),
       payment_screenshot,
-      payment_method: 'JazzCash',
+      payment_method: 'Upaisa',
       status: 'pending',
       read: false,
       source: 'online',

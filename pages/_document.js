@@ -11,6 +11,9 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap"
         />
+        <link rel="icon" href="/images/huma-logo-icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/images/huma-logo-icon.png" type="image/png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/images/huma-logo-icon-512.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0f4c45" />
       </Head>

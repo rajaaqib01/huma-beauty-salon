@@ -57,7 +57,7 @@ export default function AdmissionsPage() {
   return (
     <AdminShell title="Course Admissions">
       <p className="admin-page-subtitle" style={{ marginBottom: 16 }}>
-        Verify JazzCash payments and approve or reject student applications.
+        Verify Upaisa payments and approve or reject student applications.
       </p>
 
       <div className="services-filter-tabs" style={{ marginBottom: 20, position: 'static', boxShadow: 'none' }}>
@@ -95,7 +95,7 @@ export default function AdmissionsPage() {
                 <li><span aria-hidden="true">📞</span> {a.phone}</li>
                 <li><span aria-hidden="true">✉️</span> {a.email}</li>
                 {a.city ? <li><span aria-hidden="true">📍</span> {a.city}</li> : null}
-                <li><span aria-hidden="true">💳</span> JazzCash Txn: <strong>{a.transaction_id}</strong></li>
+                <li><span aria-hidden="true">💳</span> Upaisa Txn: <strong>{a.transaction_id}</strong></li>
                 {a.experience ? <li>Experience: {a.experience}</li> : null}
                 {a.notes ? <li>Notes: {a.notes}</li> : null}
                 <li className="admin-admission-card-date">

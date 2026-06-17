@@ -1,15 +1,59 @@
 -- Supabase schema for Huma Beauty Salon admin dashboard
 
--- services table
+-- services table (text id matches local JSON catalog ids)
 CREATE TABLE IF NOT EXISTS services (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  id text PRIMARY KEY,
   title text NOT NULL,
   description text,
   price numeric(10,2),
   category text,
+  subcategory text,
   image_url text,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
+);
+
+-- service category groups (shown on /services page)
+CREATE TABLE IF NOT EXISTS makeup_categories (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS hair_categories (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS facial_categories (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS nails_categories (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS mehndi_categories (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS waxing_categories (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  sort_order int DEFAULT 0,
+  created_at timestamptz DEFAULT now()
 );
 
 -- bookings table
@@ -100,3 +144,4 @@ CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status);
 CREATE INDEX IF NOT EXISTS idx_bookings_created_at ON bookings(created_at);
 CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);
 CREATE INDEX IF NOT EXISTS idx_services_category ON services(category);
+CREATE INDEX IF NOT EXISTS idx_services_subcategory ON services(subcategory);

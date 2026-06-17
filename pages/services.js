@@ -20,7 +20,6 @@ export default function ServicesPage({
   nailsGroups = [],
   mehndiGroups = [],
   waxingGroups = [],
-  heroImages = [],
 }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('all');
@@ -44,14 +43,6 @@ export default function ServicesPage({
     [groupedServices, groupedBySectionId]
   );
 
-  const tabs = useMemo(
-    () => [{ id: 'all', label: 'All' }, ...sectionsWithServices.map((section) => ({
-      id: section.id,
-      label: section.tabLabel || section.category,
-    }))],
-    [sectionsWithServices]
-  );
-
   const visibleSections = useMemo(() => {
     if (activeTab === 'all') return sectionsWithServices;
     return sectionsWithServices.filter((section) => section.id === activeTab);
@@ -60,21 +51,14 @@ export default function ServicesPage({
   useEffect(() => {
     if (!router.isReady) return;
     const hash = String(router.asPath.split('#')[1] || '').trim();
-    if (!hash) return;
-    if (hash === 'all' || sectionsWithServices.some((section) => section.id === hash)) {
+    if (!hash || hash === 'all') {
+      setActiveTab('all');
+      return;
+    }
+    if (sectionsWithServices.some((section) => section.id === hash)) {
       setActiveTab(hash);
     }
   }, [router.isReady, router.asPath, sectionsWithServices]);
-
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-    const base = '/services';
-    if (tabId === 'all') {
-      router.replace(base, undefined, { shallow: true, scroll: false });
-      return;
-    }
-    router.replace(`${base}#${tabId}`, undefined, { shallow: true, scroll: false });
-  };
 
   const hasServices = sectionsWithServices.length > 0;
 
@@ -90,27 +74,10 @@ export default function ServicesPage({
       <Navbar />
 
       <main className="page-main">
-        <ServicesPageHero images={heroImages} />
+        <ServicesPageHero />
 
         {hasServices ? (
-          <>
-            <nav className="services-filter-bar" aria-label="Filter services by category">
-              <div className="services-filter-tabs">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    className={`services-filter-tab${activeTab === tab.id ? ' services-filter-tab--active' : ''}`}
-                    onClick={() => handleTabClick(tab.id)}
-                    aria-pressed={activeTab === tab.id}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </nav>
-
-            <div id="services">
+          <div id="services">
               {visibleSections.map((section) => {
                 if (GROUPED_SECTION_IDS.includes(section.id)) {
                   return (
@@ -137,8 +104,7 @@ export default function ServicesPage({
                   />
                 );
               })}
-            </div>
-          </>
+          </div>
         ) : (
           <section className="services-page-empty-wrap">
             <div className="services-page-empty">
@@ -188,16 +154,6 @@ export async function getServerSideProps() {
       getMehndiGroupedBySubcategory(),
       getWaxingGroupedBySubcategory(),
     ]);
-    const allGroupedServices = [
-      makeupGroups, hairGroups, facialGroups, nailsGroups, mehndiGroups, waxingGroups,
-    ].flatMap((groups) => groups.flatMap((g) => g.services));
-    const heroImages = [...new Set(
-      Object.values(groupedServices)
-        .flat()
-        .concat(allGroupedServices)
-        .map((service) => service.img)
-        .filter(Boolean)
-    )].slice(0, 12);
     return {
       props: {
         groupedServices,
@@ -207,7 +163,6 @@ export async function getServerSideProps() {
         nailsGroups,
         mehndiGroups,
         waxingGroups,
-        heroImages,
       },
     };
   } catch (e) {
@@ -223,7 +178,6 @@ export async function getServerSideProps() {
         nailsGroups: [],
         mehndiGroups: [],
         waxingGroups: [],
-        heroImages: [],
       },
     };
   }

@@ -8,9 +8,19 @@
   "theme_color": "#0f4c45",
   "icons": [
     {
-      "src": "https://images.unsplash.com/photo-1560066984-138daaa56d8c?w=192&q=80",
+      "src": "/images/huma-logo-icon.png",
       "sizes": "192x192",
       "type": "image/png"
+    },
+    {
+      "src": "/images/huma-logo-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/huma-logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ]
 }
