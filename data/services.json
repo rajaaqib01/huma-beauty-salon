@@ -132,8 +132,10 @@
     "description": "Full hair coloring services including fashion and natural shades.",
     "price": "9000",
     "category": "Hair",
-    "image_url": "https://i.pinimg.com/736x/30/76/97/30769764d31c49e940676ffb652d79be.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/30/76/97/30769764d31c49e940676ffb652d79be.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Hair Coloring",
+    "updated_at": "2026-06-17T09:37:04.414Z"
   },
   {
     "id": "svc-hair-5",
