@@ -1,5 +1,14 @@
 [
   {
+    "id": "mqhwkaoo-tbyn4ey",
+    "title": "Bob Cut",
+    "description": "A classic or modern bob tailored to complement your face shape.",
+    "price": "2500",
+    "category": "Hair",
+    "subcategory": "Hair Cutting",
+    "image_url": "https://i.pinimg.com/1200x/7f/5d/73/7f5d73e33be05f6a3933ed6b4064a145.jpg"
+  },
+  {
     "id": "mqhwhiz8-y1d83x6",
     "title": "Step Cut",
     "description": "Creates defined steps throughout the hair for extra bounce and style.",
