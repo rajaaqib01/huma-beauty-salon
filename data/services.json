@@ -464,8 +464,10 @@
     "description": "Premium facial with exclusive products for ultimate luxury glow.",
     "price": "10000",
     "category": "Facial",
-    "image_url": "https://i.pinimg.com/1200x/25/a5/4b/25a54bd9f0bbb32608305d744d32c201.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/1200x/25/a5/4b/25a54bd9f0bbb32608305d744d32c201.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Luxury Facial",
+    "updated_at": "2026-06-17T11:24:42.480Z"
   },
   {
     "id": "svc-mehndi-1",
