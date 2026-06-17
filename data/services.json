@@ -1,5 +1,14 @@
 [
   {
+    "id": "mqhy5o1a-jzm80ob",
+    "title": "Hair Wash",
+    "description": "A refreshing cleanse using professional shampoo to leave your hair clean, soft, and healthy-looking.",
+    "price": "1000",
+    "category": "Hair",
+    "subcategory": "Hair care",
+    "image_url": "https://i.pinimg.com/1200x/e2/ec/ca/e2ecca20cd518bc6820325aa6956065c.jpg"
+  },
+  {
     "id": "mqhxoy6z-w8g2om5",
     "title": "Bun Styles",
     "description": "Elegant low, high, messy, or textured buns perfect for formal occasions and events.",
