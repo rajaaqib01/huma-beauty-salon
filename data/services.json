@@ -1,5 +1,14 @@
 [
   {
+    "id": "mqhw2yfr-9mzh7y8",
+    "title": "Hair Trim",
+    "description": "Neaten the length and remove split ends while maintaining your current hairstyle.",
+    "price": "1300",
+    "category": "Hair",
+    "subcategory": "Hair Cutting",
+    "image_url": "https://i.pinimg.com/736x/42/28/84/422884eba9e0e6cec528cdaded5eeb38.jpg"
+  },
+  {
     "id": "mqh8ulxs-z83jumd",
     "title": "Casual Makeup",
     "description": "A simple and neat look perfect for everyday wear or casual outings.",
