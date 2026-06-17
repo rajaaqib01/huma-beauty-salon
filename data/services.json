@@ -1,5 +1,14 @@
 [
   {
+    "id": "mqhzujtk-vnukzgm",
+    "title": "Express Facial",
+    "description": "A fast skin refresh designed to restore brightness and freshness in minimal time.",
+    "price": "3000",
+    "category": "Facial",
+    "subcategory": "Basic Facial",
+    "image_url": "https://i.pinimg.com/736x/67/e4/5a/67e45a92888a6d441c1bc34505e30373.jpg"
+  },
+  {
     "id": "mqhz2bcj-0b7730u",
     "title": "Dandruff Treatment",
     "description": "Targeted calming and clarifying for flaky scalp.",
