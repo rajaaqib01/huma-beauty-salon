@@ -440,8 +440,10 @@
     "description": "Specialized treatment to reduce acne, scars, and breakouts.",
     "price": "5000",
     "category": "Facial",
-    "image_url": "https://i.pinimg.com/736x/53/ac/8f/53ac8fd0ccc2939742e096c68e9c5867.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/53/ac/8f/53ac8fd0ccc2939742e096c68e9c5867.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Skin Treatment",
+    "updated_at": "2026-06-17T11:20:53.447Z"
   },
   {
     "id": "svc-facial-7",
