@@ -1,5 +1,14 @@
 [
   {
+    "id": "mqhw4ka8-ppwn5nn",
+    "title": "Straight Cut",
+    "description": "A clean, one-length haircut that creates a sleek and polished look.",
+    "price": "1500",
+    "category": "Hair",
+    "subcategory": "Hair Cutting",
+    "image_url": "https://i.pinimg.com/736x/f0/f8/96/f0f896b955e3687c49e397e27eafafa6.jpg"
+  },
+  {
     "id": "mqhw2yfr-9mzh7y8",
     "title": "Hair Trim",
     "description": "Neaten the length and remove split ends while maintaining your current hairstyle.",
