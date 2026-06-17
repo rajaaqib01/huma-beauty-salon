@@ -1,5 +1,14 @@
 [
   {
+    "id": "mqhzy1k5-5p39z89",
+    "title": "Mini Facial",
+    "description": "A targeted facial focusing on deep cleansing and hydration.",
+    "price": "3349",
+    "category": "Facial",
+    "subcategory": "Basic Facial",
+    "image_url": "https://i.pinimg.com/1200x/14/0f/f0/140ff07410b143fa89ce087dccba5acd.jpg"
+  },
+  {
     "id": "mqhzujtk-vnukzgm",
     "title": "Express Facial",
     "description": "A fast skin refresh designed to restore brightness and freshness in minimal time.",
