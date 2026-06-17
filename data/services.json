@@ -121,8 +121,10 @@
     "description": "Protein treatment to strengthen hair and reduce breakage.",
     "price": "8000",
     "category": "Hair",
-    "image_url": "https://i.pinimg.com/1200x/4e/f4/a8/4ef4a87c4da99edefc6c7b97d173a5cc.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/1200x/4e/f4/a8/4ef4a87c4da99edefc6c7b97d173a5cc.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Hair Treatments",
+    "updated_at": "2026-06-17T09:26:49.663Z"
   },
   {
     "id": "svc-hair-4",
