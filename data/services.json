@@ -170,8 +170,10 @@
     "description": "Advanced restorative treatment to repair and rejuvenate hair.",
     "price": "25000",
     "category": "Hair",
-    "image_url": "https://i.pinimg.com/736x/70/42/e7/7042e76897c8be684370361200c0ccbd.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/70/42/e7/7042e76897c8be684370361200c0ccbd.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Hair Treatments",
+    "updated_at": "2026-06-17T09:28:47.075Z"
   },
   {
     "id": "svc-facial-1",
