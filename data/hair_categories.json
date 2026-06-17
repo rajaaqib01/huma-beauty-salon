@@ -1,0 +1,27 @@
+[
+  {
+    "id": "mqhy14nl-c1nide1",
+    "name": "Hair care",
+    "sort_order": 5
+  },
+  {
+    "id": "hair-hair-cutting",
+    "name": "Hair Cutting",
+    "sort_order": 1
+  },
+  {
+    "id": "hair-hair-styling",
+    "name": "Hair Styling",
+    "sort_order": 2
+  },
+  {
+    "id": "hair-hair-treatments",
+    "name": "Hair Treatments",
+    "sort_order": 3
+  },
+  {
+    "id": "hair-hair-coloring",
+    "name": "Hair Coloring",
+    "sort_order": 4
+  }
+]
