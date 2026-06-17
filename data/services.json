@@ -409,8 +409,10 @@
     "description": "Brighten and even skin tone with our signature treatment.",
     "price": "4500",
     "category": "Facial",
-    "image_url": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Whitening Facial",
+    "updated_at": "2026-06-17T11:18:48.764Z"
   },
   {
     "id": "svc-facial-4",
