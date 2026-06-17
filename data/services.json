@@ -429,8 +429,10 @@
     "description": "Deep hydration and rejuvenation for plump, glowing skin.",
     "price": "8000",
     "category": "Facial",
-    "image_url": "https://i.pinimg.com/736x/8e/2b/0f/8e2b0f96ad3dacf95330a05ab6a13bd0.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/8e/2b/0f/8e2b0f96ad3dacf95330a05ab6a13bd0.jpg?w=600&amp;q=80",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "subcategory": "Advanced Facial",
+    "updated_at": "2026-06-17T11:19:24.606Z"
   },
   {
     "id": "svc-facial-6",
