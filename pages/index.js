@@ -209,7 +209,14 @@ export async function getServerSideProps() {
       import('../lib/offers'),
     ]);
 
-    const [groupedServices, approvedReviews, settings, instagramPosts, gallery, activeOffers] = await Promise.all([
+    const [
+      groupedResult,
+      reviewsResult,
+      settingsResult,
+      instagramResult,
+      galleryResult,
+      offersResult,
+    ] = await Promise.allSettled([
       getHomeGroupedServices(),
       getApprovedReviews(8),
       getSettings(),
@@ -217,6 +224,17 @@ export async function getServerSideProps() {
       getPublicGallery(),
       getPublicOffers(),
     ]);
+
+    const groupedServices = groupedResult.status === 'fulfilled' ? groupedResult.value : empty;
+    const approvedReviews = reviewsResult.status === 'fulfilled' ? reviewsResult.value : [];
+    const settings = settingsResult.status === 'fulfilled' ? settingsResult.value : {};
+    const instagramPosts = instagramResult.status === 'fulfilled' ? instagramResult.value : [];
+    const gallery = galleryResult.status === 'fulfilled' ? galleryResult.value : [];
+    const activeOffers = offersResult.status === 'fulfilled' ? offersResult.value : [];
+
+    if (groupedResult.status === 'rejected') console.error('Home services load error:', groupedResult.reason);
+    if (galleryResult.status === 'rejected') console.error('Home gallery load error:', galleryResult.reason);
+    if (offersResult.status === 'rejected') console.error('Home offers load error:', offersResult.reason);
 
     const tiktokProfile = 'https://www.tiktok.com/@humabeautysaloonjhe';
     const tiktokPosts = gallery.slice(0, 6).map((item) => ({
