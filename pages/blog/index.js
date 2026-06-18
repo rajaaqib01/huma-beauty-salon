@@ -25,7 +25,7 @@ export default function BlogIndex({ posts = [] }) {
         </section>
         <section className="offers-section">
           <div className="offers-container">
-            <div className="services-grid">
+            <div className="offers-grid blog-grid">
               {posts.map(post => (
                 <article key={post.id} className="service-card">
                   <div className="service-card-img-wrap">

@@ -6,7 +6,7 @@ const LOGO = {
   icon: '/images/huma-logo-icon.svg',
 };
 
-export default function BrandLogo({ variant = 'default', href = '/', className = '', priority = false }) {
+export default function BrandLogo({ variant = 'default', href = '/', className = '', priority = false, onClick }) {
   const src = LOGO[variant] || LOGO.default;
   const img = (
     <img
@@ -23,7 +23,12 @@ export default function BrandLogo({ variant = 'default', href = '/', className =
   }
 
   return (
-    <Link href={href} className={`brand-logo-link ${className}`.trim()} aria-label="Huma Beauty Saloon — Home">
+    <Link
+      href={href}
+      className={`brand-logo-link ${className}`.trim()}
+      aria-label="Huma Beauty Saloon — Home"
+      onClick={onClick}
+    >
       {img}
     </Link>
   );

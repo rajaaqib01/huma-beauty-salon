@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const services = await fetchServices()
-    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300')
+    res.setHeader('Cache-Control', 'no-store, must-revalidate')
     return res.json(services.map(toDisplayService))
   } catch (e) {
     console.error('Public services load error:', e)

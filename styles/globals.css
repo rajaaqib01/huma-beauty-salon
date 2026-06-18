@@ -1141,6 +1141,9 @@ img { max-width: 100%; display: block; }
   overflow: visible;
   -webkit-line-clamp: unset;
 }
+.blog-grid .service-card-img-wrap {
+  height: 220px;
+}
 .team-page-grid {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
 }
@@ -1476,14 +1479,23 @@ img { max-width: 100%; display: block; }
   backdrop-filter: blur(20px);
   box-shadow: 0 2px 20px rgba(15,76,69,0.1);
 }
-.nav-inner {
+.nav-shell {
   max-width: 1280px;
   margin: 0 auto;
-  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  width: 100%;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+  height: 72px;
 }
 .nav-logo-text {
   font-family: 'Great Vibes', cursive;
@@ -1598,11 +1610,12 @@ img { max-width: 100%; display: block; }
   transform-origin: right;
   transition: transform 0.3s ease;
 }
-.nav-dropdown:hover .nav-dropdown-trigger,
+.nav-dropdown-trigger:hover {
+  color: var(--rose-gold);
+}
 .nav-dropdown.open .nav-dropdown-trigger {
   color: var(--rose-gold);
 }
-.nav-dropdown:hover .nav-dropdown-trigger::after,
 .nav-dropdown.open .nav-dropdown-trigger::after {
   transform: scaleX(1);
   transform-origin: left;
@@ -1612,8 +1625,7 @@ img { max-width: 100%; display: block; }
   line-height: 1;
   transition: transform 0.2s ease;
 }
-.nav-dropdown.open .nav-dropdown-chevron,
-.nav-dropdown:hover .nav-dropdown-chevron {
+.nav-dropdown.open .nav-dropdown-chevron {
   transform: rotate(180deg);
 }
 .nav-dropdown-menu {
@@ -1662,7 +1674,6 @@ img { max-width: 100%; display: block; }
 .nav-dropdown-menu a:hover {
   background: rgba(15, 76, 69, 0.06);
 }
-.nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown.open .nav-dropdown-menu {
   opacity: 1;
   visibility: visible;
@@ -3615,6 +3626,11 @@ img { max-width: 100%; display: block; }
   color: #fecaca;
   border: 1px solid rgba(248, 113, 113, 0.25);
 }
+.admin-alert-warning {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fde68a;
+  border-color: rgba(245, 158, 11, 0.35);
+}
 .admin-empty-state {
   color: #767676;
   padding: 28px;
@@ -3639,6 +3655,9 @@ img { max-width: 100%; display: block; }
 .whatsapp-float svg { width: 28px; height: 28px; fill: white; }
 
 /* Mobile menu */
+.nav-mobile-backdrop {
+  display: none;
+}
 .hamburger {
   display: none;
   flex-direction: column;
@@ -3946,7 +3965,20 @@ img { max-width: 100%; display: block; }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .nav-inner { padding: 0 4%; justify-content: space-between; gap: 10px; }
+  .nav-shell {
+    flex-wrap: wrap;
+    align-items: stretch;
+    position: relative;
+    z-index: 1002;
+  }
+  .nav-fixed {
+    padding: 0 4%;
+  }
+  .nav-inner {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
   .nav-brand-logo.brand-logo-link {
     max-width: calc(100% - 48px);
   }
@@ -3956,16 +3988,42 @@ img { max-width: 100%; display: block; }
   }
   .nav-links { display: none; }
   .hamburger { display: flex; }
+  .nav-mobile-open {
+    background: rgba(248, 252, 250, 0.98);
+    box-shadow: 0 2px 20px rgba(15, 76, 69, 0.1);
+  }
+  .nav-mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    top: 72px;
+    z-index: 999;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: rgba(15, 76, 69, 0.28);
+    cursor: pointer;
+  }
   .nav-links.open {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 72px; left: 0; right: 0;
-    background: rgba(253,250,246,0.98);
-    backdrop-filter: blur(20px);
-    padding: 24px 26px 32px;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    background: rgba(253, 250, 246, 0.98);
+    padding: 24px 26px calc(32px + env(safe-area-inset-bottom, 0px));
     gap: 24px;
-    border-bottom: 1px solid var(--blush-mid);
+    border-top: 1px solid var(--blush-mid);
+    box-sizing: border-box;
   }
   .nav-links.open a { font-size: 0.95rem; }
   .nav-dropdown {
@@ -4222,6 +4280,9 @@ img { max-width: 100%; display: block; }
   .offers-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  .blog-grid .service-card-img-wrap {
+    height: 200px;
   }
   .courses-section {
     padding: 56px 5% 72px;

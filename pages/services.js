@@ -126,7 +126,8 @@ export default function ServicesPage({
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ res }) {
+  res.setHeader('Cache-Control', 'no-store, must-revalidate');
   try {
     const {
       getGroupedServices,

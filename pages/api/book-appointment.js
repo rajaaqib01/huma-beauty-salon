@@ -8,10 +8,14 @@ import { notifyAdminNewBooking, notifyCustomerBookingReceived } from '../../lib/
 import { addLoyaltyPoints } from '../../lib/loyalty';
 import { getSettings } from '../../lib/settings';
 
+import { requireSupabaseOnNetlify } from '../../lib/supabaseRuntime';
+
 async function bookAppointmentHandler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  if (requireSupabaseOnNetlify(res)) return;
 
   if (!validateRequestSize(req)) {
     return res.status(413).json({ error: 'Request payload too large' });
@@ -79,19 +83,23 @@ async function bookAppointmentHandler(req, res) {
     if (supabaseServer) {
       const { error: bookingError } = await supabaseServer.from('bookings').insert([{
         customer_name: bookingPayload.customer_name,
+        name: bookingPayload.name,
         phone: bookingPayload.phone,
         email: bookingPayload.email,
         service_title: bookingPayload.service_title,
+        service: bookingPayload.service,
+        price: bookingPayload.price,
+        offer_title: bookingPayload.offer_title,
+        discount: bookingPayload.discount,
+        staff_id: bookingPayload.staff_id,
+        staff_name: bookingPayload.staff_name,
+        referral_code: bookingPayload.referral_code,
         date: bookingPayload.date,
         time: bookingPayload.time,
-        notes: [
-          bookingPayload.notes,
-          bookingPayload.price ? `Price: ${bookingPayload.price}` : '',
-          bookingPayload.offer_title ? `Offer: ${bookingPayload.offer_title}` : '',
-          bookingPayload.staff_name ? `Stylist: ${bookingPayload.staff_name}` : '',
-          bookingPayload.referral_code ? `Referral: ${bookingPayload.referral_code}` : '',
-        ].filter(Boolean).join('\n'),
+        notes: bookingPayload.notes,
         status: bookingPayload.status,
+        source: bookingPayload.source,
+        read: bookingPayload.read,
       }]);
       if (bookingError) {
         console.error('Booking DB insert error:', bookingError);
