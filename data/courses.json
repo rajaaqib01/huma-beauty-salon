@@ -5,7 +5,7 @@
     "title": "Professional Makeup Course",
     "category": "Makeup",
     "duration": "4 Weeks",
-    "fee": "25000",
+    "fee": 25000,
     "seats": 15,
     "description": "Learn bridal, party, and everyday makeup with hands-on practice on real clients.",
     "syllabus": [
@@ -17,7 +17,8 @@
     ],
     "image_url": "https://i.pinimg.com/736x/c8/2a/24/c82a24c245509066b76b3dc347924b15.jpg?w=600&q=80",
     "sort_order": 1,
-    "active": true
+    "active": true,
+    "updated_at": "2026-06-18T19:04:12.523Z"
   },
   {
     "id": "course-hair",
