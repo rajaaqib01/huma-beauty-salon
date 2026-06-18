@@ -3,11 +3,12 @@ import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 import { genId } from '../../../lib/dbId'
+import { ADMIN_URL_FIELDS, normalizeServiceImageUrl } from '../../../lib/serviceImageStorage'
 
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '6mb',
+      sizeLimit: '8mb',
     },
   },
 }
@@ -18,15 +19,16 @@ function normalizeServicePrice(price) {
   return Number.isFinite(num) ? num : null
 }
 
-function buildServicePayload(body, { forUpdate = false } = {}) {
+async function buildServicePayload(body, { forUpdate = false } = {}) {
   const now = new Date().toISOString()
+  const imageUrl = await normalizeServiceImageUrl(String(body.image_url || '').trim())
   const payload = {
     ...body,
     title: String(body.title || '').trim(),
     description: String(body.description || '').trim(),
     category: String(body.category || '').trim(),
     subcategory: String(body.subcategory || '').trim(),
-    image_url: String(body.image_url || '').trim(),
+    image_url: imageUrl,
     price: normalizeServicePrice(body.price),
     updated_at: now,
   }
@@ -55,8 +57,8 @@ async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const body = sanitizeObject(req.body)
-      const obj = await localInsert('services', buildServicePayload(body))
+      const body = sanitizeObject(req.body, { preserveUrlFields: true, urlFields: ADMIN_URL_FIELDS })
+      const obj = await localInsert('services', await buildServicePayload(body))
       return res.status(201).json(obj)
     } catch (e) {
       console.error('Service insert error:', e)
@@ -66,8 +68,8 @@ async function handler(req, res) {
 
   if (req.method === 'PUT') {
     try {
-      const body = sanitizeObject(req.body)
-      const updated = await localUpdate('services', id, buildServicePayload(body, { forUpdate: true }))
+      const body = sanitizeObject(req.body, { preserveUrlFields: true, urlFields: ADMIN_URL_FIELDS })
+      const updated = await localUpdate('services', id, await buildServicePayload(body, { forUpdate: true }))
       if (!updated) return res.status(404).json({ error: 'Service not found' })
       return res.json(updated)
     } catch (e) {

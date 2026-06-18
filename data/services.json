@@ -1,13 +1,68 @@
 [
   {
+    "id": "mqk07zm4-sfl2z23",
+    "title": "Pigmentation Facial",
+    "description": "A specialized facial that helps reduce pigmentation, even out skin tone, and promote a clearer, more radiant complexion ✨",
+    "price": 8500,
+    "category": "Facial",
+    "subcategory": "Skin Treatment",
+    "image_url": "/uploads/services/1781817647082-zwzyojk.jpg",
+    "updated_at": "2026-06-18T21:20:47.116Z",
+    "created_at": "2026-06-18T21:20:47.116Z"
+  },
+  {
+    "id": "mqk03z08-x923aid",
+    "title": "Dark Spots Removal Facial",
+    "description": "A targeted facial that helps fade dark spots, even out skin tone, and restore a clearer, brighter complexion ✨",
+    "price": 6200,
+    "category": "Facial",
+    "subcategory": "Skin Treatment",
+    "image_url": "/uploads/services/1781817459668-9mtcwro.jpg",
+    "updated_at": "2026-06-18T21:17:39.704Z",
+    "created_at": "2026-06-18T21:17:39.704Z"
+  },
+  {
+    "id": "mqjzyja3-8ys2xtu",
+    "title": "Vitamin C Facial",
+    "description": "A brightening facial that evens skin tone, reduces dullness, and enhances your natural glow ✨",
+    "price": 4499,
+    "category": "Facial",
+    "subcategory": "Advanced Facial",
+    "image_url": "/uploads/services/1781817206007-pmpkb7m.jpg",
+    "updated_at": "2026-06-18T21:14:00.439Z",
+    "created_at": "2026-06-18T21:13:26.043Z"
+  },
+  {
+    "id": "mqjzcf2t-9bcg5nj",
+    "title": "Mini Facial",
+    "description": "Light facial jo skin ko gently cleanse, hydrate aur soft banata hai; perfect for regular care aur natural glow ✨",
+    "price": 2750,
+    "category": "Facial",
+    "subcategory": "Basic Facial",
+    "image_url": "/uploads/services/1781816174135-50pdb78.jpg",
+    "updated_at": "2026-06-18T20:56:14.165Z",
+    "created_at": "2026-06-18T20:56:14.165Z"
+  },
+  {
+    "id": "mqjz9ruu-qmw3nh4",
+    "title": "Express Facial",
+    "description": "Quick facial jo skin ko instantly clean, fresh aur glowing banata hai; perfect for instant refresh ✨",
+    "price": 3000,
+    "category": "Facial",
+    "subcategory": "Basic Facial",
+    "image_url": "/uploads/services/1781816050729-1cj8s8b.jpg",
+    "updated_at": "2026-06-18T20:54:10.757Z",
+    "created_at": "2026-06-18T20:54:10.757Z"
+  },
+  {
     "id": "mqjvjpib-quzzkvc",
     "title": "simple makeup",
-    "description": "",
+    "description": "Professional Simple makeup service at Huma Beauty Saloon, Jhelum.",
     "price": 3000,
     "category": "Makeup",
     "subcategory": "Casual Makeup",
-    "image_url": "/uploads/services/1781809795763-0vg6ph6.jpg",
-    "updated_at": "2026-06-18T19:09:55.810Z",
+    "image_url": "/uploads/services/1781812594143-upe86tk.jpg",
+    "updated_at": "2026-06-18T19:56:34.224Z",
     "created_at": "2026-06-18T19:09:55.810Z"
   },
   {
@@ -24,21 +79,23 @@
     "id": "svc-makeup-hd-bridal-makeup",
     "title": "HD Bridal Makeup",
     "description": "Professional hd bridal makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "15000",
+    "price": 15000,
     "category": "Makeup",
     "subcategory": "Bridal Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781811749151-3xzngj3.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:42:29.168Z"
   },
   {
     "id": "svc-makeup-walima-makeup",
     "title": "Walima Makeup",
     "description": "Professional walima makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "12000",
+    "price": 12000,
     "category": "Makeup",
     "subcategory": "Bridal Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781811639271-4gjutn6.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:40:39.295Z"
   },
   {
     "id": "svc-makeup-4",
@@ -64,51 +121,45 @@
     "id": "svc-makeup-soft-glam-makeup",
     "title": "Soft Glam Makeup",
     "description": "Professional soft glam makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "7000",
+    "price": 8000,
     "category": "Makeup",
     "subcategory": "Party Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
-  },
-  {
-    "id": "svc-makeup-evening-makeup",
-    "title": "Evening Makeup",
-    "description": "Professional evening makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "7000",
-    "category": "Makeup",
-    "subcategory": "Party Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781812138712-2poy17n.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:53:54.024Z"
   },
   {
     "id": "svc-makeup-day-makeup",
     "title": "Day Makeup",
     "description": "Professional day makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "5000",
+    "price": 5000,
     "category": "Makeup",
     "subcategory": "Party Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781812063713-h553it4.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:47:43.795Z"
   },
   {
     "id": "svc-makeup-natural-makeup",
     "title": "Natural Makeup",
     "description": "Professional natural makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "3500",
+    "price": 3500,
     "category": "Makeup",
     "subcategory": "Party Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781811960018-94a9il5.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:46:00.059Z"
   },
   {
     "id": "svc-makeup-model-makeup",
     "title": "Model Makeup",
     "description": "Professional model makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "9000",
+    "price": 9000,
     "category": "Makeup",
     "subcategory": "Fashion / Model Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781812954108-9tps8ah.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T20:02:34.155Z"
   },
   {
     "id": "svc-makeup-16",
@@ -134,91 +185,89 @@
     "id": "svc-makeup-ramp-makeup",
     "title": "Ramp Makeup",
     "description": "Professional ramp makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "9000",
+    "price": 9000,
     "category": "Makeup",
     "subcategory": "Fashion / Model Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781813141838-x6ob92f.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T20:05:41.888Z"
   },
   {
     "id": "svc-makeup-5",
     "title": "HD Makeup",
     "description": "High-definition makeup designed for photos, videos, and close-ups.",
-    "price": "10000",
+    "price": 12999,
     "category": "Makeup",
-    "subcategory": "HD & Airbrush",
-    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&q=80",
-    "created_at": "2026-05-31T00:00:00.000Z"
+    "subcategory": "HD &amp; Airbrush",
+    "image_url": "/uploads/services/1781813620221-teup40m.jpg",
+    "created_at": "2026-05-31T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:13:40.254Z"
   },
   {
     "id": "svc-makeup-hd-airbrush-makeup",
     "title": "Airbrush Makeup",
     "description": "Flawless airbrush finish for weddings, events and high-definition coverage.",
-    "price": "12000",
+    "price": 25000,
     "category": "Makeup",
-    "subcategory": "HD & Airbrush",
-    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "subcategory": "HD &amp; Airbrush",
+    "image_url": "https://i.pinimg.com/736x/c4/a0/62/c4a062383b4900d59fcb94665361a9a7.jpg?w=600&amp;q=80",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:12:02.347Z"
   },
   {
     "id": "svc-makeup-waterproof-makeup",
     "title": "Waterproof Makeup",
     "description": "Professional waterproof makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "8500",
+    "price": 19999,
     "category": "Makeup",
-    "subcategory": "HD & Airbrush",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "subcategory": "HD &amp; Airbrush",
+    "image_url": "/uploads/services/1781813320934-k5jtdtf.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T20:12:35.314Z"
   },
   {
     "id": "svc-makeup-long-lasting-makeup",
     "title": "Long Lasting Makeup",
     "description": "Professional long lasting makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "8500",
+    "price": 15000,
     "category": "Makeup",
-    "subcategory": "HD & Airbrush",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "subcategory": "HD &amp; Airbrush",
+    "image_url": "/uploads/services/1781813463975-l41ak01.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T20:13:04.528Z"
   },
   {
     "id": "svc-makeup-daily-makeup",
     "title": "Daily Makeup",
     "description": "Professional daily makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "3500",
+    "price": 3500,
     "category": "Makeup",
     "subcategory": "Casual Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781812678163-6clhet8.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:57:58.219Z"
   },
   {
     "id": "svc-makeup-light-makeup",
     "title": "Light Makeup",
     "description": "Professional light makeup service at Huma Beauty Saloon, Jhelum.",
-    "price": "3500",
+    "price": 3500,
     "category": "Makeup",
     "subcategory": "Casual Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
-  },
-  {
-    "id": "svc-makeup-no-makeup-look",
-    "title": "No-Makeup Look",
-    "description": "Professional no-makeup look service at Huma Beauty Saloon, Jhelum.",
-    "price": "3500",
-    "category": "Makeup",
-    "subcategory": "Casual Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781812739006-tmo2lxt.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T19:58:59.073Z"
   },
   {
     "id": "svc-makeup-15",
     "title": "Office Makeup",
     "description": "Polished, professional makeup suitable for workplace and meetings.",
-    "price": "4000",
+    "price": 4000,
     "category": "Makeup",
     "subcategory": "Casual Makeup",
-    "image_url": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781812817387-dizxzfh.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:00:17.462Z"
   },
   {
     "id": "svc-facial-clean-up",
@@ -234,11 +283,12 @@
     "id": "svc-facial-basic-facial",
     "title": "Basic Facial",
     "description": "Professional basic facial service at Huma Beauty Saloon, Jhelum.",
-    "price": "4500",
+    "price": 3499,
     "category": "Facial",
     "subcategory": "Basic Facial",
-    "image_url": "https://i.pinimg.com/1200x/cc/1a/4e/cc1a4e2f556732f7a884890488a64290.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "image_url": "/uploads/services/1781815668856-rg3jv2f.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T20:47:48.916Z"
   },
   {
     "id": "svc-facial-05",
@@ -254,71 +304,78 @@
     "id": "svc-facial-03",
     "title": "Gold Facial",
     "description": "Luxurious gold-infused facial for radiant skin.",
-    "price": "5500",
+    "price": 5500,
     "category": "Facial",
-    "subcategory": "Advanced Facial",
-    "image_url": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "subcategory": "Whitening Facial",
+    "image_url": "/uploads/services/1781816285593-fd9zjui.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:58:05.669Z"
   },
   {
     "id": "svc-facial-11",
     "title": "Diamond Facial",
     "description": "Diamond micro-exfoliation for polished, youthful skin.",
-    "price": "9000",
+    "price": 7500,
     "category": "Facial",
-    "subcategory": "Advanced Facial",
-    "image_url": "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "subcategory": "Whitening Facial",
+    "image_url": "/uploads/services/1781816513822-b7aa092.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T21:01:53.877Z"
   },
   {
     "id": "svc-facial-pearl-facial",
     "title": "Pearl Facial",
     "description": "Professional pearl facial service at Huma Beauty Saloon, Jhelum.",
-    "price": "6500",
+    "price": 6500,
     "category": "Facial",
-    "subcategory": "Advanced Facial",
-    "image_url": "https://i.pinimg.com/1200x/cc/1a/4e/cc1a4e2f556732f7a884890488a64290.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.805Z"
+    "subcategory": "Whitening Facial",
+    "image_url": "/uploads/services/1781816397055-p24yeie.jpg",
+    "created_at": "2026-06-16T22:22:22.805Z",
+    "updated_at": "2026-06-18T20:59:57.108Z"
   },
   {
     "id": "svc-facial-09",
     "title": "Hydra Facial",
     "description": "Deep hydration and rejuvenation for plump, glowing skin.",
-    "price": "8000",
+    "price": 10000,
     "category": "Facial",
     "subcategory": "Advanced Facial",
-    "image_url": "https://i.pinimg.com/1200x/cc/1a/4e/cc1a4e2f556732f7a884890488a64290.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781816642983-mn3pxjx.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T21:04:03.069Z"
   },
   {
     "id": "svc-facial-acne-treatment",
     "title": "Acne Treatment",
     "description": "Professional acne treatment service at Huma Beauty Saloon, Jhelum.",
-    "price": "6000",
+    "price": 7500,
     "category": "Facial",
     "subcategory": "Skin Treatment",
-    "image_url": "https://i.pinimg.com/1200x/cc/1a/4e/cc1a4e2f556732f7a884890488a64290.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "image_url": "/uploads/services/1781816841893-fi1opv7.jpg",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T21:10:01.125Z"
   },
   {
     "id": "svc-facial-12",
     "title": "Anti-Aging Facial",
     "description": "Reduce fine lines and restore youthful firmness.",
-    "price": "7000",
+    "price": 7000,
     "category": "Facial",
-    "subcategory": "Skin Treatment",
-    "image_url": "https://i.pinimg.com/1200x/86/24/96/86249669d6cb25d9dcc5053a8f22bd78.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "subcategory": "Advanced Facial",
+    "image_url": "/uploads/services/1781816948400-2xkh1w7.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T21:09:08.449Z"
   },
   {
     "id": "svc-facial-skin-polishing",
     "title": "Skin Polishing",
     "description": "Professional skin polishing service at Huma Beauty Saloon, Jhelum.",
-    "price": "5500",
+    "price": 5999,
     "category": "Facial",
-    "subcategory": "Skin Treatment",
-    "image_url": "https://i.pinimg.com/1200x/cc/1a/4e/cc1a4e2f556732f7a884890488a64290.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "subcategory": "Advanced Facial",
+    "image_url": "/uploads/services/1781816734754-s53jpdv.jpg",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T21:10:52.272Z"
   },
   {
     "id": "svc-facial-whitening-treatment",
@@ -364,71 +421,78 @@
     "id": "svc-hair-01",
     "title": "Ladies Hair Cut",
     "description": "Precision ladies haircut tailored to your face shape and style.",
-    "price": "1000",
+    "price": 2000,
     "category": "Hair",
     "subcategory": "Hair Cutting",
-    "image_url": "https://i.pinimg.com/1200x/7e/ee/ce/7eeece0d44b374dfe75cc09232162440.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781814408583-ukt8etz.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:28:43.377Z"
   },
   {
     "id": "svc-hair-02",
     "title": "Layer Cut",
     "description": "Soft layered cut for volume, movement, and a fresh look.",
-    "price": "1500",
+    "price": 2499,
     "category": "Hair",
     "subcategory": "Hair Cutting",
-    "image_url": "https://i.pinimg.com/736x/30/76/97/30769764d31c49e940676ffb652d79be.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781814490546-aefmrt2.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:28:10.597Z"
   },
   {
     "id": "svc-hair-03",
     "title": "Step Cut",
     "description": "Classic step layering for structured shape and bounce.",
-    "price": "1500",
+    "price": 3000,
     "category": "Hair",
     "subcategory": "Hair Cutting",
-    "image_url": "https://i.pinimg.com/736x/56/4e/25/564e25677bf29e7689469546211441f4.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781814707085-uoscaoj.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:31:47.131Z"
   },
   {
     "id": "svc-hair-trim",
     "title": "Trim",
     "description": "Professional trim service at Huma Beauty Saloon, Jhelum.",
-    "price": "1500",
+    "price": 1500,
     "category": "Hair",
     "subcategory": "Hair Cutting",
-    "image_url": "https://i.pinimg.com/1200x/7e/ee/ce/7eeece0d44b374dfe75cc09232162440.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "image_url": "/uploads/services/1781814611581-flcpy0k.jpg",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T20:30:11.668Z"
   },
   {
     "id": "svc-hair-13",
     "title": "Blow Dry",
     "description": "Smooth, voluminous blow dry for any occasion.",
-    "price": "1500",
+    "price": 1800,
     "category": "Hair",
     "subcategory": "Hair Styling",
-    "image_url": "https://i.pinimg.com/1200x/83/08/ae/8308ae065f6981ce3716760be8124943.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781815377169-vaw59wh.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:42:57.192Z"
   },
   {
     "id": "svc-hair-14",
     "title": "Hair Straightening",
     "description": "Temporary straightening with heat styling and finish.",
-    "price": "2000",
+    "price": 2500,
     "category": "Hair",
     "subcategory": "Hair Styling",
-    "image_url": "https://i.pinimg.com/736x/57/16/42/571642770c4147fad0d25b1be91ad17d.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/736x/57/16/42/571642770c4147fad0d25b1be91ad17d.jpg?w=600&amp;q=80",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:41:46.877Z"
   },
   {
     "id": "svc-hair-hair-curling",
     "title": "Hair Curling",
     "description": "Professional hair curling service at Huma Beauty Saloon, Jhelum.",
-    "price": "2000",
+    "price": 3000,
     "category": "Hair",
     "subcategory": "Hair Styling",
-    "image_url": "https://i.pinimg.com/1200x/7e/ee/ce/7eeece0d44b374dfe75cc09232162440.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "image_url": "/uploads/services/1781815287539-q7mp77k.jpg",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T20:41:27.556Z"
   },
   {
     "id": "svc-hair-hair-setting",
@@ -464,51 +528,56 @@
     "id": "svc-hair-25",
     "title": "Rebonding",
     "description": "Chemical straightening for permanently smooth hair.",
-    "price": "18000",
+    "price": 18000,
     "category": "Hair",
     "subcategory": "Hair Treatments",
-    "image_url": "https://i.pinimg.com/1200x/7e/ee/ce/7eeece0d44b374dfe75cc09232162440.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781815081256-7j0mqfg.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:38:01.310Z"
   },
   {
     "id": "svc-hair-21",
     "title": "Hair Spa",
     "description": "Deep conditioning and scalp therapy to restore shine.",
-    "price": "3500",
+    "price": 5001,
     "category": "Hair",
     "subcategory": "Hair Treatments",
-    "image_url": "https://i.pinimg.com/1200x/83/08/ae/8308ae065f6981ce3716760be8124943.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "https://i.pinimg.com/1200x/83/08/ae/8308ae065f6981ce3716760be8124943.jpg?w=600&amp;q=80",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:44:38.617Z"
   },
   {
     "id": "svc-hair-full-hair-color",
     "title": "Full Hair Color",
     "description": "Professional full hair color service at Huma Beauty Saloon, Jhelum.",
-    "price": "6000",
+    "price": 6499,
     "category": "Hair",
     "subcategory": "Hair Coloring",
-    "image_url": "https://i.pinimg.com/1200x/7e/ee/ce/7eeece0d44b374dfe75cc09232162440.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "image_url": "/uploads/services/1781814893530-1k9fns5.jpg",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T20:34:53.585Z"
   },
   {
     "id": "svc-hair-06",
     "title": "Root Touch Up",
     "description": "Root regrowth color refresh between full colors.",
-    "price": "4500",
+    "price": 3500,
     "category": "Hair",
     "subcategory": "Hair Coloring",
-    "image_url": "https://i.pinimg.com/736x/57/16/42/571642770c4147fad0d25b1be91ad17d.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781814806095-sn5ode7.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:33:26.157Z"
   },
   {
     "id": "svc-hair-07",
     "title": "Highlights",
     "description": "Custom highlights for dimension and brightness.",
-    "price": "12000",
+    "price": 12000,
     "category": "Hair",
     "subcategory": "Hair Coloring",
-    "image_url": "https://i.pinimg.com/736x/70/42/e7/7042e76897c8be684370361200c0ccbd.jpg?w=600&q=80",
-    "created_at": "2026-06-17T00:00:00.000Z"
+    "image_url": "/uploads/services/1781814969314-ue04r74.jpg",
+    "created_at": "2026-06-17T00:00:00.000Z",
+    "updated_at": "2026-06-18T20:36:09.377Z"
   },
   {
     "id": "svc-hair-08",
