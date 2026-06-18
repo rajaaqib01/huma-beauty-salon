@@ -553,11 +553,12 @@
     "id": "svc-mehndi-full-feet-mehndi",
     "title": "Full Feet Mehndi",
     "description": "Professional full feet mehndi service at Huma Beauty Saloon, Jhelum.",
-    "price": "12000",
+    "price": "6000",
     "category": "Mehndi",
     "subcategory": "Bridal Mehndi",
-    "image_url": "https://i.pinimg.com/736x/2d/86/59/2d86596f9bbb18306ac58f16ac9baf17.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "image_url": "https://i.pinimg.com/736x/2d/86/59/2d86596f9bbb18306ac58f16ac9baf17.jpg?w=600&amp;q=80",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T16:32:27.861Z"
   },
   {
     "id": "svc-mehndi-03",
