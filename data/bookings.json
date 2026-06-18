@@ -1,27 +1,5 @@
 [
   {
-    "id": "mqj8xgac-i79jptd",
-    "customer_name": "raja aqib ",
-    "name": "raja aqib ",
-    "phone": "03378418500",
-    "email": "aqiraja78@gmail.com",
-    "service_title": "Bridal Makeup",
-    "service": "Bridal Makeup",
-    "price": "Rs. 18,000",
-    "offer_title": null,
-    "discount": null,
-    "staff_id": null,
-    "staff_name": null,
-    "referral_code": null,
-    "date": "2026-06-20",
-    "time": "15:00",
-    "notes": "",
-    "status": "pending",
-    "source": "online",
-    "read": false,
-    "created_at": "2026-06-18T08:36:45.876Z"
-  },
-  {
     "id": "mqh7r89e-tx02pf9",
     "customer_name": "Humaaqi",
     "name": "Humaaqi",
