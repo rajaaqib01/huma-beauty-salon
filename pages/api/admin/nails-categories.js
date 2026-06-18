@@ -1,32 +1,19 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { adminList } from '../../../lib/adminDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 
 const DB_NAME = 'nails_categories'
 const TABLE_NAME = 'nails_categories'
 
 async function handler(req, res) {
-  if (!supabaseServer) {
-    if (req.method === 'GET') {
-      try {
-        const items = await localList(DB_NAME)
-        return res.json([...items].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)))
-      } catch (e) {
-        console.error('Local nails categories load error:', e)
-        return res.status(500).json({ error: e.message })
-      }
-    }
-  }
-
   if (req.method === 'GET') {
-    const { data, error } = await supabaseServer
-      .from(TABLE_NAME)
-      .select('*')
-      .order('sort_order', { ascending: true })
-    if (error) return res.status(500).json({ error: error.message })
-    return res.json(data || [])
+    const items = await adminList(TABLE_NAME, (db) =>
+      db.from(TABLE_NAME).select('*').order('sort_order', { ascending: true })
+    )
+    return res.json([...items].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)))
   }
 
   if (req.method === 'POST') {

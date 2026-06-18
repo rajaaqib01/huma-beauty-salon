@@ -1,27 +1,27 @@
 import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { adminList, adminFindById } from '../../../lib/adminDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 
 async function handler(req, res) {
   const { method } = req
   const { id } = req.query
 
-  if (!supabaseServer) {
-    if (method === 'GET') {
-      try {
-        const items = await localList('gallery')
-        if (id) {
-          const found = items.find(x => String(x.id) === String(id)) || null
-          return res.json(found)
-        }
-        return res.json(items)
-      } catch (e) {
-        console.error('Local gallery load error:', e)
-        return res.status(500).json({ error: e.message })
-      }
+  if (method === 'GET') {
+    if (id) {
+      const found = await adminFindById('gallery', id, (db) =>
+        db.from('gallery').select('*').order('created_at', { ascending: false })
+      )
+      return res.json(found)
     }
+    const items = await adminList('gallery', (db) =>
+      db.from('gallery').select('*').order('created_at', { ascending: false })
+    )
+    return res.json(items)
+  }
 
+  if (!supabaseServer) {
     if (method === 'POST') {
       try {
         const { title, image_url, category } = req.body || {}
@@ -70,15 +70,6 @@ async function handler(req, res) {
 
     res.setHeader('Allow', 'GET,POST,PUT,DELETE')
     return res.status(405).end('Method Not Allowed')
-  }
-
-  if (method === 'GET') {
-    if (id) {
-      const { data, error } = await supabaseServer.from('gallery').select('*').eq('id', id).single()
-      return error ? res.status(500).json({ error: error.message }) : res.json(data)
-    }
-    const { data, error } = await supabaseServer.from('gallery').select('*').order('created_at', { ascending: false })
-    return error ? res.status(500).json({ error: error.message }) : res.json(data)
   }
 
   if (method === 'POST') {

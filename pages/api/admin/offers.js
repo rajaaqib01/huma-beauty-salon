@@ -1,6 +1,7 @@
 import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { adminList, adminFindById } from '../../../lib/adminDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 
 function validateOfferBody(body) {
@@ -14,22 +15,23 @@ function validateOfferBody(body) {
 }
 
 async function handler(req, res) {
-  if (!supabaseServer) {
-    if (req.method === 'GET') {
-      const { id } = req.query
-      try {
-        const items = await localList('offers')
-        if (id) {
-          const item = items.find(x => String(x.id) === String(id))
-          return res.json(item || null)
-        }
-        return res.json(items)
-      } catch (e) {
-        console.error('Local offers load error:', e)
-        return res.status(500).json({ error: e.message })
-      }
-    }
+  const { method } = req
+  const { id } = req.query
 
+  if (method === 'GET') {
+    if (id) {
+      const item = await adminFindById('offers', id, (db) =>
+        db.from('offers').select('*').order('created_at', { ascending: false })
+      )
+      return res.json(item)
+    }
+    const items = await adminList('offers', (db) =>
+      db.from('offers').select('*').order('created_at', { ascending: false })
+    )
+    return res.json(items)
+  }
+
+  if (!supabaseServer) {
     if (req.method === 'POST') {
       const body = sanitizeObject(req.body)
       const validationError = validateOfferBody(body)
@@ -72,18 +74,6 @@ async function handler(req, res) {
 
     res.setHeader('Allow', 'GET,POST,PUT,DELETE')
     return res.status(405).end('Method Not Allowed')
-  }
-
-  const { method } = req
-  const { id } = req.query
-
-  if (method === 'GET') {
-    if (id) {
-      const { data, error } = await supabaseServer.from('offers').select('*').eq('id', id).single()
-      return error ? res.status(500).json({ error: error.message }) : res.json(data)
-    }
-    const { data, error } = await supabaseServer.from('offers').select('*').order('created_at', { ascending: false })
-    return error ? res.status(500).json({ error: error.message }) : res.json(data)
   }
 
   if (method === 'POST') {

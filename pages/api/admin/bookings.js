@@ -1,7 +1,8 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import { list as localList, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { adminList, adminFindById } from '../../../lib/adminDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 import { notifyCustomerBookingStatus } from '../../../lib/notifications'
 import { parsePriceAmount, formatPrice } from '../../../lib/bookingSales'
@@ -33,24 +34,20 @@ async function handleStatusNotify(previous, updated) {
 }
 
 async function adminBookingHandler(req, res) {
-  if (!supabaseServer) {
-    if (req.method === 'GET') {
-      try {
-        const items = await localList('bookings')
-        return res.json(items)
-      } catch (e) {
-        console.error('Local bookings load error:', e)
-        return res.status(500).json({ error: 'Failed to load bookings' })
-      }
-    }
+  if (req.method === 'GET') {
+    const items = await adminList('bookings', (db) =>
+      db.from('bookings').select('*').order('created_at', { ascending: false })
+    )
+    return res.json(items)
+  }
 
+  if (!supabaseServer) {
     if (req.method === 'PUT') {
       const { id } = req.query
       if (!id) return res.status(400).json({ error: 'Missing booking id' })
       const body = sanitizeObject(req.body)
       try {
-        const all = await localList('bookings')
-        const previous = all.find(b => String(b.id) === String(id))
+        const previous = await adminFindById('bookings', id)
         const patch = enrichBookingPatch(body, previous)
         const updated = await localUpdate('bookings', id, patch)
         if (!updated) return res.status(404).json({ error: 'Booking not found' })
@@ -80,22 +77,16 @@ async function adminBookingHandler(req, res) {
     return res.status(405).end('Method Not Allowed')
   }
 
-  if (req.method === 'GET') {
-    const { data, error } = await supabaseServer.from('bookings').select('*').order('created_at', { ascending: false })
-    if (error) return res.status(500).json({ error: 'Failed to load bookings' })
-    return res.json(data)
-  }
-
   if (req.method === 'PUT') {
     const { id } = req.query
     if (!id) return res.status(400).json({ error: 'Missing booking id' })
     const body = sanitizeObject(req.body)
 
-    const { data: prevData } = await supabaseServer.from('bookings').select('*').eq('id', id).single()
-    const patch = enrichBookingPatch(body, prevData)
+    const previous = await adminFindById('bookings', id)
+    const patch = enrichBookingPatch(body, previous)
     const { data, error } = await supabaseServer.from('bookings').update({ ...patch }).eq('id', id).select()
     if (error) return res.status(500).json({ error: 'Failed to update booking' })
-    if (body.status && prevData) await handleStatusNotify(prevData, data[0])
+    if (body.status && previous) await handleStatusNotify(previous, data[0])
     return res.json(data[0])
   }
 

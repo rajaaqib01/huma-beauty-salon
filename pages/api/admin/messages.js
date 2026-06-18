@@ -1,22 +1,20 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { rejectUnlessCanDelete } from '../../../lib/adminRoles'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
+import { adminList } from '../../../lib/adminDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 
 async function handler(req, res){
+  if(req.method === 'GET'){
+    const items = await adminList('messages', (db) =>
+      db.from('messages').select('*').order('created_at', { ascending: false })
+    )
+    return res.json(items)
+  }
+
   if (!supabaseServer) {
     // Local fallback
-    if (req.method === 'GET'){
-      try{
-        const items = await localList('messages')
-        return res.json(items)
-      } catch (e){
-        console.error('Local messages load error:', e)
-        return res.status(500).json({ error: e.message })
-      }
-    }
-
     if(req.method === 'POST'){
       try{
         const obj = await localInsert('messages', sanitizeObject(req.body))
@@ -50,12 +48,6 @@ async function handler(req, res){
         return res.status(500).json({ error: e.message })
       }
     }
-  }
-
-  if(req.method === 'GET'){
-    const { data, error } = await supabaseServer.from('messages').select('*').order('created_at', { ascending: false })
-    if(error) return res.status(500).json({ error: error.message })
-    return res.json(data)
   }
 
   if(req.method === 'POST'){

@@ -1,6 +1,6 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { supabaseServer } from '../../../lib/supabaseServer'
-import localDb from '../../../lib/localDb'
+import { adminList } from '../../../lib/adminDb'
 import { isOwnerRole } from '../../../lib/adminRoles'
 import { buildMonthlyTotals } from '../../../lib/bookingSales'
 import { getTodayBookings, processBookingReminders } from '../../../lib/bookingReminders'
@@ -59,41 +59,46 @@ async function handler(req, res) {
   try {
     let admissions = []
     try {
-      admissions = await localDb.list('admissions')
+      admissions = await adminList('admissions')
     } catch {
       admissions = []
     }
     const admissionCounts = admissionStats(admissions)
 
     if (supabaseServer) {
-      const [{ count: total_bookings }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true })
-      const [{ count: pending }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'pending')
-      const [{ count: confirmed }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'confirmed')
-      const [{ count: cancelled }] = await supabaseServer.from('bookings').select('*', { count: 'exact', head: true }).eq('status', 'cancelled')
-      const [{ count: total_services }] = await supabaseServer.from('services').select('*', { count: 'exact', head: true })
-      const [{ count: total_messages }] = await supabaseServer.from('messages').select('*', { count: 'exact', head: true })
-      const { data: allBookings } = await supabaseServer.from('bookings').select('*')
+      try {
+        const [allBookings, services, messages, admissionsFromDb] = await Promise.all([
+          adminList('bookings'),
+          adminList('services'),
+          adminList('messages'),
+          adminList('admissions'),
+        ])
+        if (admissionsFromDb.length) admissions = admissionsFromDb
+        const admissionCounts = admissionStats(admissions)
 
-      const payload = {
-        total_bookings,
-        pending,
-        confirmed,
-        cancelled,
-        total_services,
-        total_messages,
-        bookings_this_week: bookingsThisWeek(allBookings || []),
-        popular_service: popularService(allBookings || []),
-        today_bookings: await getTodayBookings(),
-        ...admissionCounts,
+        const payload = {
+          total_bookings: allBookings.length,
+          pending: allBookings.filter((b) => String(b.status).toLowerCase() === 'pending').length,
+          confirmed: allBookings.filter((b) => String(b.status).toLowerCase() === 'confirmed').length,
+          cancelled: allBookings.filter((b) => String(b.status).toLowerCase() === 'cancelled').length,
+          total_services: services.length,
+          total_messages: messages.length,
+          bookings_this_week: bookingsThisWeek(allBookings),
+          popular_service: popularService(allBookings),
+          today_bookings: await getTodayBookings(),
+          ...admissionCounts,
+        }
+        if (showOwnerSales) payload.current_month_sales = currentMonthSales(allBookings)
+        return res.json(payload)
+      } catch (supabaseErr) {
+        console.error('Supabase stats fallback:', supabaseErr.message)
       }
-      if (showOwnerSales) payload.current_month_sales = currentMonthSales(allBookings || [])
-      return res.json(payload)
     }
 
-    const bookings = await localDb.list('bookings')
-    const services = await localDb.list('services')
-    const messages = await localDb.list('messages')
-    const offers = await localDb.list('offers')
+    const bookings = await adminList('bookings')
+    const services = await adminList('services')
+    const messages = await adminList('messages')
+    const offers = await adminList('offers')
 
     const payload = {
       total_bookings: bookings.length,

@@ -120,10 +120,10 @@ export default function ServicesPage() {
 
   return (
     <AdminShell title="Services">
-      {storageHealth?.needs_supabase ? (
+      {storageHealth?.needs_supabase || storageHealth?.supabase_read_ok === false ? (
         <div className="admin-alert admin-alert-warning" style={{ marginBottom: '16px' }}>
-          <strong>Supabase required on live site.</strong>{' '}
-          Manual services will not save until you complete setup:
+          <strong>Supabase keys need fixing on live site.</strong>{' '}
+          Admin can view catalog data, but new saves need correct Netlify env vars:
           <ol style={{ margin: '10px 0 0 18px', padding: 0, lineHeight: 1.6 }}>
             <li>Run <code>sql/schema.sql</code> in Supabase SQL Editor</li>
             <li>Add Supabase keys to <code>.env.local</code> and Netlify env vars</li>

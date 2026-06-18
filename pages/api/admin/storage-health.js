@@ -1,7 +1,7 @@
 import { requireAdmin } from '../../../lib/adminSession'
 import { getStorageBackend, isProductionPersistentStorage } from '../../../lib/storageBackend'
+import { adminList } from '../../../lib/adminDb'
 import { SUPABASE_NETLIFY_SETUP_MSG } from '../../../lib/supabaseRuntime'
-import { list as localList } from '../../../lib/localDb'
 import { supabaseServer } from '../../../lib/supabaseServer'
 
 async function handler(req, res) {
@@ -12,17 +12,16 @@ async function handler(req, res) {
 
   const backend = getStorageBackend()
   let servicesCount = 0
+  let supabaseReadOk = true
 
   try {
+    const items = await adminList('services', (db) =>
+      db.from('services').select('*').order('created_at', { ascending: true })
+    )
+    servicesCount = items.length
     if (supabaseServer) {
-      const { count, error } = await supabaseServer
-        .from('services')
-        .select('*', { count: 'exact', head: true })
-      if (error) throw new Error(error.message)
-      servicesCount = count || 0
-    } else {
-      const items = await localList('services')
-      servicesCount = Array.isArray(items) ? items.length : 0
+      const probe = await supabaseServer.from('services').select('id').limit(1)
+      supabaseReadOk = !probe.error
     }
   } catch (err) {
     return res.status(500).json({
@@ -37,7 +36,8 @@ async function handler(req, res) {
     persistent: isProductionPersistentStorage(),
     is_netlify: Boolean(process.env.NETLIFY),
     services_count: servicesCount,
-    needs_supabase: Boolean(process.env.NETLIFY) && backend !== 'supabase',
+    supabase_read_ok: supabaseReadOk,
+    needs_supabase: Boolean(process.env.NETLIFY) && (!supabaseReadOk || backend !== 'supabase'),
     setup_message: SUPABASE_NETLIFY_SETUP_MSG,
   })
 }
