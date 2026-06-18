@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import AdminShell from '../../../components/AdminShell'
 import { GROUPED_CATEGORIES, getCategoryApiUrl, getPresetsForGroup } from '../../../lib/groupedCategoryConfig'
+import { readApiJson, validateAdminImageFile } from '../../../lib/adminApiClient'
 
 const CATEGORIES = ['Makeup', 'Hair', 'Facial', 'Nails', 'Mehndi', 'Waxing']
 const FALLBACK_IMG = 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80'
@@ -44,12 +45,9 @@ export default function EditService() {
   const handleFileChange = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
-    if (!file.type.startsWith('image/')) {
-      setError('Please choose an image file (JPG, PNG, WEBP, GIF).')
-      return
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Image must be smaller than 5MB.')
+    const fileError = validateAdminImageFile(file)
+    if (fileError) {
+      setError(fileError)
       return
     }
     setError('')
@@ -73,7 +71,7 @@ export default function EditService() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(pendingFile),
     })
-    const json = await res.json()
+    const json = await readApiJson(res)
     if (!res.ok) throw new Error(json.error || 'Failed to upload image')
     return json.url
   }
@@ -113,7 +111,7 @@ export default function EditService() {
         credentials: 'include',
         body: JSON.stringify(payload),
       })
-      const data = await res.json().catch(() => ({}))
+      const data = await readApiJson(res)
       if (!res.ok) {
         throw new Error(data.error || 'Failed to save service')
       }

@@ -4,6 +4,14 @@ import { list as localList, insert as localInsert, update as localUpdate, remove
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 import { genId } from '../../../lib/dbId'
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '6mb',
+    },
+  },
+}
+
 function normalizeServicePrice(price) {
   if (price == null || price === '') return null
   const num = Number(String(price).replace(/[^\d.]/g, ''))

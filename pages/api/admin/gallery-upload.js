@@ -3,7 +3,15 @@ import path from 'path'
 import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { isServerless } from '../../../lib/isServerless'
 
-const MAX_BYTES = 5 * 1024 * 1024
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '6mb',
+    },
+  },
+}
+
+const MAX_BYTES = 4 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
 async function handler(req, res) {

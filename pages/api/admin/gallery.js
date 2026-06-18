@@ -2,6 +2,14 @@ import { requireOwnerAdmin } from '../../../lib/adminSession'
 import { list as localList, insert as localInsert, update as localUpdate, remove as localRemove } from '../../../lib/localDb'
 import { sanitizeObject } from '../../../lib/apiUtils/security'
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '6mb',
+    },
+  },
+}
+
 async function handler(req, res) {
   const { method } = req
   const { id } = req.query

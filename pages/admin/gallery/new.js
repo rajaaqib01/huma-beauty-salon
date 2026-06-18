@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import AdminShell from '../../../components/AdminShell'
+import { readApiJson, validateAdminImageFile } from '../../../lib/adminApiClient'
 
 export default function NewGalleryPage() {
   const [title, setTitle] = useState('')
@@ -15,12 +16,9 @@ export default function NewGalleryPage() {
   const handleFileChange = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
-    if (!file.type.startsWith('image/')) {
-      setError('Please choose an image file (JPG, PNG, WEBP, GIF).')
-      return
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Image must be smaller than 5MB.')
+    const fileError = validateAdminImageFile(file)
+    if (fileError) {
+      setError(fileError)
       return
     }
     setError('')
@@ -46,7 +44,7 @@ export default function NewGalleryPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(pendingFile),
     })
-    const json = await res.json()
+    const json = await readApiJson(res)
     if (!res.ok) throw new Error(json.error || 'Failed to upload image file')
     return json.url
   }
@@ -72,7 +70,7 @@ export default function NewGalleryPage() {
         body: JSON.stringify({ title, image_url: finalUrl, category }),
       })
 
-      const data = await res.json()
+      const data = await readApiJson(res)
       if (!res.ok) {
         throw new Error(data.error || 'Failed to save gallery image')
       }
