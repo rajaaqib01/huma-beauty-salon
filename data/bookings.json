@@ -66,28 +66,6 @@
     "created_at": "2026-06-17T18:36:49.995Z"
   },
   {
-    "id": "mqicxc1i-fkaezu5",
-    "customer_name": "raja ali",
-    "name": "raja ali",
-    "phone": "899438933232",
-    "email": "aqi000143@gmail.com",
-    "service_title": "Gel Nail Paint",
-    "service": "Gel Nail Paint",
-    "price": "Rs. 1,500",
-    "offer_title": null,
-    "discount": null,
-    "staff_id": null,
-    "staff_name": null,
-    "referral_code": null,
-    "date": "2026-06-18",
-    "time": "15:30",
-    "notes": "",
-    "status": "pending",
-    "source": "online",
-    "read": false,
-    "created_at": "2026-06-17T17:40:52.662Z"
-  },
-  {
     "id": "mqh7r89e-tx02pf9",
     "customer_name": "Humaaqi",
     "name": "Humaaqi",
