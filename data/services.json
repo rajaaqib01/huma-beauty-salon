@@ -549,9 +549,10 @@
     "description": "Professional simple mehndi service at Huma Beauty Saloon, Jhelum.",
     "price": "1500",
     "category": "Mehndi",
-    "subcategory": "Casual Mehndi",
-    "image_url": "https://i.pinimg.com/736x/2d/86/59/2d86596f9bbb18306ac58f16ac9baf17.jpg?w=600&q=80",
-    "created_at": "2026-06-16T22:22:22.806Z"
+    "subcategory": "Hand mehndi designs",
+    "image_url": "https://i.pinimg.com/736x/2d/86/59/2d86596f9bbb18306ac58f16ac9baf17.jpg?w=600&amp;q=80",
+    "created_at": "2026-06-16T22:22:22.806Z",
+    "updated_at": "2026-06-18T15:34:29.886Z"
   },
   {
     "id": "svc-mehndi-arabic-mehndi",
