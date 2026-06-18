@@ -1,21 +1,16 @@
 import { escapeHtml, sanitizeObject } from '../../lib/apiUtils/security';
 import { validateBookingForm, validateRequestSize } from '../../lib/apiUtils/validation';
 import { rateLimit } from '../../lib/apiUtils/rateLimit';
-import { supabaseServer } from '../../lib/supabaseServer';
 import { insert as localInsert } from '../../lib/localDb';
 import { validateBookingSlot } from '../../lib/bookingSlots';
 import { notifyAdminNewBooking, notifyCustomerBookingReceived } from '../../lib/notifications';
 import { addLoyaltyPoints } from '../../lib/loyalty';
 import { getSettings } from '../../lib/settings';
 
-import { requireSupabaseOnNetlify } from '../../lib/supabaseRuntime';
-
 async function bookAppointmentHandler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  if (requireSupabaseOnNetlify(res)) return;
 
   if (!validateRequestSize(req)) {
     return res.status(413).json({ error: 'Request payload too large' });
@@ -80,38 +75,11 @@ async function bookAppointmentHandler(req, res) {
       created_at: new Date().toISOString(),
     };
 
-    if (supabaseServer) {
-      const { error: bookingError } = await supabaseServer.from('bookings').insert([{
-        customer_name: bookingPayload.customer_name,
-        name: bookingPayload.name,
-        phone: bookingPayload.phone,
-        email: bookingPayload.email,
-        service_title: bookingPayload.service_title,
-        service: bookingPayload.service,
-        price: bookingPayload.price,
-        offer_title: bookingPayload.offer_title,
-        discount: bookingPayload.discount,
-        staff_id: bookingPayload.staff_id,
-        staff_name: bookingPayload.staff_name,
-        referral_code: bookingPayload.referral_code,
-        date: bookingPayload.date,
-        time: bookingPayload.time,
-        notes: bookingPayload.notes,
-        status: bookingPayload.status,
-        source: bookingPayload.source,
-        read: bookingPayload.read,
-      }]);
-      if (bookingError) {
-        console.error('Booking DB insert error:', bookingError);
-        return res.status(500).json({ error: 'Failed to save booking. Please try again or contact us on WhatsApp.' });
-      }
-    } else {
-      try {
-        await localInsert('bookings', bookingPayload);
-      } catch (e) {
-        console.error('Local booking insert failed:', e);
-        return res.status(500).json({ error: 'Failed to save booking. Please try again or contact us on WhatsApp.' });
-      }
+    try {
+      await localInsert('bookings', bookingPayload);
+    } catch (e) {
+      console.error('Booking insert failed:', e);
+      return res.status(500).json({ error: 'Failed to save booking. Please try again or contact us on WhatsApp.' });
     }
 
     setImmediate(async () => {

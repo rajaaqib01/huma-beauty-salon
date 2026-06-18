@@ -1,13 +1,11 @@
 import { escapeHtml, sanitizeObject } from '../../lib/apiUtils/security';
 import { validateCourseAdmission, validateRequestSize } from '../../lib/apiUtils/validation';
 import { rateLimit } from '../../lib/apiUtils/rateLimit';
-import { supabaseServer } from '../../lib/supabaseServer';
 import { insert as localInsert } from '../../lib/localDb';
 import { genId } from '../../lib/dbId';
 import { getCourseById } from '../../lib/courses';
 import { savePaymentScreenshot } from '../../lib/savePaymentScreenshot';
 import { notifyAdminNewAdmission, notifyStudentAdmissionReceived } from '../../lib/notifications';
-import { requireSupabaseOnNetlify } from '../../lib/supabaseRuntime';
 
 export const config = {
   api: {
@@ -21,8 +19,6 @@ async function courseAdmissionHandler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  if (requireSupabaseOnNetlify(res)) return;
 
   if (!validateRequestSize(req, 6 * 1024 * 1024)) {
     return res.status(413).json({ error: 'Request payload too large. Please use a smaller screenshot (under 5MB).' });
@@ -95,20 +91,7 @@ async function courseAdmissionHandler(req, res) {
       created_at: new Date().toISOString(),
     };
 
-    if (supabaseServer) {
-      const { error } = await supabaseServer.from('admissions').insert([payload]);
-      if (error) {
-        console.error('Admission DB insert error:', error);
-        return res.status(500).json({ error: 'Failed to save admission. Please try again or contact us on WhatsApp.' });
-      }
-    } else {
-      try {
-        await localInsert('admissions', payload);
-      } catch (e) {
-        console.error('Local admission insert failed:', e);
-        return res.status(500).json({ error: 'Failed to save admission. Please try again or contact us on WhatsApp.' });
-      }
-    }
+    await localInsert('admissions', payload);
 
     setImmediate(async () => {
       try {

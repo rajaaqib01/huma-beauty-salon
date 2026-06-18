@@ -1,5 +1,4 @@
 import { requireAdmin } from '../../../../lib/adminSession'
-import { supabaseServer } from '../../../../lib/supabaseServer'
 import { list as localList } from '../../../../lib/localDb'
 
 function toCsvRow(values) {
@@ -13,15 +12,7 @@ async function handler(req, res) {
   }
 
   const { month } = req.query
-  let bookings = []
-
-  if (supabaseServer) {
-    const { data, error } = await supabaseServer.from('bookings').select('*').order('created_at', { ascending: false })
-    if (error) return res.status(500).json({ error: error.message })
-    bookings = data || []
-  } else {
-    bookings = await localList('bookings')
-  }
+  let bookings = await localList('bookings')
 
   if (month) {
     bookings = bookings.filter(b => String(b.date || '').startsWith(String(month)))

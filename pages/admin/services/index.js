@@ -93,7 +93,6 @@ export default function ServicesPage() {
   const { data: nailsCategories = [] } = useSWR('/api/nails-categories', fetcher)
   const { data: mehndiCategories = [] } = useSWR('/api/mehndi-categories', fetcher)
   const { data: waxingCategories = [] } = useSWR('/api/waxing-categories', fetcher)
-  const { data: storageHealth } = useSWR('/api/admin/storage-health', fetcher)
   const [activeFilter, setActiveFilter] = useState('All')
   const services = Array.isArray(data) ? data : []
 
@@ -120,18 +119,6 @@ export default function ServicesPage() {
 
   return (
     <AdminShell title="Services">
-      {storageHealth?.needs_supabase || storageHealth?.supabase_read_ok === false ? (
-        <div className="admin-alert admin-alert-warning" style={{ marginBottom: '16px' }}>
-          <strong>Supabase keys need fixing on live site.</strong>{' '}
-          Admin can view catalog data, but new saves need correct Netlify env vars:
-          <ol style={{ margin: '10px 0 0 18px', padding: 0, lineHeight: 1.6 }}>
-            <li>Run <code>sql/schema.sql</code> in Supabase SQL Editor</li>
-            <li>Add Supabase keys to <code>.env.local</code> and Netlify env vars</li>
-            <li>Run <code>npm run seed:supabase</code> then redeploy Netlify</li>
-          </ol>
-        </div>
-      ) : null}
-
       <div className="admin-section-actions">
         <Link href="/admin/services/new" className="admin-button admin-button-primary">Add Service</Link>
         <Link href="/admin/services/categories" className="admin-button admin-button-secondary">Service Categories</Link>

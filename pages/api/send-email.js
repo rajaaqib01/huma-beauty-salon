@@ -2,7 +2,6 @@ import nodemailer from 'nodemailer';
 import { escapeHtml, sanitizeObject } from '../../lib/apiUtils/security';
 import { validateContactForm, validateRequestSize } from '../../lib/apiUtils/validation';
 import { rateLimit } from '../../lib/apiUtils/rateLimit';
-import { supabaseServer } from '../../lib/supabaseServer'
 import { insert as localInsert } from '../../lib/localDb'
 
 const SEND_EMAIL_RATE_LIMIT = 12;
@@ -50,17 +49,12 @@ async function sendEmailHandler(req, res) {
     read: false,
   }
 
-  // Persist message (Supabase if available, else local JSON)
+  // Persist message to local JSON / Netlify Blobs
   let persisted = false
-  try{
-    if(supabaseServer){
-      await supabaseServer.from('messages').insert([{ ...msgObj }])
-      persisted = true
-    } else {
-      await localInsert('messages', msgObj)
-      persisted = true
-    }
-  } catch (e){
+  try {
+    await localInsert('messages', msgObj)
+    persisted = true
+  } catch (e) {
     console.error('Message persistence error:', e)
     persisted = false
   }

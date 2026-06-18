@@ -1,5 +1,4 @@
 import { requireOwnerAdmin } from '../../../../lib/adminSession'
-import { supabaseServer } from '../../../../lib/supabaseServer'
 import { list as localList, insert as localInsert, update as localUpdate } from '../../../../lib/localDb'
 import { sanitizeObject } from '../../../../lib/apiUtils/security'
 import {
@@ -12,11 +11,6 @@ import {
 } from '../../../../lib/bookingSales'
 
 async function loadBookings() {
-  if (supabaseServer) {
-    const { data, error } = await supabaseServer.from('bookings').select('*').order('created_at', { ascending: false })
-    if (error) throw new Error(error.message)
-    return data || []
-  }
   return localList('bookings')
 }
 
@@ -90,12 +84,6 @@ async function handler(req, res) {
         created_at: now,
       }
 
-      if (supabaseServer) {
-        const { data, error } = await supabaseServer.from('bookings').insert([payload]).select()
-        if (error) return res.status(500).json({ error: error.message })
-        return res.status(201).json(data[0])
-      }
-
       const created = await localInsert('bookings', payload)
       return res.status(201).json(created)
     } catch (e) {
@@ -133,13 +121,6 @@ async function handler(req, res) {
       }
 
       patch.updated_at = new Date().toISOString()
-
-      if (supabaseServer) {
-        const { data, error } = await supabaseServer.from('bookings').update(patch).eq('id', id).select()
-        if (error) return res.status(500).json({ error: error.message })
-        if (!data?.[0]) return res.status(404).json({ error: 'Sale record not found' })
-        return res.json(data[0])
-      }
 
       const updated = await localUpdate('bookings', id, patch)
       if (!updated) return res.status(404).json({ error: 'Sale record not found' })
