@@ -60,10 +60,12 @@
     "date": "2026-06-20",
     "time": "09:30",
     "notes": "",
-    "status": "pending",
+    "status": "confirmed",
     "source": "online",
-    "read": false,
-    "created_at": "2026-06-18T21:39:33.366Z"
+    "read": true,
+    "created_at": "2026-06-18T21:39:33.366Z",
+    "confirmed_at": "2026-06-19T07:00:22.627Z",
+    "sale_amount": 2750
   },
   {
     "id": "mqjw2evm-9b70cgw",
