@@ -84,10 +84,12 @@
     "date": "2026-06-20",
     "time": "13:30",
     "notes": "",
-    "status": "pending",
+    "status": "confirmed",
     "source": "online",
-    "read": false,
-    "created_at": "2026-06-18T19:24:28.498Z"
+    "read": true,
+    "created_at": "2026-06-18T19:24:28.498Z",
+    "confirmed_at": "2026-06-19T07:00:25.369Z",
+    "sale_amount": 15000
   },
   {
     "id": "mqh7r89e-tx02pf9",
